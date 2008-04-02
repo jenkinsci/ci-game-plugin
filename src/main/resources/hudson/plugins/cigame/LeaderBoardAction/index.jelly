@@ -1,0 +1,16 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<l:layout title="Score card">
+	<!--  <st:include page="../sidepanel.jelly" /> -->
+    <l:main-panel>
+       	<h1>Leader board</h1>
+		<div>
+        	<table class="sortable">
+        		<th>Particpant</th><th>Score</th>
+          		<j:forEach var="userscore" items="${it.userScores}">
+        			<tr><td>${userscore.user.fullName}</td><td>${userscore.score}</td></tr> 
+          		</j:forEach>
+        	</table>
+      	</div>
+	</l:main-panel>
+  	</l:layout>
+</j:jelly>

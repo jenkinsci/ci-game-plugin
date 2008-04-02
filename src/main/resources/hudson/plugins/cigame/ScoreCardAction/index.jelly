@@ -1,0 +1,32 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<l:layout title="Score card">
+	<st:include it="${it.build}" page="sidepanel.jelly" />
+	<j:set var="sc" value="${it.scorecard}" />
+	<j:set var="participants" value="${it.participants}" />
+    <l:main-panel>
+       	<h1>Score card</h1>
+       	<div>
+       	<j:choose>
+	       	<j:when test="${participants.size() == 0}">
+	       		No players participated in this build
+	       	</j:when>
+	       	<j:otherwise>
+	       		Participating players in the build was       	
+          		<j:forEach var="player" items="${it.participants}">
+        			${player} 
+          		</j:forEach>
+	       	</j:otherwise>
+	    </j:choose>
+	       	
+       	</div>
+		<div>
+        	<table class="sortable">
+        		<th>Rule</th><th>Points</th>
+          		<j:forEach var="score" items="${sc.scores}">
+        			<tr><td>${score.rulesetName} - ${score.ruleName}</td><td>${score.value}</td></tr> 
+          		</j:forEach>
+        	</table>
+      	</div>
+	</l:main-panel>
+  	</l:layout>
+</j:jelly>
