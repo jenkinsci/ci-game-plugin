@@ -9,7 +9,9 @@ import hudson.model.Action;
  */
 public class ScoreBoardAction implements Action {
 
-    public String getDisplayName() {
+	private static final long serialVersionUID = 1L;
+
+	public String getDisplayName() {
         return "Score card";
     }
 

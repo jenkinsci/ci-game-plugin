@@ -1,12 +1,12 @@
 package hudson.plugins.cigame;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import hudson.model.Action;
-import hudson.model.Hudson;
 import hudson.model.User;
-import hudson.plugins.cigame.model.ScoreCard;
 
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -18,6 +18,9 @@ import org.kohsuke.stapler.export.ExportedBean;
  */
 @ExportedBean(defaultVisibility=999)
 public class LeaderBoardAction implements Action{
+
+	private static final long serialVersionUID = 1L;
+
 
 	public String getDisplayName() {
 		return "Leader board";
@@ -42,9 +45,20 @@ public class LeaderBoardAction implements Action{
         for (User user : User.getAll()) {
         	UserScoreProperty property = user.getProperty(UserScoreProperty.class);
         	if (property != null) {
-        		list.add(new UserScore(property.getUser().getDisplayName(), property.getScore()));
+        		list.add(new UserScore(property.getUser(), property.getScore()));
         	}
         }
+        
+        Collections.sort(list, new Comparator<UserScore>() {
+			@Override
+			public int compare(UserScore o1, UserScore o2) {
+				if (o1.score < o2.score)
+					return 1;
+				if (o1.score > o2.score) 
+					return -1;
+				return 0;
+			}
+        });
         
         return list;
     }
@@ -52,18 +66,18 @@ public class LeaderBoardAction implements Action{
 
     @ExportedBean(defaultVisibility=999)
 	public class UserScore {
-		private String fullName;
+		private User user;
 		private double score;
 		
-		public UserScore(String fullName, double score) {
+		public UserScore(User user, double score) {
 			super();
-			this.fullName = fullName;
+			this.user = user;
 			this.score = score;
 		}
 
 	    @Exported		
-		public String getFullName() {
-			return fullName;
+		public User getUser() {
+			return user;
 		}
 
 	    @Exported	

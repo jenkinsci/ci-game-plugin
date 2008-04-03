@@ -13,15 +13,15 @@
 	       	<j:otherwise>
 	       		Participating players in the build was       	
           		<j:forEach var="player" items="${it.participants}">
-        			${player} 
+        			<a href="${rootURL}/${player.url}">${player}</a> 
           		</j:forEach>
 	       	</j:otherwise>
-	    </j:choose>
-	       	
+	    </j:choose>	       	
        	</div>
+       	<br/>
 		<div>
-        	<table class="sortable">
-        		<th>Rule</th><th>Points</th>
+        	<table class="pane sortable" style="width:50%">
+        		<tr><td class="pane-header" initialSortDir="down" align="left">Rule</td><td class="pane-header" align="left">Points</td></tr>
           		<j:forEach var="score" items="${sc.scores}">
         			<tr><td>${score.rulesetName} - ${score.ruleName}</td><td>${score.value}</td></tr> 
           		</j:forEach>

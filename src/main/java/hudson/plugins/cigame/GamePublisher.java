@@ -15,7 +15,6 @@ import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.cigame.model.Rule;
-import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.plugins.cigame.rules.basic.BuildResultRule;
@@ -54,29 +53,38 @@ public class GamePublisher extends Publisher {
         ScoreCardAction action = new ScoreCardAction(sc, build);
         build.getActions().add(action);
         
-        updateUserScores(build, sc.getTotalPoints());
-       
-        
-        installLeaderBoard();
+        if (updateUserScores(build.getChangeSet(), sc.getTotalPoints())) {
+        	installLeaderBoard();
+        }
         
         return true;
     }
 
-	private void updateUserScores(AbstractBuild<?, ?> build, double score)
+    /**
+     * Add the score to the users that have committed code in the change set
+     * @param changeSet the change set, used to get users
+     * @param score the score that the build was worth
+     * @throws IOException thrown if the property could not be added to the user object.
+     * @return true, if any user scores was updated; false, otherwise
+     */
+	private boolean updateUserScores(ChangeLogSet<? extends Entry> changeSet, double score)
 			throws IOException {
 		Set<User> players = new HashSet<User>();
-        ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
-    	for (Entry entry : changeSet) {
-    		players.add(entry.getAuthor());
+		if (score != 0) {
+	    	for (Entry entry : changeSet) {
+	    		players.add(entry.getAuthor());
+			}
+	    	for (User user : players) {
+	    		UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+	    		if (property == null) {
+	    			property = new UserScoreProperty();
+	    			user.addProperty(property);
+	    		}
+	    		property.setScore(property.getScore() + score);
+	    		user.save();
+	    	}
 		}
-    	for (User user : players) {
-    		UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-    		if (property == null) {
-    			property = new UserScoreProperty();
-    			user.addProperty(property);
-    		}
-    		property.setScore(property.getScore() + score);
-    	}
+    	return (!players.isEmpty());
 	}
 
     /**

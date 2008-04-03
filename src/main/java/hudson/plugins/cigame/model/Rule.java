@@ -1,14 +1,13 @@
 package hudson.plugins.cigame.model;
 
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 
 /**
  * Rule interface.
  *
  * @author Erik Ramfelt
  */
-public interface Rule<P extends AbstractProject<P,R>,R extends AbstractBuild<P,R>> {
+public interface Rule {
 	/**
 	 * Returns the name of the rule
 	 * @return name of the rule
@@ -20,5 +19,5 @@ public interface Rule<P extends AbstractProject<P,R>,R extends AbstractBuild<P,R
      * @param build build to calculate points for
      * @return 0, build is not worth any points and the rule is ignored.
      */
-    double evaluate(R build);
+    double evaluate(AbstractBuild<?,?> build);
 }

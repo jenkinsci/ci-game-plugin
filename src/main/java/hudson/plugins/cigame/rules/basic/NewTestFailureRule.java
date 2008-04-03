@@ -12,8 +12,8 @@ import hudson.tasks.junit.TestResultAction;
  * Rule for giving points if a new test is added and fails.
  */
 public class NewTestFailureRule implements Rule {
-
-    private double introducedNewFailure = -1;
+	
+	private double introducedNewFailure = -1;
 
     public NewTestFailureRule() {        
     }
@@ -22,7 +22,8 @@ public class NewTestFailureRule implements Rule {
         return "New test that failed";
     }
 
-	public double evaluate(AbstractBuild build) {
+	@Override
+	public double evaluate(AbstractBuild<?, ?> build) {
         TestResultAction action = build.getAction(TestResultAction.class);
         if ((action != null) && (action.getPreviousResult() != null)) {
             TestResult currentResult = action.getResult();
@@ -31,7 +32,7 @@ public class NewTestFailureRule implements Rule {
             List<CaseResult> currentFailedTests = currentResult.getFailedTests();
             List<CaseResult> previousFailedTests = previousResult.getFailedTests();
             
-            int regressionFailures = 0;
+            //int regressionFailures = 0;
             int newFailures = 0;
             
             for (CaseResult caseResult : currentFailedTests) {

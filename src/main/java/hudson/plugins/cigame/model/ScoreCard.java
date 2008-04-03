@@ -19,7 +19,7 @@ public class ScoreCard {
      * @param build build to evaluate
      * @param ruleset rule set to use for evaluation
      */
-    public void record(AbstractBuild<?, ?> build, RuleSet ruleset) {
+    public void record(AbstractBuild<?,?> build, RuleSet ruleset) {
     	if (scores == null) {
     		scores = new LinkedList<Score>();
     	}

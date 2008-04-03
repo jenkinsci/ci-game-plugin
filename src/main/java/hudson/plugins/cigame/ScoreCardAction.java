@@ -8,7 +8,6 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
-import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
@@ -22,7 +21,9 @@ import hudson.scm.ChangeLogSet.Entry;
 @ExportedBean(defaultVisibility=999)
 public class ScoreCardAction implements Action{
 
-    private AbstractBuild<?, ?> build;
+	private static final long serialVersionUID = 1L;
+
+	private AbstractBuild<?, ?> build;
     
     private ScoreCard scorecard;
     
@@ -53,16 +54,12 @@ public class ScoreCardAction implements Action{
     }
     
     @Exported
-    public Set<String> getParticipants() {
-    	Set<String> players = new HashSet<String>();
+    public Set<User> getParticipants() {
+    	Set<User> players = new HashSet<User>();
     	ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
     	for (Entry entry : changeSet) {
-    		String name = entry.getAuthor().getFullName();
-    		if (!players.contains(name)) {
-    			players.add(name);
-    		}
+    		players.add(entry.getAuthor());
 		}
-
     	return players;
     }
 }

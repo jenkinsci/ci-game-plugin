@@ -1,13 +1,19 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<l:layout title="Score card">
-	<!--  <st:include page="../sidepanel.jelly" /> -->
+	<l:layout title="Leader board">
+	<st:include page="sidepanel.jelly"/>
     <l:main-panel>
-       	<h1>Leader board</h1>
+       	<h1>Game leader board</h1>
 		<div>
-        	<table class="sortable">
-        		<th>Particpant</th><th>Score</th>
+        	<table class="pane sortable" style="width:50%">	
+        		<tr>
+        			<td class="pane-header" align="left,center">Particpant</td>
+        			<td class="pane-header" initialSortDir="up" align="left" width="10%">Score</td>
+        		</tr>
           		<j:forEach var="userscore" items="${it.userScores}">
-        			<tr><td>${userscore.user.fullName}</td><td>${userscore.score}</td></tr> 
+    	      		<tr>
+        				<td><a href="${rootURL}/${userscore.user.url}">${userscore.user}</a></td>
+        				<td>${userscore.score}</td>
+        			</tr> 
           		</j:forEach>
         	</table>
       	</div>
