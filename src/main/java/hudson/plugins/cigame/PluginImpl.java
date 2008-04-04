@@ -3,6 +3,8 @@ package hudson.plugins.cigame;
 import hudson.Plugin;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
+import hudson.model.UserProperties;
+import hudson.model.UserPropertyDescriptor;
 import hudson.tasks.Publisher;
 
 /**
@@ -15,6 +17,7 @@ public class PluginImpl extends Plugin {
     @Override
     public void start() throws Exception {
         Publisher.PUBLISHERS.addRecorder(DESCRIPTOR);
+        UserProperties.LIST.add(UserScorePropertyDescriptor.INSTANCE);
         Hudson.getInstance().getActions().add(new LeaderBoardAction());
         /*List<UserInfo> users = Hudson.getInstance().getPeople().users;
         System.out.println("USERS = " + users.size());

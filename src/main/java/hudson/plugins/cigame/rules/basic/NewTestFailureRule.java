@@ -22,7 +22,6 @@ public class NewTestFailureRule implements Rule {
         return "New test that failed";
     }
 
-	@Override
 	public double evaluate(AbstractBuild<?, ?> build) {
         TestResultAction action = build.getAction(TestResultAction.class);
         if ((action != null) && (action.getPreviousResult() != null)) {

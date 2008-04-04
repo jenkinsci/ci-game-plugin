@@ -7,6 +7,10 @@ import hudson.model.Descriptor;
 import hudson.model.User;
 import hudson.model.UserProperty;
 
+/**
+ * 
+ * @author Erik Ramfelt
+ */
 @ExportedBean(defaultVisibility=999)
 public class UserScoreProperty extends UserProperty {
 
@@ -14,6 +18,10 @@ public class UserScoreProperty extends UserProperty {
 	
 	public UserScoreProperty() {
 		score = 0;
+	}
+	
+	public UserScoreProperty(double score) {
+		this.score = score;
 	}
 	
 	public Descriptor<UserProperty> getDescriptor() {

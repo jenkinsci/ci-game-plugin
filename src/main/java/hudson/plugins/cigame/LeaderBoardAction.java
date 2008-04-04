@@ -50,7 +50,6 @@ public class LeaderBoardAction implements Action{
         }
         
         Collections.sort(list, new Comparator<UserScore>() {
-			@Override
 			public int compare(UserScore o1, UserScore o2) {
 				if (o1.score < o2.score)
 					return 1;
