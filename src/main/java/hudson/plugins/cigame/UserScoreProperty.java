@@ -3,9 +3,9 @@ package hudson.plugins.cigame;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
-import hudson.model.Descriptor;
 import hudson.model.User;
 import hudson.model.UserProperty;
+import hudson.model.UserPropertyDescriptor;
 
 /**
  * 
@@ -24,7 +24,7 @@ public class UserScoreProperty extends UserProperty {
 		this.score = score;
 	}
 	
-	public Descriptor<UserProperty> getDescriptor() {
+	public UserPropertyDescriptor getDescriptor() {
 		return UserScorePropertyDescriptor.INSTANCE;
 	}
 
