@@ -11,11 +11,11 @@ import hudson.tasks.junit.TestResultAction;
 /**
  * Rule for giving points if a new test is added and fails.
  */
-public class NewTestFailureRule implements Rule {
+public class IncreasingFailedTestsRule implements Rule {
 	
-	private double introducedNewFailure = -1;
+	private double pointsForEachNewFailure = -1;
 
-    public NewTestFailureRule() {        
+    public IncreasingFailedTestsRule() {        
     }
     
     public String getName() {
@@ -28,18 +28,10 @@ public class NewTestFailureRule implements Rule {
             TestResult currentResult = action.getResult();
             TestResult previousResult = action.getPreviousResult().getResult();
 
-            List<CaseResult> currentFailedTests = currentResult.getFailedTests();
-            List<CaseResult> previousFailedTests = previousResult.getFailedTests();
-            
-            //int regressionFailures = 0;
-            int newFailures = 0;
-            
-            for (CaseResult caseResult : currentFailedTests) {
-				if (!previousFailedTests.contains(caseResult)) {
-					newFailures++;
-				}
-			}
-            return newFailures * introducedNewFailure;
+            int passedTestDiff = currentResult.getFailCount() - previousResult.getFailCount();
+            if (passedTestDiff > 0) {
+            	return passedTestDiff * pointsForEachNewFailure;
+            }
         }
         return 0;
 	}

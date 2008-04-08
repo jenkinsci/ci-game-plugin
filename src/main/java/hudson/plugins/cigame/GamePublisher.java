@@ -18,7 +18,8 @@ import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.plugins.cigame.rules.basic.BuildResultRule;
-import hudson.plugins.cigame.rules.basic.NewTestFailureRule;
+import hudson.plugins.cigame.rules.basic.IncreasingFailedTestsRule;
+import hudson.plugins.cigame.rules.basic.IncreasingPassedTestsRule;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.Publisher;
@@ -45,7 +46,8 @@ public class GamePublisher extends Publisher {
         
         RuleSet ruleset = new RuleSet("Basic ruleset", new LinkedList<Rule>());
         ruleset.add(new BuildResultRule());
-        ruleset.add(new NewTestFailureRule());
+        ruleset.add(new IncreasingFailedTestsRule());
+        ruleset.add(new IncreasingPassedTestsRule());
         
         ScoreCard sc = new ScoreCard();
         sc.record(build, ruleset);        
