@@ -32,7 +32,7 @@ public class IncreasingPassedTestsRule implements Rule {
 	}
 
 	public String getName() {
-		return "Increasing number of pass tests";
+		return "Increased number of passed tests";
 	}
 
 }

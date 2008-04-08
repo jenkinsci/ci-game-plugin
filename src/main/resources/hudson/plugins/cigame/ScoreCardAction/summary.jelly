@@ -2,6 +2,6 @@
 	xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
 	xmlns:f="/lib/form" xmlns:i="jelly:fmt">
 	<t:summary icon="/plugin/ci-game/icons/game-48x48.png">
-		The build was worth ${it.scorecard.totalPoints} points.
+		The build was worth <a href="${it.urlName}/">${it.scorecard.totalPoints} points</a>.
 	</t:summary>
 </j:jelly>

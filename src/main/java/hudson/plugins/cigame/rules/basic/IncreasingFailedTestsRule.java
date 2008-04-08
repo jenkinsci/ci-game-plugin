@@ -19,7 +19,7 @@ public class IncreasingFailedTestsRule implements Rule {
     }
     
     public String getName() {
-        return "New test that failed";
+        return "Increased number of failed tests";
     }
 
 	public double evaluate(AbstractBuild<?, ?> build) {
