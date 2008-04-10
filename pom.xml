@@ -20,4 +20,10 @@
     <comments>All source code is under the MIT license.</comments>
     </license>
   </licenses>
+
+  <scm>
+    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/ci-game-1.1</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.1</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/ci-game/tags/ci-game-1.1</url>
+  </scm>
 </project>
