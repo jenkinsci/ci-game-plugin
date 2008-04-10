@@ -10,10 +10,11 @@ import hudson.plugins.cigame.model.Rule;
  */
 public class BuildResultRule implements Rule {
 
-	private int failurePoints = -10;
-    private int successPoints = 1;
+	private int failurePoints;
+    private int successPoints;
     
     public BuildResultRule() {
+    	this(1, -10);
     }
     
     public BuildResultRule(int successPoints, int failurePoints) {
@@ -25,26 +26,25 @@ public class BuildResultRule implements Rule {
         return "Build result";
     }
 
-	public double evaluate(AbstractBuild<?,?> build) {
-    	
+	public double evaluate(AbstractBuild<?,?> build) {    	
     	Result result = build.getResult();
+    	Result lastResult = null;
+    	if (build.getPreviousBuild() != null) {
+    		lastResult = build.getPreviousBuild().getResult();
+    	}
+    	return evaluate(result, lastResult);
+	}
+	
+	double evaluate(Result result, Result lastResult) {
 		if (result == Result.SUCCESS) {
     		return successPoints;
     	}
-
-    	if (result == Result.FAILURE) {
-
-        	Result lastResult = Result.SUCCESS;
-        	Run<?,?> previousBuild = build.getPreviousBuild();
-        	if (previousBuild != null) {
-        		lastResult = previousBuild.getResult();
-        	}
-        	
-        	if (result.isWorseThan(lastResult)) {
+    	if (result == Result.FAILURE) {        	
+        	if ((lastResult == null) 
+        		|| (lastResult.isBetterThan(Result.FAILURE))) {
         		return failurePoints;
         	}
-    	}
-    	
-        return 0;
+    	}    	
+		return 0;
 	}
 }

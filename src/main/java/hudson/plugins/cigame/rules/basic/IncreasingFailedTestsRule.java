@@ -1,11 +1,8 @@
 package hudson.plugins.cigame.rules.basic;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
+import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
-import hudson.tasks.junit.CaseResult;
-import hudson.tasks.junit.TestResult;
 import hudson.tasks.junit.TestResultAction;
 
 /**
@@ -13,9 +10,14 @@ import hudson.tasks.junit.TestResultAction;
  */
 public class IncreasingFailedTestsRule implements Rule {
 	
-	private double pointsForEachNewFailure = -1;
+	private double pointsForEachNewFailure;
 
-    public IncreasingFailedTestsRule() {        
+    public IncreasingFailedTestsRule() {
+    	this(-1);
+    }
+
+    public IncreasingFailedTestsRule(int points) {
+    	pointsForEachNewFailure = points;
     }
     
     public String getName() {
@@ -25,15 +27,20 @@ public class IncreasingFailedTestsRule implements Rule {
 	public double evaluate(AbstractBuild<?, ?> build) {
         TestResultAction action = build.getAction(TestResultAction.class);
         if ((action != null) && (action.getPreviousResult() != null)) {
-            TestResult currentResult = action.getResult();
-            TestResult previousResult = action.getPreviousResult().getResult();
-
-            int passedTestDiff = currentResult.getFailCount() - previousResult.getFailCount();
-            if (passedTestDiff > 0) {
-            	return passedTestDiff * pointsForEachNewFailure;
-            }
+            return evaluate(build.getResult(), build.getPreviousBuild().getResult(),
+            		action.getResult().getFailCount(), action.getPreviousResult().getResult().getFailCount());
         }
         return 0;
 	}
-
+	
+	double evaluate(Result currentResult, Result previousResult, int currentFailCount, int previousFailCount) {
+		if ((previousResult.isBetterThan(Result.FAILURE)) 
+				&& (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
+			int failingTestDiff = currentFailCount - previousFailCount;
+			if (failingTestDiff > 0) {
+				return failingTestDiff * pointsForEachNewFailure;
+			}
+		}
+		return 0;
+	}
 }

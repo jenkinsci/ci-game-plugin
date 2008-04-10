@@ -1,34 +1,43 @@
 package hudson.plugins.cigame.rules.basic;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
+import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
-import hudson.tasks.junit.CaseResult;
-import hudson.tasks.junit.TestResult;
 import hudson.tasks.junit.TestResultAction;
 
 /**
  * Rule that gives points for increasing the number of passed tests.
- * @author Paulina
- *
  */
 public class IncreasingPassedTestsRule implements Rule {
 
-	private int pointsForEachFixedFailure = 1;
+	private int pointsForEachFixedFailure;
 	
+	public IncreasingPassedTestsRule() {
+		this(1);
+	}
+	
+	public IncreasingPassedTestsRule(int points) {
+		pointsForEachFixedFailure = points;
+	}
+
 	public double evaluate(AbstractBuild<?, ?> build) {
         TestResultAction action = build.getAction(TestResultAction.class);
         if ((action != null) && (action.getPreviousResult() != null)) {
-            TestResult currentResult = action.getResult();
-            TestResult previousResult = action.getPreviousResult().getResult();
-
-            int passedTestDiff = currentResult.getPassCount() - previousResult.getPassCount();
-            if (passedTestDiff > 0) {
-            	return passedTestDiff * pointsForEachFixedFailure;
-            }
+            return evaluate(build.getResult(), build.getPreviousBuild().getResult(),
+            		action.getResult().getPassCount(), action.getPreviousResult().getResult().getPassCount());
         }
         return 0;
+	}
+
+	double evaluate(Result currentResult, Result previousResult, int currentPassCount, int previousPassCount) {
+		if ((previousResult.isBetterThan(Result.FAILURE)) 
+				&& (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
+			int passedTestDiff = currentPassCount - previousPassCount;
+			if (passedTestDiff > 0) {
+				return passedTestDiff * pointsForEachFixedFailure;
+			}
+		}
+		return 0;
 	}
 
 	public String getName() {
