@@ -19,7 +19,7 @@ public class RuleBook {
      * Add rule set to the rule book
      * @param ruleset new rule set
      */
-    void addRuleSet(RuleSet ruleset) {
+    public void addRuleSet(RuleSet ruleset) {
         rulesets.add(ruleset);
     }
     
@@ -27,7 +27,7 @@ public class RuleBook {
      * Remove rule set from the rule book
      * @param ruleset rule set
      */
-    void removeRuleSet(RuleSet ruleset) {
+    public void removeRuleSet(RuleSet ruleset) {
         rulesets.remove(ruleset);
     }
     

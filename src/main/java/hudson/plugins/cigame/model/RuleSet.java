@@ -1,5 +1,6 @@
 package hudson.plugins.cigame.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -14,6 +15,22 @@ public class RuleSet {
     public RuleSet(String name, Collection<Rule> rules) {
         this.name = name;
         this.rules = rules;
+    }
+    
+    public RuleSet(String name) {
+        this.name = name;
+        this.rules = new ArrayList<Rule>();
+    }
+
+    /**
+     * Returns if the rule set is available or not.
+     * If a rule set is not available then it will not be used for determining the score
+     * for a build
+     * Default implementation returns true.
+     * @return true
+     */
+    public boolean isAvailable() {
+    	return true;
     }
 
     /**

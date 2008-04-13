@@ -1,10 +1,18 @@
 package hudson.plugins.cigame;
 
+import java.util.LinkedList;
+
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.model.Descriptor;
+import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleBook;
+import hudson.plugins.cigame.model.RuleSet;
+import hudson.plugins.cigame.rules.basic.BuildResultRule;
+import hudson.plugins.cigame.rules.basic.IncreasingFailedTestsRule;
+import hudson.plugins.cigame.rules.basic.IncreasingPassedTestsRule;
 import hudson.tasks.Publisher;
 
 public class GameDescriptor extends Descriptor<Publisher> {
@@ -14,6 +22,29 @@ public class GameDescriptor extends Descriptor<Publisher> {
     
     protected GameDescriptor() {
         super(GamePublisher.class);
+    }
+    
+    /**
+     * Returns the default rule book
+     * @return the rule book that is configured for the game.
+     */
+    public RuleBook getRuleBook() {        
+    	RuleSet ruleset = new RuleSet("Basic ruleset", new LinkedList<Rule>());
+        ruleset.add(new BuildResultRule());
+        ruleset.add(new IncreasingFailedTestsRule());
+        ruleset.add(new IncreasingPassedTestsRule());
+        
+        /*PluginRuleSet violationsPluginSet = new PluginRuleSet("violations", "Violations");
+        violationsPluginSet.add(new DefaultViolationRule("pmd", "PMD violation", -1, 1));
+        violationsPluginSet.add(new DefaultViolationRule("pylint", "pylint violation", -1, 1));
+        violationsPluginSet.add(new DefaultViolationRule("cpd", "CPD violation", -5, 5));*/
+        
+    	RuleBook book = new RuleBook();
+        book.addRuleSet(ruleset);
+        /*if (violationsPluginSet.isAvailable()) {
+        	book.addRuleSet(violationsPluginSet);
+        }*/
+        return book;
     }
 
     @Override

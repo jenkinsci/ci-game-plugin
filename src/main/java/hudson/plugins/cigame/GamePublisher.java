@@ -2,7 +2,6 @@ package hudson.plugins.cigame;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,12 +13,8 @@ import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.User;
-import hudson.plugins.cigame.model.Rule;
-import hudson.plugins.cigame.model.RuleSet;
+import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.ScoreCard;
-import hudson.plugins.cigame.rules.basic.BuildResultRule;
-import hudson.plugins.cigame.rules.basic.IncreasingFailedTestsRule;
-import hudson.plugins.cigame.rules.basic.IncreasingPassedTestsRule;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.Publisher;
@@ -27,7 +22,7 @@ import hudson.tasks.Publisher;
 public class GamePublisher extends Publisher {
 
     public Descriptor<Publisher> getDescriptor() {
-        return PluginImpl.getDescriptor();
+        return PluginImpl.GAME_PUBLISHER_DESCRIPTOR;
     }
 
     @Override
@@ -43,14 +38,11 @@ public class GamePublisher extends Publisher {
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
             throws InterruptedException, IOException {
-        
-        RuleSet ruleset = new RuleSet("Basic ruleset", new LinkedList<Rule>());
-        ruleset.add(new BuildResultRule());
-        ruleset.add(new IncreasingFailedTestsRule());
-        ruleset.add(new IncreasingPassedTestsRule());
+
+        RuleBook ruleBook = PluginImpl.GAME_PUBLISHER_DESCRIPTOR.getRuleBook();
         
         ScoreCard sc = new ScoreCard();
-        sc.record(build, ruleset);        
+		sc.record(build, ruleBook);
         
         ScoreCardAction action = new ScoreCardAction(sc, build);
         build.getActions().add(action);

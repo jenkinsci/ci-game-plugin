@@ -1,10 +1,8 @@
 package hudson.plugins.cigame;
 
 import hudson.Plugin;
-import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.UserProperties;
-import hudson.model.UserPropertyDescriptor;
 import hudson.tasks.Publisher;
 
 /**
@@ -12,12 +10,13 @@ import hudson.tasks.Publisher;
  */
 public class PluginImpl extends Plugin {
     
-    private static final GameDescriptor DESCRIPTOR = new GameDescriptor(); 
+    public static final GameDescriptor GAME_PUBLISHER_DESCRIPTOR = new GameDescriptor();
+    public static final UserScorePropertyDescriptor USER_SCORE_PROPERTY_DESCRIPTOR = new UserScorePropertyDescriptor();
     
     @Override
     public void start() throws Exception {
-        Publisher.PUBLISHERS.addRecorder(DESCRIPTOR);
-        UserProperties.LIST.add(UserScorePropertyDescriptor.INSTANCE);
+        Publisher.PUBLISHERS.addNotifier(GAME_PUBLISHER_DESCRIPTOR);
+        UserProperties.LIST.add(USER_SCORE_PROPERTY_DESCRIPTOR);
         Hudson.getInstance().getActions().add(new LeaderBoardAction());
         /*List<UserInfo> users = Hudson.getInstance().getPeople().users;
         System.out.println("USERS = " + users.size());
@@ -29,13 +28,5 @@ public class PluginImpl extends Plugin {
 			}
 		}
         */
-    }
-
-    /**
-     * Returns the one and only descriptor.
-     * @return the one and only descriptor.
-     */
-    static Descriptor<Publisher> getDescriptor() {
-        return DESCRIPTOR;        
     }
 }

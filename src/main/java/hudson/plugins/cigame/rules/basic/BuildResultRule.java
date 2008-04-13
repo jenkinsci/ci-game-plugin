@@ -2,7 +2,6 @@ package hudson.plugins.cigame.rules.basic;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
-import hudson.model.Run;
 import hudson.plugins.cigame.model.Rule;
 
 /**

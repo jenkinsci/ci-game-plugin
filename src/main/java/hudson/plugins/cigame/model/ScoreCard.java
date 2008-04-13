@@ -33,6 +33,17 @@ public class ScoreCard {
     }
 
     /**
+     * Record points for the rules in the rule book
+     * @param build build to evaluate
+     * @param ruleset rule book to use for evaluation
+     */
+    public void record(AbstractBuild<?,?> build, RuleBook ruleBook) {
+    	for (RuleSet set : ruleBook.getRuleSets()) {
+    		record(build, set);
+    	}
+    }
+
+    /**
      * Returns a collection of scores. May not be called before the score has been
      * recorded.
      * @return a collection of scores.

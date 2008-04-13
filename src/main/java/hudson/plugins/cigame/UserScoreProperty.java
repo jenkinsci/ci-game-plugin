@@ -25,7 +25,7 @@ public class UserScoreProperty extends UserProperty {
 	}
 	
 	public UserPropertyDescriptor getDescriptor() {
-		return UserScorePropertyDescriptor.INSTANCE;
+		return PluginImpl.USER_SCORE_PROPERTY_DESCRIPTOR;
 	}
 
     @Exported
