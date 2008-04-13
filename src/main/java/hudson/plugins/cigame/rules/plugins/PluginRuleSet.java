@@ -1,7 +1,10 @@
 
 package hudson.plugins.cigame.rules.plugins;
 
+import java.util.Collection;
+
 import hudson.model.Hudson;
+import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleSet;
 
 /**
@@ -10,6 +13,7 @@ import hudson.plugins.cigame.model.RuleSet;
 public class PluginRuleSet extends RuleSet {
 
 	private String pluginName;
+	private transient boolean isInitalized = false;
 	
 	/**
 	 * Construct a rule set for a plugin.
@@ -29,4 +33,22 @@ public class PluginRuleSet extends RuleSet {
 	public boolean isAvailable() {
 		return (Hudson.getInstance().getPlugin(pluginName) != null);
 	}
+	
+	/**
+	 * Late loading of the rules for this rule set.
+	 */
+	protected void loadRules(){
+		isInitalized = true;
+	}
+
+	@Override
+	public Collection<Rule> getRules() {
+		if (!isInitalized) {
+			loadRules();
+			isInitalized = true;
+		}
+		return super.getRules();
+	}
+	
+	
 }

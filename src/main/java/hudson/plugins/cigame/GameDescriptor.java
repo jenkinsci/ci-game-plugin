@@ -14,7 +14,11 @@ import hudson.plugins.cigame.rules.basic.BuildResultRule;
 import hudson.plugins.cigame.rules.basic.IncreasingFailedTestsRule;
 import hudson.plugins.cigame.rules.basic.IncreasingPassedTestsRule;
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
+import hudson.plugins.cigame.rules.plugins.opentasks.DefaultOpenTasksRule;
+import hudson.plugins.cigame.rules.plugins.opentasks.OpenTasksRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.DefaultViolationRule;
+import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
+import hudson.plugins.tasks.util.model.Priority;
 import hudson.tasks.Publisher;
 
 public class GameDescriptor extends Descriptor<Publisher> {
@@ -36,20 +40,18 @@ public class GameDescriptor extends Descriptor<Publisher> {
         ruleset.add(new IncreasingFailedTestsRule());
         ruleset.add(new IncreasingPassedTestsRule());
         
-        PluginRuleSet violationsPluginSet = new PluginRuleSet("violations", "Violations");
-        violationsPluginSet.add(new DefaultViolationRule("pmd", "PMD violation", -1, 1));
-        violationsPluginSet.add(new DefaultViolationRule("pylint", "pylint violation", -1, 1));
-        violationsPluginSet.add(new DefaultViolationRule("cpd", "CPD violation", -5, 5));
-        violationsPluginSet.add(new DefaultViolationRule("checkstyle", "Checkstyle violation", -5, 5));
-        violationsPluginSet.add(new DefaultViolationRule("findbugs", "FindBugs violation", -5, 5));
-        violationsPluginSet.add(new DefaultViolationRule("fxcop", "FXCop violation", -5, 5));
-        
-    	RuleBook book = new RuleBook();
+        RuleBook book = new RuleBook();
         book.addRuleSet(ruleset);
-        if (violationsPluginSet.isAvailable()) {
-        	book.addRuleSet(violationsPluginSet);
-        }
+        //addRuleSetIfAvailable(book, new OpenTasksRuleSet());
+        addRuleSetIfAvailable(book, new ViolationsRuleSet());
+        
         return book;
+    }
+    
+    private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet) {
+    	if (ruleSet.isAvailable()) {
+    		book.addRuleSet(ruleSet);
+    	}
     }
 
     @Override

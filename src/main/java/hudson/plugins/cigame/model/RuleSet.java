@@ -45,7 +45,7 @@ public class RuleSet {
      * Returns the rules for this rule set.
      * @return the rules for this rule set.
      */
-    Collection<Rule> getRules() {
+    public Collection<Rule> getRules() {
         return rules;
     }
 
