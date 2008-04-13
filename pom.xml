@@ -26,4 +26,13 @@
     <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.1</developerConnection>
     <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/ci-game/tags/ci-game-1.1</url>
   </scm>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.jvnet.hudson.plugins</groupId>
+      <artifactId>violations</artifactId>
+      <version>0.5.4</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 </project>

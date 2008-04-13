@@ -13,6 +13,8 @@ import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.rules.basic.BuildResultRule;
 import hudson.plugins.cigame.rules.basic.IncreasingFailedTestsRule;
 import hudson.plugins.cigame.rules.basic.IncreasingPassedTestsRule;
+import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
+import hudson.plugins.cigame.rules.plugins.violation.DefaultViolationRule;
 import hudson.tasks.Publisher;
 
 public class GameDescriptor extends Descriptor<Publisher> {
@@ -34,16 +36,19 @@ public class GameDescriptor extends Descriptor<Publisher> {
         ruleset.add(new IncreasingFailedTestsRule());
         ruleset.add(new IncreasingPassedTestsRule());
         
-        /*PluginRuleSet violationsPluginSet = new PluginRuleSet("violations", "Violations");
+        PluginRuleSet violationsPluginSet = new PluginRuleSet("violations", "Violations");
         violationsPluginSet.add(new DefaultViolationRule("pmd", "PMD violation", -1, 1));
         violationsPluginSet.add(new DefaultViolationRule("pylint", "pylint violation", -1, 1));
-        violationsPluginSet.add(new DefaultViolationRule("cpd", "CPD violation", -5, 5));*/
+        violationsPluginSet.add(new DefaultViolationRule("cpd", "CPD violation", -5, 5));
+        violationsPluginSet.add(new DefaultViolationRule("checkstyle", "Checkstyle violation", -5, 5));
+        violationsPluginSet.add(new DefaultViolationRule("findbugs", "FindBugs violation", -5, 5));
+        violationsPluginSet.add(new DefaultViolationRule("fxcop", "FXCop violation", -5, 5));
         
     	RuleBook book = new RuleBook();
         book.addRuleSet(ruleset);
-        /*if (violationsPluginSet.isAvailable()) {
+        if (violationsPluginSet.isAvailable()) {
         	book.addRuleSet(violationsPluginSet);
-        }*/
+        }
         return book;
     }
 
