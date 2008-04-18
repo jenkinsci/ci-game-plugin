@@ -49,7 +49,7 @@ public class GameDescriptor extends Descriptor<Publisher> {
 
             rulebook.addRuleSet(ruleset);
             // addRuleSetIfAvailable(book, new OpenTasksRuleSet());
-            addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
+            // addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
             // addRuleSetIfAvailable(rulebook, new PmdRuleSet());
         }
         return rulebook;
