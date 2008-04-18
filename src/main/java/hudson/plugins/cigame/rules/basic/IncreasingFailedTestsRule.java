@@ -11,40 +11,43 @@ import hudson.tasks.junit.TestResultAction;
  * Rule for giving points if a new test is added and fails.
  */
 public class IncreasingFailedTestsRule implements Rule {
-	
-	private double pointsForEachNewFailure;
+
+    private double pointsForEachNewFailure;
 
     public IncreasingFailedTestsRule() {
-    	this(-1);
+        this(-1);
     }
 
     public IncreasingFailedTestsRule(int points) {
-    	pointsForEachNewFailure = points;
+        pointsForEachNewFailure = points;
     }
-    
+
     public String getName() {
         return "Increased number of failed tests";
     }
 
-	public double evaluate(AbstractBuild<?, ?> build) {
+    public double evaluate(AbstractBuild<?, ?> build) {
         List<TestResultAction> actions = build.getActions(TestResultAction.class);
         for (TestResultAction action : actions) {
-	        if ((action != null) && (action.getPreviousResult() != null)) {
-	            return evaluate(build.getResult(), build.getPreviousBuild().getResult(),
-	            		action.getResult().getFailCount(), action.getPreviousResult().getResult().getFailCount());
-	        }
+            if ((action != null) && (action.getPreviousResult() != null)) {
+                return evaluate(build.getResult(), 
+                        build.getPreviousBuild().getResult(), 
+                        action.getResult().getFailCount(), 
+                        action.getPreviousResult().getResult().getFailCount());
+            }
         }
         return 0;
-	}
-	
-	double evaluate(Result currentResult, Result previousResult, int currentFailCount, int previousFailCount) {
-		if ((previousResult.isBetterThan(Result.FAILURE)) 
-				&& (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
-			int failingTestDiff = currentFailCount - previousFailCount;
-			if (failingTestDiff > 0) {
-				return failingTestDiff * pointsForEachNewFailure;
-			}
-		}
-		return 0;
-	}
+    }
+
+    double evaluate(Result currentResult, Result previousResult,
+            int currentFailCount, int previousFailCount) {
+        if ((previousResult.isBetterThan(Result.FAILURE))
+                && (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
+            int failingTestDiff = currentFailCount - previousFailCount;
+            if (failingTestDiff > 0) {
+                return failingTestDiff * pointsForEachNewFailure;
+            }
+        }
+        return 0;
+    }
 }

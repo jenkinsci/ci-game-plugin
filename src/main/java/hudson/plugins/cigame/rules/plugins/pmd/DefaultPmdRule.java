@@ -16,9 +16,9 @@ public class DefaultPmdRule implements Rule {
             if (previousResultAction != null) {
                 PmdResult pmdResult = action.getResult();
                 if (pmdResult.getDelta() > 0) {
-                    return -10;
+                    return -1;
                 } else if (pmdResult.getDelta() < 0) {
-                    return 10;
+                    return 1;
                 }
             }
         }

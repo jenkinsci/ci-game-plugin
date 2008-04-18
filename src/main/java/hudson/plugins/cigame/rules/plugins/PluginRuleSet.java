@@ -17,7 +17,7 @@ public class PluginRuleSet extends RuleSet {
     /**
      * Construct a rule set for a plugin.
      * 
-     * @param pluginName  the name of the plugin as it is known by Hudson.
+     * @param pluginName the name of the plugin as it is known by Hudson.
      * @param name the text name of the rule set, as it will be displayed.
      */
     public PluginRuleSet(String pluginName, String name) {

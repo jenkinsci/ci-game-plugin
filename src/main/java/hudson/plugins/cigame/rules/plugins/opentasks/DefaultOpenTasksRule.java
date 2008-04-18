@@ -16,49 +16,49 @@ import hudson.plugins.tasks.util.model.Priority;
  */
 public class DefaultOpenTasksRule implements Rule {
 
-	private int pointsForAddingAnAnnotation;
-	private int pointsForRemovingAnAnnotation;
-	
-	private Priority tasksPriority;
+    private int pointsForAddingAnAnnotation;
+    private int pointsForRemovingAnAnnotation;
 
-	public DefaultOpenTasksRule(Priority tasksPriority,
-			int pointsForAddingAnAnnotation, int pointsForRemovingAnAnnotation) {
-		this.tasksPriority = tasksPriority;
-		this.pointsForAddingAnAnnotation = pointsForAddingAnAnnotation;
-		this.pointsForRemovingAnAnnotation = pointsForRemovingAnAnnotation;
-	}
+    private Priority tasksPriority;
 
-	public double evaluate(AbstractBuild<?, ?> build) {
-		double points = 0;
-		if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
-			List<TasksResultAction> actions = build.getActions(hudson.plugins.tasks.TasksResultAction.class);
-			for (TasksResultAction action : actions) {
-				if (action.getPreviousResultAction() != null) {
-					TasksResult result = action.getResult();
-					TasksResult previousResult = action.getPreviousResultAction().getResult();
-					points += evaluteTaskResult(result, previousResult);
-				}
-			}
-		}
-		return points;
-	}
+    public DefaultOpenTasksRule(Priority tasksPriority,
+            int pointsForAddingAnAnnotation, int pointsForRemovingAnAnnotation) {
+        this.tasksPriority = tasksPriority;
+        this.pointsForAddingAnAnnotation = pointsForAddingAnAnnotation;
+        this.pointsForRemovingAnAnnotation = pointsForRemovingAnAnnotation;
+    }
 
-	double evaluteTaskResult(TasksResult result, TasksResult previousResult) {
-		Collection<FileAnnotation> annotations = result.getAnnotations(tasksPriority.name());
-		Collection<FileAnnotation> previousAnnotations = previousResult.getAnnotations(tasksPriority.name());
-		if ((annotations != null) && (previousAnnotations != null)) {
-			int diff = annotations.size() - previousAnnotations.size();
-			if (diff > 0) {
-				return pointsForAddingAnAnnotation;
-			} else if (diff < 0) {
-				return pointsForRemovingAnAnnotation;
-			}
-		}
-		return 0;
-	}
+    public double evaluate(AbstractBuild<?, ?> build) {
+        double points = 0;
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+            List<TasksResultAction> actions = build.getActions(hudson.plugins.tasks.TasksResultAction.class);
+            for (TasksResultAction action : actions) {
+                if (action.getPreviousResultAction() != null) {
+                    TasksResult result = action.getResult();
+                    TasksResult previousResult = action.getPreviousResultAction().getResult();
+                    points += evaluteTaskResult(result, previousResult);
+                }
+            }
+        }
+        return points;
+    }
 
-	public String getName() {
-		return "Open tasks";
-	}
+    double evaluteTaskResult(TasksResult result, TasksResult previousResult) {
+        Collection<FileAnnotation> annotations = result.getAnnotations(tasksPriority.name());
+        Collection<FileAnnotation> previousAnnotations = previousResult.getAnnotations(tasksPriority.name());
+        if ((annotations != null) && (previousAnnotations != null)) {
+            int diff = annotations.size() - previousAnnotations.size();
+            if (diff > 0) {
+                return pointsForAddingAnAnnotation;
+            } else if (diff < 0) {
+                return pointsForRemovingAnAnnotation;
+            }
+        }
+        return 0;
+    }
+
+    public String getName() {
+        return "Open tasks";
+    }
 
 }

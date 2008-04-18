@@ -8,7 +8,7 @@ public class Score {
     private String rulesetName;
     private String ruleName;
     private double value;
-    
+
     public Score(String rulesetName, String ruleName, double value) {
         this.rulesetName = rulesetName;
         this.ruleName = ruleName;

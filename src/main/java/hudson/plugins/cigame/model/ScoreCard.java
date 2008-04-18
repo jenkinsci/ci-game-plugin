@@ -7,45 +7,48 @@ import hudson.model.AbstractBuild;
 
 /**
  * Score card containing the results of evaluating the rules against a build.
- *
- *
+ * 
+ * 
  */
 public class ScoreCard {
-    
+
     private Collection<Score> scores;
 
     /**
      * Record points for the rules in the rule set
+     * 
      * @param build build to evaluate
      * @param ruleset rule set to use for evaluation
      */
-    public void record(AbstractBuild<?,?> build, RuleSet ruleset) {
-    	if (scores == null) {
-    		scores = new LinkedList<Score>();
-    	}
-        for (Rule rule: ruleset.getRules()) {            
+    public void record(AbstractBuild<?, ?> build, RuleSet ruleset) {
+        if (scores == null) {
+            scores = new LinkedList<Score>();
+        }
+        for (Rule rule : ruleset.getRules()) {
             double points = rule.evaluate(build);
             if (points != 0) {
-                Score score = new Score(ruleset.getName(), rule.getName(), points);
+                Score score = new Score(ruleset.getName(), rule.getName(),  points);
                 scores.add(score);
-            }    
+            }
         }
     }
 
     /**
      * Record points for the rules in the rule book
+     * 
      * @param build build to evaluate
      * @param ruleset rule book to use for evaluation
      */
-    public void record(AbstractBuild<?,?> build, RuleBook ruleBook) {
-    	for (RuleSet set : ruleBook.getRuleSets()) {
-    		record(build, set);
-    	}
+    public void record(AbstractBuild<?, ?> build, RuleBook ruleBook) {
+        for (RuleSet set : ruleBook.getRuleSets()) {
+            record(build, set);
+        }
     }
 
     /**
-     * Returns a collection of scores. May not be called before the score has been
-     * recorded.
+     * Returns a collection of scores. May not be called before the score has
+     * been recorded.
+     * 
      * @return a collection of scores.
      * @throws IllegalStateException thrown if the method is called before the scores has been recorded.
      */
@@ -55,9 +58,10 @@ public class ScoreCard {
         }
         return scores;
     }
-    
+
     /**
      * Returns the total points for this score card
+     * 
      * @return the total points for this score card
      * @throws IllegalStateException
      */

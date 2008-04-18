@@ -18,20 +18,20 @@ import hudson.scm.ChangeLogSet.Entry;
  * 
  * @author Erik Ramfelt
  */
-@ExportedBean(defaultVisibility=999)
-public class ScoreCardAction implements Action{
+@ExportedBean(defaultVisibility = 999)
+public class ScoreCardAction implements Action {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private AbstractBuild<?, ?> build;
-    
+    private AbstractBuild<?, ?> build;
+
     private ScoreCard scorecard;
-    
-    public ScoreCardAction(ScoreCard scorecard, AbstractBuild<?,?>b) {
+
+    public ScoreCardAction(ScoreCard scorecard, AbstractBuild<?, ?> b) {
         build = b;
         this.scorecard = scorecard;
     }
-    
+
     public AbstractBuild<?, ?> getBuild() {
         return build;
     }
@@ -52,14 +52,14 @@ public class ScoreCardAction implements Action{
     public ScoreCard getScorecard() {
         return scorecard;
     }
-    
+
     @Exported
     public Set<User> getParticipants() {
-    	Set<User> players = new HashSet<User>();
-    	ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
-    	for (Entry entry : changeSet) {
-    		players.add(entry.getAuthor());
-		}
-    	return players;
+        Set<User> players = new HashSet<User>();
+        ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
+        for (Entry entry : changeSet) {
+            players.add(entry.getAuthor());
+        }
+        return players;
     }
 }

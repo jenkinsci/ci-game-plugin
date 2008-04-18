@@ -9,13 +9,13 @@ import hudson.plugins.cigame.model.Rule;
  */
 public class BuildResultRule implements Rule {
 
-	private int failurePoints;
+    private int failurePoints;
     private int successPoints;
-    
+
     public BuildResultRule() {
-    	this(1, -10);
+        this(1, -10);
     }
-    
+
     public BuildResultRule(int successPoints, int failurePoints) {
         this.successPoints = successPoints;
         this.failurePoints = failurePoints;
@@ -25,25 +25,25 @@ public class BuildResultRule implements Rule {
         return "Build result";
     }
 
-	public double evaluate(AbstractBuild<?,?> build) {    	
-    	Result result = build.getResult();
-    	Result lastResult = null;
-    	if (build.getPreviousBuild() != null) {
-    		lastResult = build.getPreviousBuild().getResult();
-    	}
-    	return evaluate(result, lastResult);
-	}
-	
-	double evaluate(Result result, Result lastResult) {
-		if (result == Result.SUCCESS) {
-    		return successPoints;
-    	}
-    	if (result == Result.FAILURE) {        	
-        	if ((lastResult == null) 
-        		|| (lastResult.isBetterThan(Result.FAILURE))) {
-        		return failurePoints;
-        	}
-    	}    	
-		return 0;
-	}
+    public double evaluate(AbstractBuild<?, ?> build) {
+        Result result = build.getResult();
+        Result lastResult = null;
+        if (build.getPreviousBuild() != null) {
+            lastResult = build.getPreviousBuild().getResult();
+        }
+        return evaluate(result, lastResult);
+    }
+
+    double evaluate(Result result, Result lastResult) {
+        if (result == Result.SUCCESS) {
+            return successPoints;
+        }
+        if (result == Result.FAILURE) {
+            if ((lastResult == null)
+                    || (lastResult.isBetterThan(Result.FAILURE))) {
+                return failurePoints;
+            }
+        }
+        return 0;
+    }
 }

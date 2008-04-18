@@ -11,34 +11,34 @@ import hudson.model.UserPropertyDescriptor;
  * 
  * @author Erik Ramfelt
  */
-@ExportedBean(defaultVisibility=999)
+@ExportedBean(defaultVisibility = 999)
 public class UserScoreProperty extends UserProperty {
 
-	private double score;
-	
-	public UserScoreProperty() {
-		score = 0;
-	}
-	
-	public UserScoreProperty(double score) {
-		this.score = score;
-	}
-	
-	public UserPropertyDescriptor getDescriptor() {
-		return PluginImpl.USER_SCORE_PROPERTY_DESCRIPTOR;
-	}
+    private double score;
+
+    public UserScoreProperty() {
+        score = 0;
+    }
+
+    public UserScoreProperty(double score) {
+        this.score = score;
+    }
+
+    public UserPropertyDescriptor getDescriptor() {
+        return PluginImpl.USER_SCORE_PROPERTY_DESCRIPTOR;
+    }
 
     @Exported
-	public User getUser() {
-		return user;
-	}
+    public User getUser() {
+        return user;
+    }
 
     @Exported
-	public double getScore() {
-		return score;
-	}
+    public double getScore() {
+        return score;
+    }
 
-	public void setScore(double score) {
-		this.score = score;
-	}	
+    public void setScore(double score) {
+        this.score = score;
+    }
 }

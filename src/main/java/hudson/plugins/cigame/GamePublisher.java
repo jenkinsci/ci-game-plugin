@@ -36,67 +36,68 @@ public class GamePublisher extends Publisher {
     }
 
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
-            throws InterruptedException, IOException {
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
+            BuildListener listener) throws InterruptedException, IOException {
 
         RuleBook ruleBook = PluginImpl.GAME_PUBLISHER_DESCRIPTOR.getRuleBook();
-        
+
         ScoreCard sc = new ScoreCard();
-		sc.record(build, ruleBook);
-        
+        sc.record(build, ruleBook);
+
         ScoreCardAction action = new ScoreCardAction(sc, build);
         build.getActions().add(action);
-        
+
         if (updateUserScores(build.getChangeSet(), sc.getTotalPoints())) {
-        	installLeaderBoard();
+            installLeaderBoard();
         }
-        
+
         return true;
     }
 
     /**
      * Add the score to the users that have committed code in the change set
+     * 
      * @param changeSet the change set, used to get users
      * @param score the score that the build was worth
      * @throws IOException thrown if the property could not be added to the user object.
      * @return true, if any user scores was updated; false, otherwise
      */
-	private boolean updateUserScores(ChangeLogSet<? extends Entry> changeSet, double score)
-			throws IOException {
-		Set<User> players = new HashSet<User>();
-		if (score != 0) {
-	    	for (Entry entry : changeSet) {
-	    		players.add(entry.getAuthor());
-			}
-	    	for (User user : players) {
-	    		UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-	    		if (property == null) {
-	    			property = new UserScoreProperty();
-	    			user.addProperty(property);
-	    		}
-	    		property.setScore(property.getScore() + score);
-	    		user.save();
-	    	}
-		}
-    	return (!players.isEmpty());
-	}
+    private boolean updateUserScores(ChangeLogSet<? extends Entry> changeSet,
+            double score) throws IOException {
+        Set<User> players = new HashSet<User>();
+        if (score != 0) {
+            for (Entry entry : changeSet) {
+                players.add(entry.getAuthor());
+            }
+            for (User user : players) {
+                UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+                if (property == null) {
+                    property = new UserScoreProperty();
+                    user.addProperty(property);
+                }
+                property.setScore(property.getScore() + score);
+                user.save();
+            }
+        }
+        return (!players.isEmpty());
+    }
 
     /**
-     * Installs LeaderBoardAction onto the front page.
-     * If it is already installed, nothing happens.
+     * Installs LeaderBoardAction onto the front page. If it is already
+     * installed, nothing happens.
      */
-	private void installLeaderBoard() {
-		boolean isInstalled = false;
-		List<Action> installedActions = Hudson.getInstance().getActions();
+    private void installLeaderBoard() {
+        boolean isInstalled = false;
+        List<Action> installedActions = Hudson.getInstance().getActions();
         for (Action installedAction : installedActions) {
-			if (installedAction instanceof LeaderBoardAction) {
-				isInstalled = true;
-				break;
-			}
-		}
+            if (installedAction instanceof LeaderBoardAction) {
+                isInstalled = true;
+                break;
+            }
+        }
         if (!isInstalled) {
-        	LeaderBoardAction action = new LeaderBoardAction();
+            LeaderBoardAction action = new LeaderBoardAction();
             Hudson.getInstance().getActions().add(action);
         }
-	}
+    }
 }

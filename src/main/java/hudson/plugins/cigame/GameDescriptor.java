@@ -41,8 +41,8 @@ public class GameDescriptor extends Descriptor<Publisher> {
     public RuleBook getRuleBook() {
         if (rulebook == null) {
             rulebook = new RuleBook();
-            
-            RuleSet ruleset = new RuleSet("Basic ruleset", new LinkedList<Rule>());
+
+            RuleSet ruleset = new RuleSet("Basic ruleset");
             ruleset.add(new BuildResultRule());
             ruleset.add(new IncreasingFailedTestsRule());
             ruleset.add(new IncreasingPassedTestsRule());
