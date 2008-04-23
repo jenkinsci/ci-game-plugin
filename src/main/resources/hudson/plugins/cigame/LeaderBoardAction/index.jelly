@@ -6,7 +6,7 @@
 		<div>
         	<table class="pane sortable" style="width:50%">	
         		<tr>
-        			<td class="pane-header" align="left,center">Particpant</td>
+        			<td class="pane-header" align="left,center">Participant</td>
         			<td class="pane-header" initialSortDir="up" align="left" width="10%">Score</td>
         		</tr>
           		<j:forEach var="userscore" items="${it.userScores}">
