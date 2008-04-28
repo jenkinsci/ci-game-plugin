@@ -48,9 +48,9 @@ public class GameDescriptor extends Descriptor<Publisher> {
             ruleset.add(new IncreasingPassedTestsRule());
 
             rulebook.addRuleSet(ruleset);
-            // addRuleSetIfAvailable(book, new OpenTasksRuleSet());
-            // addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
-            // addRuleSetIfAvailable(rulebook, new PmdRuleSet());
+            addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
+            addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
+            addRuleSetIfAvailable(rulebook, new PmdRuleSet());
         }
         return rulebook;
     }
