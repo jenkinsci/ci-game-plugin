@@ -1,4 +1,4 @@
-package hudson.plugins.cigame.rules.basic;
+package hudson.plugins.cigame.rules.build;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Result;

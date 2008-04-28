@@ -1,6 +1,7 @@
-package hudson.plugins.cigame.rules.basic;
+package hudson.plugins.cigame.rules.build;
 
 import hudson.model.Result;
+import hudson.plugins.cigame.rules.build.BuildResultRule;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

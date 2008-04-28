@@ -10,7 +10,8 @@ import hudson.model.Descriptor;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
-import hudson.plugins.cigame.rules.basic.BuildResultRule;
+import hudson.plugins.cigame.rules.build.BuildResultRule;
+import hudson.plugins.cigame.rules.build.BuildRuleSet;
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
 import hudson.plugins.cigame.rules.plugins.opentasks.DefaultOpenTasksRule;
 import hudson.plugins.cigame.rules.plugins.opentasks.OpenTasksRuleSet;
@@ -43,10 +44,7 @@ public class GameDescriptor extends Descriptor<Publisher> {
         if (rulebook == null) {
             rulebook = new RuleBook();
 
-            RuleSet ruleset = new RuleSet("Basic ruleset");
-            ruleset.add(new BuildResultRule());
-            rulebook.addRuleSet(ruleset);
-            
+            addRuleSetIfAvailable(rulebook, new BuildRuleSet());
             addRuleSetIfAvailable(rulebook, new UnitTestingRuleSet());
             addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
             addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
