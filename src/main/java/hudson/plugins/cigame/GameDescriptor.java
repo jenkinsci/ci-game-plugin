@@ -1,27 +1,18 @@
 package hudson.plugins.cigame;
 
-import java.util.LinkedList;
-
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.model.Descriptor;
-import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
-import hudson.plugins.cigame.rules.build.BuildResultRule;
+import hudson.plugins.cigame.plugins.findbugs.FindBugsRuleSet;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
-import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
-import hudson.plugins.cigame.rules.plugins.opentasks.DefaultOpenTasksRule;
 import hudson.plugins.cigame.rules.plugins.opentasks.OpenTasksRuleSet;
 import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
-import hudson.plugins.cigame.rules.plugins.violation.DefaultViolationRule;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
-import hudson.plugins.cigame.rules.unittesting.IncreasingFailedTestsRule;
-import hudson.plugins.cigame.rules.unittesting.IncreasingPassedTestsRule;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
-import hudson.plugins.tasks.util.model.Priority;
 import hudson.tasks.Publisher;
 
 public class GameDescriptor extends Descriptor<Publisher> {
@@ -49,6 +40,7 @@ public class GameDescriptor extends Descriptor<Publisher> {
             addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
             addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
             addRuleSetIfAvailable(rulebook, new PmdRuleSet());
+            addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
         }
         return rulebook;
     }
