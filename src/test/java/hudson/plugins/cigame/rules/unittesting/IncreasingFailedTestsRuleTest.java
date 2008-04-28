@@ -1,7 +1,8 @@
-package hudson.plugins.cigame.rules.basic;
+package hudson.plugins.cigame.rules.unittesting;
 
 import static org.junit.Assert.*;
 import hudson.model.Result;
+import hudson.plugins.cigame.rules.unittesting.IncreasingFailedTestsRule;
 
 import org.junit.Test;
 

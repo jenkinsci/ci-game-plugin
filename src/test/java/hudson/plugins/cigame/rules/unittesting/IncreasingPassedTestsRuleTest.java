@@ -1,6 +1,7 @@
-package hudson.plugins.cigame.rules.basic;
+package hudson.plugins.cigame.rules.unittesting;
 
 import hudson.model.Result;
+import hudson.plugins.cigame.rules.unittesting.IncreasingPassedTestsRule;
 
 import org.junit.Assert;
 import org.junit.Test;

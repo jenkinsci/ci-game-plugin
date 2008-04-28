@@ -1,4 +1,4 @@
-package hudson.plugins.cigame.rules.basic;
+package hudson.plugins.cigame.rules.unittesting;
 
 import java.util.List;
 
