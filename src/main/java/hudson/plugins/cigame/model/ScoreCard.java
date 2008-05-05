@@ -3,6 +3,9 @@ package hudson.plugins.cigame.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+
 import hudson.model.AbstractBuild;
 
 /**
@@ -10,6 +13,7 @@ import hudson.model.AbstractBuild;
  * 
  * 
  */
+@ExportedBean(defaultVisibility=999)
 public class ScoreCard {
 
     private Collection<Score> scores;
@@ -52,6 +56,7 @@ public class ScoreCard {
      * @return a collection of scores.
      * @throws IllegalStateException thrown if the method is called before the scores has been recorded.
      */
+    @Exported
     public Collection<Score> getScores() throws IllegalStateException {
         if (scores == null) {
             throw new IllegalStateException("No scores are available");
@@ -65,6 +70,7 @@ public class ScoreCard {
      * @return the total points for this score card
      * @throws IllegalStateException
      */
+    @Exported
     public double getTotalPoints() throws IllegalStateException {
         if (scores == null) {
             throw new IllegalStateException("No scores are available");

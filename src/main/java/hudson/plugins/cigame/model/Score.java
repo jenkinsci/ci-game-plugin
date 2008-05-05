@@ -1,9 +1,13 @@
 package hudson.plugins.cigame.model;
 
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+
 /**
  * Recorded score for a rule and build.
  * 
  */
+@ExportedBean(defaultVisibility=999)
 public class Score {
     private String rulesetName;
     private String ruleName;
@@ -15,14 +19,22 @@ public class Score {
         this.value = value;
     }
 
+    @Exported
+    public String getDescription() {
+        return rulesetName + " - " + ruleName;
+    }
+
+    @Exported
     public String getRulesetName() {
         return rulesetName;
     }
 
+    @Exported
     public String getRuleName() {
         return ruleName;
     }
 
+    @Exported
     public double getValue() {
         return value;
     }
