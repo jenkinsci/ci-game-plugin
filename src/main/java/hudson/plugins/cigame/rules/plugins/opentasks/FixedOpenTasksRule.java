@@ -14,14 +14,14 @@ import hudson.plugins.tasks.util.model.Priority;
 /**
  * Default rule for the Open tasks plugin.
  */
-public class DefaultOpenTasksRule implements Rule {
+public class FixedOpenTasksRule implements Rule {
 
     private int pointsForAddingAnAnnotation;
     private int pointsForRemovingAnAnnotation;
 
     private Priority tasksPriority;
 
-    public DefaultOpenTasksRule(Priority tasksPriority,
+    public FixedOpenTasksRule(Priority tasksPriority,
             int pointsForAddingAnAnnotation, int pointsForRemovingAnAnnotation) {
         this.tasksPriority = tasksPriority;
         this.pointsForAddingAnAnnotation = pointsForAddingAnAnnotation;

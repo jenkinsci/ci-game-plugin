@@ -11,8 +11,8 @@ public class OpenTasksRuleSet extends PluginRuleSet {
 
     @Override
     protected void loadRules() {
-        add(new DefaultOpenTasksRule(Priority.HIGH, 5, -5));
-        add(new DefaultOpenTasksRule(Priority.NORMAL, 3, -3));
-        add(new DefaultOpenTasksRule(Priority.LOW, 1, -1));
+        add(new FixedOpenTasksRule(Priority.HIGH, 5, -5));
+        add(new FixedOpenTasksRule(Priority.NORMAL, 3, -3));
+        add(new FixedOpenTasksRule(Priority.LOW, 1, -1));
     }
 }
