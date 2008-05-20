@@ -9,9 +9,11 @@ import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.plugins.findbugs.FindBugsRuleSet;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
+import hudson.plugins.cigame.rules.plugins.checkstyle.CheckstyleRuleSet;
 import hudson.plugins.cigame.rules.plugins.opentasks.OpenTasksRuleSet;
 import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
+import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
 import hudson.tasks.Publisher;
 
@@ -41,6 +43,8 @@ public class GameDescriptor extends Descriptor<Publisher> {
             addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
             addRuleSetIfAvailable(rulebook, new PmdRuleSet());
             addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
+            addRuleSetIfAvailable(rulebook, new WarningsRuleSet());
+            addRuleSetIfAvailable(rulebook, new CheckstyleRuleSet());
         }
         return rulebook;
     }
