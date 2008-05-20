@@ -9,19 +9,24 @@ import org.kohsuke.stapler.export.ExportedBean;
  */
 @ExportedBean(defaultVisibility=999)
 public class Score {
-    private String rulesetName;
-    private String ruleName;
-    private double value;
+    private final String rulesetName;
+    private final String ruleName;
+    private final double value;
+    private final String description;
 
-    public Score(String rulesetName, String ruleName, double value) {
+    public Score(String rulesetName, String ruleName, double points, String pointDescription) {
         this.rulesetName = rulesetName;
         this.ruleName = ruleName;
-        this.value = value;
+        this.value = points;
+        description = pointDescription;
     }
 
     @Exported
     public String getDescription() {
-        return rulesetName + " - " + ruleName;
+        if (description == null)
+            return rulesetName + " - " + ruleName;
+        else
+            return description;
     }
 
     @Exported

@@ -23,7 +23,10 @@
         	<table class="pane sortable" style="width:50%">
         		<tr><td class="pane-header" initialSortDir="down" align="left">Rule</td><td class="pane-header" align="left">Points</td></tr>
           		<j:forEach var="score" items="${sc.scores}">
-        			<tr><td>${score.rulesetName} - ${score.ruleName}</td><td>${score.value}</td></tr> 
+        			<tr>
+        				<td><div tooltip="Rule set: ${score.rulesetName}&lt;br/&gt;Rule: ${score.ruleName}">${score.description}</div></td>
+        				<td>${score.value}</td>
+        			</tr> 
           		</j:forEach>
         	</table>
       	</div>

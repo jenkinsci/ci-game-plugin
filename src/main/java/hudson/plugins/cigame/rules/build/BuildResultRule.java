@@ -3,6 +3,7 @@ package hudson.plugins.cigame.rules.build;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleResult;
 
 /**
  * Rule that gives points on the result of the build.
@@ -25,7 +26,7 @@ public class BuildResultRule implements Rule {
         return "Build result";
     }
 
-    public double evaluate(AbstractBuild<?, ?> build) {
+    public RuleResult evaluate(AbstractBuild<?, ?> build) {
         Result result = build.getResult();
         Result lastResult = null;
         if (build.getPreviousBuild() != null) {
@@ -34,16 +35,16 @@ public class BuildResultRule implements Rule {
         return evaluate(result, lastResult);
     }
 
-    double evaluate(Result result, Result lastResult) {
+    RuleResult evaluate(Result result, Result lastResult) {
         if (result == Result.SUCCESS) {
-            return successPoints;
+            return new RuleResult( successPoints, "The build was successful");
         }
         if (result == Result.FAILURE) {
             if ((lastResult == null)
                     || (lastResult.isBetterThan(Result.FAILURE))) {
-                return failurePoints;
+                return new RuleResult(failurePoints, "The build failed");
             }
         }
-        return 0;
+        return null;
     }
 }

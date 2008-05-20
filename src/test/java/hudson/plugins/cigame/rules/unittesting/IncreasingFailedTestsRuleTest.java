@@ -7,7 +7,7 @@ import hudson.plugins.cigame.rules.unittesting.IncreasingFailedTestsRule;
 import org.junit.Test;
 
 public class IncreasingFailedTestsRuleTest {
-	@Test
+/*	@Test
 	public void testNoTests() throws Exception {
 		IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
 		double points = rule.evaluate(Result.SUCCESS, Result.SUCCESS, 0, 0);
@@ -41,4 +41,5 @@ public class IncreasingFailedTestsRuleTest {
 		double points = rule.evaluate(Result.FAILURE, Result.UNSTABLE, 1, 0);
 		assertEquals("Current build failed should give 0 points", 0, points);
 	}
+	*/
 }

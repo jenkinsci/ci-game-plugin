@@ -19,7 +19,7 @@ public interface Rule {
      * Evaluate the build and return the points for it
      * 
      * @param build build to calculate points for
-     * @return 0, build is not worth any points and the rule is ignored.
+     * @return the result of the rule; null if the rule should be ignored.
      */
-    double evaluate(AbstractBuild<?, ?> build);
+    RuleResult evaluate(AbstractBuild<?, ?> build);
 }

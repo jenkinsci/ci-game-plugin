@@ -5,6 +5,7 @@ import java.util.List;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.violations.ViolationsBuildAction;
 import hudson.plugins.violations.ViolationsReport;
 import hudson.plugins.violations.ViolationsReport.TypeReport;
@@ -24,20 +25,29 @@ public class DefaultViolationRule implements Rule {
         this.pointsForRemovingViolation = pointsForRemovingViolation;
     }
 
-    public double evaluate(AbstractBuild<?, ?> build) {
-        double totalPoints = 0;
+    public RuleResult evaluate(AbstractBuild<?, ?> build) {
+        int diff = 0;
         if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
             List<ViolationsBuildAction> actions = build.getActions(ViolationsBuildAction.class);
             for (ViolationsBuildAction action : actions) {
-                ViolationsBuildAction previousResult = action.getPreviousResult();
-                if (previousResult != null) {
-                    totalPoints += evaluateReport(
-                            action.getReport(),
-                            previousResult.getReport());
+                if (action.getPreviousResult() != null) {
+                    TypeReport typeReport = action.getReport().getTypeReports().get(typeName);
+                    TypeReport previousTypeReport = action.getPreviousResult().getReport().getTypeReports().get(typeName);
+                    if ((typeReport != null) && (previousTypeReport != null)) {
+                        diff += typeReport.getNumber() - previousTypeReport.getNumber();
+                    }
                 }
             }
         }
-        return totalPoints;
+        if (diff > 0) {
+            return new RuleResult(diff * pointsForAddingViolation, 
+                    String.format("%d new open %s(s) was found", diff, violationName));
+        }
+        if (diff < 0) {
+            return new RuleResult((diff * -1) * pointsForRemovingViolation, 
+                    String.format("%d open %s(s) was fixed", diff * -1, violationName));
+        }
+        return null;
     }
 
     /**

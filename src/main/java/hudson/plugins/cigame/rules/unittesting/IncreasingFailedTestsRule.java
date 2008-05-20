@@ -5,6 +5,7 @@ import java.util.List;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleResult;
 import hudson.tasks.junit.TestResultAction;
 
 /**
@@ -26,7 +27,7 @@ public class IncreasingFailedTestsRule implements Rule {
         return "Increased number of failed tests";
     }
 
-    public double evaluate(AbstractBuild<?, ?> build) {
+    public RuleResult evaluate(AbstractBuild<?, ?> build) {
         List<TestResultAction> actions = build.getActions(TestResultAction.class);
         for (TestResultAction action : actions) {
             if ((action != null) && (action.getPreviousResult() != null)) {
@@ -36,18 +37,19 @@ public class IncreasingFailedTestsRule implements Rule {
                         action.getPreviousResult().getResult().getFailCount());
             }
         }
-        return 0;
+        return null;
     }
 
-    double evaluate(Result currentResult, Result previousResult,
+    RuleResult evaluate(Result currentResult, Result previousResult,
             int currentFailCount, int previousFailCount) {
         if ((previousResult.isBetterThan(Result.FAILURE))
                 && (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
             int failingTestDiff = currentFailCount - previousFailCount;
             if (failingTestDiff > 0) {
-                return failingTestDiff * pointsForEachNewFailure;
+                return new RuleResult(failingTestDiff * pointsForEachNewFailure, 
+                        String.format("%d new failing tests was added", failingTestDiff));
             }
         }
-        return 0;
+        return null;
     }
 }

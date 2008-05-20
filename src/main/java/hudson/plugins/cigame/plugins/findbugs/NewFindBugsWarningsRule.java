@@ -5,11 +5,12 @@ import java.util.List;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
 
 public class NewFindBugsWarningsRule implements Rule {
 
-    public double evaluate(AbstractBuild<?, ?> build) {
+    public RuleResult evaluate(AbstractBuild<?, ?> build) {
         double points = 0;
         if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
             List<FindBugsResultAction> actions = build.getActions(hudson.plugins.findbugs.FindBugsResultAction.class);
@@ -19,7 +20,7 @@ public class NewFindBugsWarningsRule implements Rule {
                 }
             }
         }
-        return points;
+        return new RuleResult(points, String.format("%f new findbugs warnings was found", points));
     }
 
     public String getName() {

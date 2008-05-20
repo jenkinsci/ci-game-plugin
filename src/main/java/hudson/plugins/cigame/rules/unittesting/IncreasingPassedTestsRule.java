@@ -5,6 +5,7 @@ import java.util.List;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
+import hudson.plugins.cigame.model.RuleResult;
 import hudson.tasks.junit.TestResultAction;
 
 /**
@@ -22,7 +23,7 @@ public class IncreasingPassedTestsRule implements Rule {
         pointsForEachFixedFailure = points;
     }
 
-    public double evaluate(AbstractBuild<?, ?> build) {
+    public RuleResult evaluate(AbstractBuild<?, ?> build) {
         List<TestResultAction> actions = build.getActions(TestResultAction.class);
         for (TestResultAction action : actions) {
             if ((action != null) && (action.getPreviousResult() != null)) {
@@ -32,19 +33,20 @@ public class IncreasingPassedTestsRule implements Rule {
                         action.getPreviousResult().getResult().getPassCount());
             }
         }
-        return 0;
+        return null;
     }
 
-    double evaluate(Result currentResult, Result previousResult,
+    RuleResult evaluate(Result currentResult, Result previousResult,
             int currentPassCount, int previousPassCount) {
         if ((previousResult.isBetterThan(Result.FAILURE))
                 && (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
             int passedTestDiff = currentPassCount - previousPassCount;
             if (passedTestDiff > 0) {
-                return passedTestDiff * pointsForEachFixedFailure;
+                return new RuleResult(passedTestDiff * pointsForEachFixedFailure, 
+                        String.format("%d failing tests were fixed", passedTestDiff));
             }
         }
-        return 0;
+        return null;
     }
 
     public String getName() {

@@ -29,9 +29,9 @@ public class ScoreCard {
             scores = new LinkedList<Score>();
         }
         for (Rule rule : ruleset.getRules()) {
-            double points = rule.evaluate(build);
-            if (points != 0) {
-                Score score = new Score(ruleset.getName(), rule.getName(),  points);
+            RuleResult result = rule.evaluate(build);
+            if ((result != null) && (result.getPoints() != 0)) {
+                Score score = new Score(ruleset.getName(), rule.getName(), result.getPoints(), result.getDescription());
                 scores.add(score);
             }
         }
