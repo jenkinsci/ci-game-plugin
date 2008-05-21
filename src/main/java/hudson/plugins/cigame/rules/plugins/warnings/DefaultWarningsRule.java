@@ -43,11 +43,11 @@ public class DefaultWarningsRule implements Rule {
         }
         if (numberOfAnnotations > 0) {
             return new RuleResult(numberOfAnnotations * pointsForAddingAWarning, 
-                    String.format("%d new compiler warnings(s) was found", numberOfAnnotations));
+                    String.format("%d new compiler warnings were found", numberOfAnnotations));
         }
         if (numberOfAnnotations < 0) {
             return new RuleResult((numberOfAnnotations * -1) * pointsForRemovingAWarning, 
-                    String.format("%d compiler warning(s) was fixed", numberOfAnnotations * -1));
+                    String.format("%d compiler warnings were fixed", numberOfAnnotations * -1));
         }
         return null;
     }

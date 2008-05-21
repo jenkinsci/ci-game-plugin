@@ -21,10 +21,10 @@ public class DefaultPmdRule implements Rule {
             }
         }
         if (delta > 0) {
-            return new RuleResult(1, String.format("%d new PMD warning(s) was found", delta));
+            return new RuleResult(1, String.format("%d new PMD warnings were found", delta));
         }
         if (delta < 0) {
-            return new RuleResult(-1, String.format("%d PMD warning(s) was fixed", delta * -1));
+            return new RuleResult(-1, String.format("%d PMD warnings were fixed", delta * -1));
         }
         return null;
     }

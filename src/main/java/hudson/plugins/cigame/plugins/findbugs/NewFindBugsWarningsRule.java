@@ -20,7 +20,7 @@ public class NewFindBugsWarningsRule implements Rule {
                 }
             }
         }
-        return new RuleResult(points, String.format("%f new findbugs warnings was found", points));
+        return new RuleResult(points, String.format("%f new findbugs warnings were found", points));
     }
 
     public String getName() {

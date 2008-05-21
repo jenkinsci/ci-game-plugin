@@ -41,11 +41,11 @@ public class DefaultViolationRule implements Rule {
         }
         if (diff > 0) {
             return new RuleResult(diff * pointsForAddingViolation, 
-                    String.format("%d new open %s(s) was found", diff, violationName));
+                    String.format("%d new %ss were found", diff, violationName));
         }
         if (diff < 0) {
             return new RuleResult((diff * -1) * pointsForRemovingViolation, 
-                    String.format("%d open %s(s) was fixed", diff * -1, violationName));
+                    String.format("%d %ss were fixed", diff * -1, violationName));
         }
         return null;
     }

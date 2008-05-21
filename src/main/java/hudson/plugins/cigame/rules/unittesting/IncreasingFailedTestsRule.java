@@ -47,7 +47,7 @@ public class IncreasingFailedTestsRule implements Rule {
             int failingTestDiff = currentFailCount - previousFailCount;
             if (failingTestDiff > 0) {
                 return new RuleResult(failingTestDiff * pointsForEachNewFailure, 
-                        String.format("%d new failing tests was added", failingTestDiff));
+                        String.format("%d new failing tests were added", failingTestDiff));
             }
         }
         return null;
