@@ -1,4 +1,4 @@
-package hudson.plugins.cigame.plugins.findbugs;
+package hudson.plugins.cigame.rules.plugins.findbugs;
 
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
 
