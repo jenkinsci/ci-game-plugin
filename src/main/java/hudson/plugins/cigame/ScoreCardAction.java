@@ -1,7 +1,10 @@
 package hudson.plugins.cigame;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -54,12 +57,17 @@ public class ScoreCardAction implements Action {
     }
 
     @Exported
-    public Set<User> getParticipants() {
-        Set<User> players = new HashSet<User>();
+    public Collection<User> getParticipants() {
+        List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
         for (Entry entry : changeSet) {
             players.add(entry.getAuthor());
         }
+        Collections.sort(players, new Comparator<User>() {
+            public int compare(User arg0, User arg1) {
+                return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
+            }            
+        });
         return players;
     }
 }

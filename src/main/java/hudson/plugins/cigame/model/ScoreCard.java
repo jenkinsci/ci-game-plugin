@@ -1,7 +1,9 @@
 package hudson.plugins.cigame.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -16,7 +18,7 @@ import hudson.model.AbstractBuild;
 @ExportedBean(defaultVisibility=999)
 public class ScoreCard {
 
-    private Collection<Score> scores;
+    private List<Score> scores;
 
     /**
      * Record points for the rules in the rule set
@@ -35,6 +37,7 @@ public class ScoreCard {
                 scores.add(score);
             }
         }
+        Collections.sort(scores);
     }
 
     /**

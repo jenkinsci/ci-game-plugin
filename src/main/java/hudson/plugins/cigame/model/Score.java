@@ -8,7 +8,7 @@ import org.kohsuke.stapler.export.ExportedBean;
  * 
  */
 @ExportedBean(defaultVisibility=999)
-public class Score {
+public class Score implements Comparable<Score> {
     private final String rulesetName;
     private final String ruleName;
     private final double value;
@@ -42,5 +42,13 @@ public class Score {
     @Exported
     public double getValue() {
         return value;
+    }
+
+    public int compareTo(Score o) {
+        if (value == o.value) {
+            return description.compareToIgnoreCase(o.description);
+        } else {
+            return (int) Math.round(o.value - value);
+        }
     }
 }
