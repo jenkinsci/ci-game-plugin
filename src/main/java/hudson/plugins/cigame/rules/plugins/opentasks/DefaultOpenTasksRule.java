@@ -31,7 +31,8 @@ public class DefaultOpenTasksRule implements Rule {
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int numberOfAnnotations = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
+                && (build.getPreviousBuild() != null)){
             List<TasksResultAction> actions = build.getActions(hudson.plugins.tasks.TasksResultAction.class);
             for (TasksResultAction action : actions) {
                 if (action.getPreviousResultAction() != null) {
