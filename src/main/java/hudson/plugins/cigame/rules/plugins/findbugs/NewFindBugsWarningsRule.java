@@ -7,24 +7,39 @@ import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
+import hudson.plugins.findbugs.util.model.Priority;
 
 public class NewFindBugsWarningsRule implements Rule {
 
+    private Priority priority;
+    private int pointsForEachNewWarning;
+    
+    public NewFindBugsWarningsRule(Priority priority, int pointsForEachNewWarning) {
+        this.priority = priority;
+        this.pointsForEachNewWarning = pointsForEachNewWarning;
+    }
+
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        double points = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        int numberOfAnnotations = 0;
+        if ((build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) 
+                && (build.getPreviousBuild() != null)) {
             List<FindBugsResultAction> actions = build.getActions(hudson.plugins.findbugs.FindBugsResultAction.class);
             for (FindBugsResultAction action : actions) {
                 if (action.getPreviousResultAction() != null) {
-                    points -= action.getResult().getNewWarnings().size();
+                    numberOfAnnotations = action.getResult().getNumberOfAnnotations(priority) -
+                        action.getPreviousResultAction().getResult().getNumberOfAnnotations(priority);
                 }
             }
         }
-        return new RuleResult(points, String.format("%f new findbugs warnings were found", points));
+        if (numberOfAnnotations > 0) {
+            return new RuleResult(numberOfAnnotations * pointsForEachNewWarning, 
+                    String.format("%d new %s priority findbugs were found", Math.abs(numberOfAnnotations), priority.name()));
+        }
+        return null;
     }
 
     public String getName() {
-        return "New Findbugs warnings";
+        return String.format("New %s priority Findbugs warnings", priority.name());
     }
 
 }

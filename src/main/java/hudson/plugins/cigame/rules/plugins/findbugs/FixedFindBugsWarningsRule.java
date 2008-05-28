@@ -7,23 +7,38 @@ import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
+import hudson.plugins.findbugs.util.model.Priority;
 
 public class FixedFindBugsWarningsRule implements Rule {
 
+    private Priority priority;
+    private int pointsForEachFixedWarning;
+    
+    public FixedFindBugsWarningsRule(Priority priority, int pointsForEachFixedWarning) {
+        this.priority = priority;
+        this.pointsForEachFixedWarning = pointsForEachFixedWarning;
+    }
+
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        int fixedWarnings = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        int numberOfAnnotations = 0;
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
+                && (build.getPreviousBuild() != null)) {
             List<FindBugsResultAction> actions = build.getActions(hudson.plugins.findbugs.FindBugsResultAction.class);
             for (FindBugsResultAction action : actions) {
                 if (action.getPreviousResultAction() != null) {
-                    fixedWarnings += action.getResult().getFixedWarnings().size();
+                    numberOfAnnotations = action.getPreviousResultAction().getResult().getNumberOfAnnotations(priority) -
+                        action.getResult().getNumberOfAnnotations(priority);
                 }
             }
         }
-        return new RuleResult(fixedWarnings, String.format("%d findbugs warnings were fixed", fixedWarnings));
+        if (numberOfAnnotations > 0) {
+            return new RuleResult(numberOfAnnotations * pointsForEachFixedWarning, 
+                    String.format("%d %s priority findbugs were fixed", Math.abs(numberOfAnnotations), priority.name()));
+        }
+        return null;
     }
     
     public String getName() {
-        return "Fixed Findbugs warnings";
+        return String.format("Fixed %s priority Findbugs warnings", priority.name());
     }
 }
