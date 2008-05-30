@@ -26,7 +26,8 @@ public class DefaultCheckstyleRule implements Rule {
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int numberOfWarnings = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
+                || (build.getPreviousBuild() != null)) {
             List<CheckStyleResultAction> actions = build.getActions(hudson.plugins.checkstyle.CheckStyleResultAction.class);
             for (CheckStyleResultAction action : actions) {
                 if (action.getPreviousResultAction() != null) {

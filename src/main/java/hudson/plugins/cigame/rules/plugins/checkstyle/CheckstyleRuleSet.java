@@ -1,7 +1,6 @@
 package hudson.plugins.cigame.rules.plugins.checkstyle;
 
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
-import hudson.plugins.warnings.util.model.Priority;
 
 public class CheckstyleRuleSet extends PluginRuleSet {
 

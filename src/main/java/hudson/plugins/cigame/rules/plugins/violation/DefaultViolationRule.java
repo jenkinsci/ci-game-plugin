@@ -27,7 +27,8 @@ public class DefaultViolationRule implements Rule {
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int diff = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
+                || (build.getPreviousBuild() != null)) {
             List<ViolationsBuildAction> actions = build.getActions(ViolationsBuildAction.class);
             for (ViolationsBuildAction action : actions) {
                 if (action.getPreviousResult() != null) {

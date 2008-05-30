@@ -10,7 +10,6 @@ import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.warnings.WarningsResult;
 import hudson.plugins.warnings.WarningsResultAction;
 import hudson.plugins.warnings.util.model.FileAnnotation;
-import hudson.plugins.warnings.util.model.Priority;
 
 /**
  * Default rule for the Warnings plugin.
@@ -27,7 +26,8 @@ public class DefaultWarningsRule implements Rule {
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int numberOfAnnotations = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
+                || (build.getPreviousBuild() != null)){
             List<WarningsResultAction> actions = build.getActions(hudson.plugins.warnings.WarningsResultAction.class);
             for (WarningsResultAction action : actions) {
                 if (action.getPreviousResultAction() != null) {

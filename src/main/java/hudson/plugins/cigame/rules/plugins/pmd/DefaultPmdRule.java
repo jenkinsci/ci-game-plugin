@@ -1,6 +1,5 @@
 package hudson.plugins.cigame.rules.plugins.pmd;
 
-import java.util.Collection;
 import java.util.List;
 
 import hudson.model.AbstractBuild;
