@@ -10,6 +10,6 @@ public class CheckstyleRuleSet extends PluginRuleSet {
 
     @Override
     protected void loadRules() {
-        add(new DefaultCheckstyleRule(-5, 5));
+        add(new DefaultCheckstyleRule(-1, 1));
     }
 }
