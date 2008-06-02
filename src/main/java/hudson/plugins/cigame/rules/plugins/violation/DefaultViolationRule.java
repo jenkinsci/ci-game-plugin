@@ -31,9 +31,10 @@ public class DefaultViolationRule implements Rule {
                 || (build.getPreviousBuild() != null)) {
             List<ViolationsBuildAction> actions = build.getActions(ViolationsBuildAction.class);
             for (ViolationsBuildAction action : actions) {
-                if (action.getPreviousResult() != null) {
-                    TypeReport typeReport = action.getReport().getTypeReports().get(typeName);
-                    TypeReport previousTypeReport = action.getPreviousResult().getReport().getTypeReports().get(typeName);
+                ViolationsReport violationReport = action.getReport();
+                if (violationReport.previous() != null) {
+                    TypeReport typeReport = violationReport.getTypeReports().get(typeName);
+                    TypeReport previousTypeReport = violationReport.previous().getTypeReports().get(typeName);
                     if ((typeReport != null) && (previousTypeReport != null)) {
                         diff += typeReport.getNumber() - previousTypeReport.getNumber();
                     }
