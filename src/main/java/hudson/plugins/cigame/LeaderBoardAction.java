@@ -1,13 +1,17 @@
 package hudson.plugins.cigame;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import hudson.model.Action;
+import hudson.model.Hudson;
 import hudson.model.User;
 
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
@@ -62,6 +66,19 @@ public class LeaderBoardAction implements Action {
         return list;
     }
 
+    public void doResetScores( StaplerRequest req, StaplerResponse rsp ) throws IOException {
+        if (Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
+            for (User user : User.getAll()) {
+                UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+                if (property != null) {
+                    property.setScore(0);
+                    user.save();
+                }
+            }
+        }
+        rsp.sendRedirect2(req.getContextPath());
+    }
+    
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
         private User user;
