@@ -61,7 +61,11 @@ public class ScoreCardAction implements Action {
         List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
         for (Entry entry : changeSet) {
-            players.add(entry.getAuthor());
+            User user = entry.getAuthor();
+            UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+            if ((property != null) && property.isParticipatingInGame()) {
+                players.add(user);
+            }
         }
         Collections.sort(players, new Comparator<User>() {
             public int compare(User arg0, User arg1) {

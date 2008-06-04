@@ -75,7 +75,9 @@ public class GamePublisher extends Publisher {
                     property = new UserScoreProperty();
                     user.addProperty(property);
                 }
-                property.setScore(property.getScore() + score);
+                if (property.isParticipatingInGame()) {
+                    property.setScore(property.getScore() + score);
+                }
                 user.save();
             }
         }

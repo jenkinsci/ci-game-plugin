@@ -23,6 +23,7 @@ public class UserScoreProperty extends UserProperty {
 
     public UserScoreProperty() {
         score = 0;
+        isNotParticipatingInGame = false;
     }
     
     @DataBoundConstructor
