@@ -1,5 +1,6 @@
 package hudson.plugins.cigame;
 
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
@@ -15,13 +16,19 @@ import hudson.model.UserPropertyDescriptor;
 public class UserScoreProperty extends UserProperty {
 
     private double score;
+    
+    /** Inversed name as default value is false when serializing from data that
+     * has doesnt have the value. */
+    private boolean isNotParticipatingInGame;
 
     public UserScoreProperty() {
         score = 0;
     }
-
-    public UserScoreProperty(double score) {
+    
+    @DataBoundConstructor
+    public UserScoreProperty(double score, boolean participatingInGame) {
         this.score = score;
+        this.isNotParticipatingInGame = !participatingInGame;
     }
 
     public UserPropertyDescriptor getDescriptor() {
@@ -40,5 +47,10 @@ public class UserScoreProperty extends UserProperty {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    @Exported
+    public boolean isParticipatingInGame() {
+        return !isNotParticipatingInGame;
     }
 }

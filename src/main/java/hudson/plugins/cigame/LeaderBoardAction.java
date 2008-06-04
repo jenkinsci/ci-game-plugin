@@ -48,7 +48,7 @@ public class LeaderBoardAction implements Action {
 
         for (User user : User.getAll()) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-            if (property != null) {
+            if ((property != null) && property.isParticipatingInGame()) {
                 list.add(new UserScore(property.getUser(), property.getScore()));
             }
         }
