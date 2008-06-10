@@ -4,7 +4,9 @@ fmt">
   <l:side-panel>
     <l:tasks>
       <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
-      <l:task icon="images/24x24/edit-delete.gif" href="confirmResetScores" title="${%Reset all scores}" permission="${it.CONFIGURE}" />
+      <j:if test="${h.hasPermission(app.ADMINISTER)}">
+      	<l:task icon="images/24x24/edit-delete.gif" href="confirmResetScores" title="${%Reset all scores}"/>
+      </j:if>
     </l:tasks>
   </l:side-panel>
 </j:jelly>
