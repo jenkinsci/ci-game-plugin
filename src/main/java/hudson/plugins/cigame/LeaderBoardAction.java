@@ -9,6 +9,9 @@ import java.util.List;
 import hudson.model.Action;
 import hudson.model.Hudson;
 import hudson.model.User;
+import hudson.security.ACL;
+import hudson.security.AccessControlled;
+import hudson.security.Permission;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -21,7 +24,7 @@ import org.kohsuke.stapler.export.ExportedBean;
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
-public class LeaderBoardAction implements Action {
+public class LeaderBoardAction implements Action, AccessControlled {
 
     private static final long serialVersionUID = 1L;
 
@@ -99,6 +102,18 @@ public class LeaderBoardAction implements Action {
         public double getScore() {
             return score;
         }
+    }
+
+    public ACL getACL() {
+        return Hudson.getInstance().getACL();
+    }
+
+    public void checkPermission(Permission p) {
+        getACL().checkPermission(p);
+    }
+
+    public boolean hasPermission(Permission p) {
+        return getACL().hasPermission(p);
     }
 
 }
