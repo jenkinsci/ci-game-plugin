@@ -28,8 +28,7 @@ public class DefaultPmdRule implements Rule {
                 && (build.getPreviousBuild() != null)) {
             List<PmdResultAction> actions = build.getActions(PmdResultAction.class);
             for (PmdResultAction action : actions) {
-                PmdResultAction previousResultAction = action.getPreviousResultAction();
-                if (previousResultAction != null) {
+                if (action.hasPreviousResultAction()) {
                     PmdResult result = action.getResult();
                     PmdResult previousResult = action.getPreviousResultAction().getResult();
                     

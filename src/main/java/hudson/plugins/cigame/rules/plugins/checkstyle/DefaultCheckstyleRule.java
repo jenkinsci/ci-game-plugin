@@ -30,7 +30,7 @@ public class DefaultCheckstyleRule implements Rule {
                 || (build.getPreviousBuild() != null)) {
             List<CheckStyleResultAction> actions = build.getActions(hudson.plugins.checkstyle.CheckStyleResultAction.class);
             for (CheckStyleResultAction action : actions) {
-                if (action.getPreviousResultAction() != null) {
+                if (action.hasPreviousResultAction()) {
                     CheckStyleResult result = action.getResult();
                     CheckStyleResult previousResult = action.getPreviousResultAction().getResult();
                     Collection<FileAnnotation> annotations = result.getAnnotations();
