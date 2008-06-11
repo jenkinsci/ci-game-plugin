@@ -30,7 +30,7 @@ public class DefaultWarningsRule implements Rule {
                 || (build.getPreviousBuild() != null)){
             List<WarningsResultAction> actions = build.getActions(hudson.plugins.warnings.WarningsResultAction.class);
             for (WarningsResultAction action : actions) {
-                if (action.getPreviousResultAction() != null) {
+                if (action.hasPreviousResultAction()) {
                     WarningsResult result = action.getResult();
                     WarningsResult previousResult = action.getPreviousResultAction().getResult();
                     Collection<FileAnnotation> annotations = result.getAnnotations();

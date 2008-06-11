@@ -25,7 +25,7 @@ public class FixedFindBugsWarningsRule implements Rule {
                 && (build.getPreviousBuild() != null)) {
             List<FindBugsResultAction> actions = build.getActions(hudson.plugins.findbugs.FindBugsResultAction.class);
             for (FindBugsResultAction action : actions) {
-                if (action.getPreviousResultAction() != null) {
+                if (action.hasPreviousResultAction()) {
                     numberOfAnnotations = action.getPreviousResultAction().getResult().getNumberOfAnnotations(priority) -
                         action.getResult().getNumberOfAnnotations(priority);
                 }

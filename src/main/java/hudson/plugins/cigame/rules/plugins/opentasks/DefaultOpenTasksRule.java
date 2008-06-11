@@ -35,7 +35,7 @@ public class DefaultOpenTasksRule implements Rule {
                 && (build.getPreviousBuild() != null)){
             List<TasksResultAction> actions = build.getActions(hudson.plugins.tasks.TasksResultAction.class);
             for (TasksResultAction action : actions) {
-                if (action.getPreviousResultAction() != null) {
+                if (action.hasPreviousResultAction()) {
                     TasksResult result = action.getResult();
                     TasksResult previousResult = action.getPreviousResultAction().getResult();
                     
