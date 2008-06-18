@@ -33,9 +33,9 @@ public class NewFindBugsWarningsRule implements Rule {
         }
         if (numberOfAnnotations > 0) {
             return new RuleResult(numberOfAnnotations * pointsForEachNewWarning, 
-                    String.format("%d new %s priority findbugs were found", Math.abs(numberOfAnnotations), priority.name()));
+                    String.format("%d new %s priority findbugs warnings were found", Math.abs(numberOfAnnotations), priority.name()));
         }
-        return null;
+        return new RuleResult(0, String.format("No new %s priority findbugs warnings found.", priority.name()));
     }
 
     public String getName() {

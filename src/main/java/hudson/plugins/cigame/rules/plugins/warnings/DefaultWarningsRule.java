@@ -27,7 +27,7 @@ public class DefaultWarningsRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int numberOfAnnotations = 0;
         if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
-                || (build.getPreviousBuild() != null)){
+                && (build.getPreviousBuild() != null)){
             List<WarningsResultAction> actions = build.getActions(hudson.plugins.warnings.WarningsResultAction.class);
             for (WarningsResultAction action : actions) {
                 if (action.hasPreviousResultAction()) {
@@ -49,7 +49,7 @@ public class DefaultWarningsRule implements Rule {
             return new RuleResult((numberOfAnnotations * -1) * pointsForRemovingAWarning, 
                     String.format("%d compiler warnings were fixed", numberOfAnnotations * -1));
         }
-        return null;
+        return new RuleResult(0, "No new or fixed compiler warnings found.");
     }
     
     public String getName() {

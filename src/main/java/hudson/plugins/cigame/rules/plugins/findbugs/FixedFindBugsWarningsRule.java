@@ -33,9 +33,9 @@ public class FixedFindBugsWarningsRule implements Rule {
         }
         if (numberOfAnnotations > 0) {
             return new RuleResult(numberOfAnnotations * pointsForEachFixedWarning, 
-                    String.format("%d %s priority findbugs were fixed", Math.abs(numberOfAnnotations), priority.name()));
+                    String.format("%d %s priority findbugs warnings were fixed", Math.abs(numberOfAnnotations), priority.name()));
         }
-        return null;
+        return new RuleResult(0, String.format("No fixed %s priority findbugs warnings found.", priority.name()));
     }
     
     public String getName() {

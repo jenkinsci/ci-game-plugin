@@ -28,7 +28,7 @@ public class DefaultViolationRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         int diff = 0;
         if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
-                || (build.getPreviousBuild() != null)) {
+                && (build.getPreviousBuild() != null)) {
             List<ViolationsBuildAction> actions = build.getActions(ViolationsBuildAction.class);
             for (ViolationsBuildAction action : actions) {
                 ViolationsReport violationReport = action.getReport();
@@ -49,7 +49,8 @@ public class DefaultViolationRule implements Rule {
             return new RuleResult((diff * -1) * pointsForRemovingViolation, 
                     String.format("%d %ss were fixed", diff * -1, violationName));
         }
-        return null;
+        return new RuleResult(0, 
+                String.format("There was no change for %ss", violationName));
     }
 
     /**

@@ -46,7 +46,7 @@ public class DefaultPmdRule implements Rule {
             return new RuleResult(Math.abs(delta) * pointsForAddingAnAnnotation, 
                     String.format("%d new %s priority PMD warnings were found", Math.abs(delta), tasksPriority.name()));
         }
-        return null;
+        return new RuleResult(0, String.format("No new or fixed %s priority PMD warnings found.", tasksPriority.name()));
     }
 
     public String getName() {

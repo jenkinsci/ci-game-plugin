@@ -49,13 +49,13 @@ public class DefaultOpenTasksRule implements Rule {
         }
         if (numberOfAnnotations > 0) {
             return new RuleResult(numberOfAnnotations * pointsForAddingAnAnnotation, 
-                    String.format("%d new open %s priority task were found", numberOfAnnotations, tasksPriority.name()));
+                    String.format("%d new open %s priority tasks were found", numberOfAnnotations, tasksPriority.name()));
         }
         if (numberOfAnnotations < 0) {
             return new RuleResult((numberOfAnnotations * -1) * pointsForRemovingAnAnnotation, 
-                    String.format("%d open %s priority task were fixed", numberOfAnnotations * -1, tasksPriority.name()));
+                    String.format("%d open %s priority tasks were fixed", numberOfAnnotations * -1, tasksPriority.name()));
         }
-        return null;
+        return new RuleResult(0, String.format("No new or fixed %s priority tasks found.", tasksPriority.name()));
     }
     
     public String getName() {
