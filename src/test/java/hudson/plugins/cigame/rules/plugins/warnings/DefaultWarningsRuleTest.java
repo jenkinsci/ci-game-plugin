@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
+import hudson.plugins.cigame.rules.plugins.findbugs.FixedFindBugsWarningsRule;
+import hudson.plugins.findbugs.util.model.Priority;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -37,6 +39,24 @@ public class DefaultWarningsRuleTest {
         classContext.checking(new Expectations() {
             {
                 ignoring(build).getResult(); will(returnValue(buildResult));
+            }
+        });
+
+        DefaultWarningsRule rule = new DefaultWarningsRule(100, -100);
+        RuleResult ruleResult = rule.evaluate(build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        
+        classContext.assertIsSatisfied();
+        context.assertIsSatisfied();
+    }
+    
+    @Test
+    public void assertNoPreviousBuildIsWorthZeroPoints() {        
+        classContext.checking(new Expectations() {
+            {
+                ignoring(build).getResult(); will(returnValue(Result.SUCCESS));
+                ignoring(build).getPreviousBuild(); will(returnValue(null));
             }
         });
 

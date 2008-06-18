@@ -49,4 +49,22 @@ public class FixedFindBugsWarningsRuleTest {
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
     }
+    
+    @Test
+    public void assertNoPreviousBuildIsWorthZeroPoints() {        
+        classContext.checking(new Expectations() {
+            {
+                ignoring(build).getResult(); will(returnValue(Result.SUCCESS));
+                ignoring(build).getPreviousBuild(); will(returnValue(null));
+            }
+        });
+
+        FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
+        RuleResult ruleResult = rule.evaluate(build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        
+        classContext.assertIsSatisfied();
+        context.assertIsSatisfied();
+    }
 }

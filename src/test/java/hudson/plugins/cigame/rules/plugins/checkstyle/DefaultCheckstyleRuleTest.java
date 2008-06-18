@@ -1,12 +1,11 @@
-package hudson.plugins.cigame.rules.plugins.findbugs;
+package hudson.plugins.cigame.rules.plugins.checkstyle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.checkstyle.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.plugins.checkstyle.DefaultCheckstyleRule;
-import hudson.plugins.findbugs.util.model.Priority;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -15,8 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class NewFindBugsWarningsRuleTest {
-
+public class DefaultCheckstyleRuleTest {
     private Mockery context;
     private Mockery classContext;
     private AbstractBuild<?,?> build;
@@ -34,15 +32,13 @@ public class NewFindBugsWarningsRuleTest {
     
     @Test
     public void assertFailedBuildsIsWorthZeroPoints() {
-        
-        final Result buildResult = Result.FAILURE;
         classContext.checking(new Expectations() {
             {
-                ignoring(build).getResult(); will(returnValue(buildResult));
+                ignoring(build).getResult(); will(returnValue(Result.FAILURE));
             }
         });
 
-        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertEquals("Points should be zero", 0, ruleResult.getPoints());
@@ -60,7 +56,7 @@ public class NewFindBugsWarningsRuleTest {
             }
         });
 
-        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertEquals("Points should be zero", 0, ruleResult.getPoints());

@@ -10,6 +10,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.Build;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
+import hudson.plugins.cigame.rules.plugins.warnings.DefaultWarningsRule;
 import hudson.plugins.violations.ViolationsBuildAction;
 import hudson.plugins.violations.ViolationsReport;
 import hudson.plugins.violations.ViolationsReport.TypeReport;
@@ -75,6 +76,24 @@ public class DefaultViolationRuleTest {
                 ignoring(build).getResult(); will(returnValue(buildResult));
                 ignoring(build).getPreviousBuild(); will(returnValue(previousBuild));
                 ignoring(build).getActions(ViolationsBuildAction.class); will(returnValue(actionList));
+            }
+        });
+
+        DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
+        RuleResult ruleResult = rule.evaluate(build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        
+        classContext.assertIsSatisfied();
+        context.assertIsSatisfied();
+    }
+    
+    @Test
+    public void assertNoPreviousBuildIsWorthZeroPoints() {        
+        classContext.checking(new Expectations() {
+            {
+                ignoring(build).getResult(); will(returnValue(Result.SUCCESS));
+                ignoring(build).getPreviousBuild(); will(returnValue(null));
             }
         });
 

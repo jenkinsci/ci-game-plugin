@@ -49,7 +49,7 @@ public class DefaultCheckstyleRule implements Rule {
             return new RuleResult((numberOfWarnings * -1) * pointsForRemovingAWarning, 
                     String.format("%d checkstyle warnings were fixed", numberOfWarnings * -1));
         }
-        return null;
+        return  new RuleResult(0, "No new or fixed checkstyle warnings found.");
     }
     
     public String getName() {
