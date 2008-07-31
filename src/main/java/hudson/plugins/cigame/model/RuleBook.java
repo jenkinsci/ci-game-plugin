@@ -1,5 +1,9 @@
 package hudson.plugins.cigame.model;
 
+import hudson.Util;
+
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,5 +45,19 @@ public class RuleBook {
      */
     public List<RuleSet> getRuleSets() {
         return rulesets;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("RuleBook [");
+        for (Iterator<RuleSet> iterator = rulesets.iterator(); iterator.hasNext();) {
+            builder.append(iterator.next().getName());
+            if (iterator.hasNext()) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
     }
 }
