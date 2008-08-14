@@ -1,0 +1,39 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<l:layout title="Score card">
+	<st:include it="${it.build}" page="sidepanel.jelly" />
+	<j:set var="sc" value="${it.scorecard}" />
+	<j:set var="participants" value="${it.participants}" />
+    <l:main-panel>
+       	<h1>Score card</h1>
+		<div>
+        	<table class="pane sortable" style="width:50%">
+        		<tr><td class="pane-header" align="left">Rule</td><td class="pane-header" initialSortDir="up" align="left">Points</td></tr>
+          		<j:forEach var="score" items="${sc.scores}">
+        			<tr>
+        				<td><div tooltip="Rule set: ${score.rulesetName}&lt;br/&gt;Rule: ${score.ruleName}">${score.description}</div></td>
+        				<td>${score.value}</td>
+        			</tr> 
+          		</j:forEach>
+        	</table>
+      	</div>       	
+       	<br/>
+       	<div>
+       	<j:choose>
+	       	<j:when test="${participants.size() == 0}">
+	       		No players participated in this build
+	       	</j:when>
+	       	<j:otherwise>
+	       		<table class="pane sortable" style="width:50%">
+	       		<tr><td class="pane-header" initialSortDir="down" align="left">Participating players</td></tr>
+          		<j:forEach var="player" items="${it.participants}">
+          			<tr><td>
+        			<a href="${rootURL}/${player.url}">${player}</a>
+        			</td></tr>  
+          		</j:forEach>
+          		</table>
+	       	</j:otherwise>
+	    </j:choose>	       	
+       	</div>
+	</l:main-panel>
+  	</l:layout>
+</j:jelly>
