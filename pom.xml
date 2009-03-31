@@ -76,5 +76,10 @@
       <version>2.2.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jvnet.localizer</groupId>
+      <artifactId>localizer</artifactId>
+      <version>1.9</version>
+    </dependency>
   </dependencies>
 </project>
