@@ -1,12 +1,12 @@
 package hudson.plugins.cigame.rules.unittesting;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.tasks.junit.TestResultAction;
+import hudson.tasks.test.AbstractTestResultAction;
+
+import java.util.List;
 
 /**
  * Rule for giving points if a new test is added and fails.
@@ -27,14 +27,15 @@ public class IncreasingFailedTestsRule implements Rule {
         return "Increased number of failed tests";
     }
 
+    @SuppressWarnings("unchecked")
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        List<TestResultAction> actions = build.getActions(TestResultAction.class);
-        for (TestResultAction action : actions) {
+        List<AbstractTestResultAction> actions = build.getActions(AbstractTestResultAction.class);
+        for (AbstractTestResultAction action : actions) {
             if ((action != null) && (action.getPreviousResult() != null)) {
                 return evaluate(build.getResult(), 
                         build.getPreviousBuild().getResult(), 
-                        action.getResult().getFailCount(), 
-                        action.getPreviousResult().getResult().getFailCount());
+                        action.getFailCount(), 
+                        action.getPreviousResult().getFailCount());
             }
         }
         return null;

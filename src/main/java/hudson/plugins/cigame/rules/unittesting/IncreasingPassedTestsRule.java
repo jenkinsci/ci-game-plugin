@@ -1,12 +1,12 @@
 package hudson.plugins.cigame.rules.unittesting;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.tasks.junit.TestResultAction;
+import hudson.tasks.test.AbstractTestResultAction;
+
+import java.util.List;
 
 /**
  * Rule that gives points for increasing the number of passed tests.
@@ -23,14 +23,15 @@ public class IncreasingPassedTestsRule implements Rule {
         pointsForEachFixedFailure = points;
     }
 
+    @SuppressWarnings("unchecked")
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        List<TestResultAction> actions = build.getActions(TestResultAction.class);
-        for (TestResultAction action : actions) {
+        List<AbstractTestResultAction> actions = build.getActions(AbstractTestResultAction.class);
+        for (AbstractTestResultAction action : actions) {
             if ((action != null) && (action.getPreviousResult() != null)) {
                 return evaluate(build.getResult(), 
                         build.getPreviousBuild().getResult(), 
-                        action.getResult().getPassCount(), 
-                        action.getPreviousResult().getResult().getPassCount());
+                        action.getTotalCount()-action.getFailCount(), 
+                        action.getPreviousResult().getTotalCount()-action.getPreviousResult().getFailCount());
             }
         }
         return null;
