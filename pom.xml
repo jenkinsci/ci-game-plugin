@@ -10,7 +10,7 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.8</version>
+  <version>1.9-SNAPSHOT</version>
   <name>Hudson Continuous Integration game</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/The+Continuous+Integration+Game+plugin</url>
 
@@ -22,9 +22,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/ci-game-1.8</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.8</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/ci-game/tags/ci-game-1.8</url>
+    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/ci-game-1.7</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.7</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/ci-game/tags/ci-game-1.7</url>
   </scm>
   
   <dependencies>
