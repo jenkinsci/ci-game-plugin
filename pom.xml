@@ -10,7 +10,7 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.10-SNAPSHOT</version>
   <name>Hudson Continuous Integration game</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/The+Continuous+Integration+Game+plugin</url>
 
