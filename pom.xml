@@ -21,12 +21,6 @@
     </license>
   </licenses>
 
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/ci-game-1.7</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.7</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/ci-game/tags/ci-game-1.7</url>
-  </scm>
-  
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
