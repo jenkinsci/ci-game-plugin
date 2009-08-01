@@ -1,10 +1,10 @@
 package hudson.plugins.cigame.rules.plugins.pmd;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.plugins.violation.DefaultViolationRule;
 import hudson.plugins.pmd.util.model.Priority;
 
 import org.jmock.Expectations;
@@ -43,7 +43,7 @@ public class DefaultPmdRuleTest {
         DefaultPmdRule rule = new DefaultPmdRule(Priority.HIGH, 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -61,7 +61,7 @@ public class DefaultPmdRuleTest {
         DefaultPmdRule rule = new DefaultPmdRule(Priority.HIGH, 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();

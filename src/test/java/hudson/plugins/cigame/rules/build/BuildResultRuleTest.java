@@ -6,6 +6,7 @@ import hudson.plugins.cigame.rules.build.BuildResultRule;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 public class BuildResultRuleTest {
 
@@ -13,14 +14,14 @@ public class BuildResultRuleTest {
     public void testFirstBuildSuccess() {
         BuildResultRule rule = new BuildResultRule(100, -100);
         RuleResult results = rule.evaluate(Result.SUCCESS, null);
-        assertEquals("Successful build should give 100 results", 100, results.getPoints());
+        assertThat("Successful build should give 100 results",  results.getPoints(), is((double) 100));
     }
 
     @Test
     public void testFirstBuildFailed() {
         BuildResultRule rule = new BuildResultRule(100, -100);
         RuleResult results = rule.evaluate(Result.FAILURE, null);
-        assertEquals("Failed build should give -100 results", -100, results.getPoints());
+        assertThat("Failed build should give -100 results", results.getPoints(), is((double) -100));
     }
 
     @Test
@@ -34,7 +35,7 @@ public class BuildResultRuleTest {
     public void testLastBuildWasUnstable() {
         BuildResultRule rule = new BuildResultRule(100, -100);
         RuleResult results = rule.evaluate(Result.SUCCESS, Result.UNSTABLE);
-        assertEquals("Fixed build should give 100 results", 100, results.getPoints());
+        assertThat("Fixed build should give 100 results", results.getPoints(), is((double)100));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class BuildResultRuleTest {
     public void testContinuedBuildSuccess() {
         BuildResultRule rule = new BuildResultRule(100, -100);
         RuleResult results = rule.evaluate(Result.SUCCESS, Result.SUCCESS);
-        assertEquals("No change in result should give 100 results", 100, results.getPoints());
+        assertThat("No change in result should give 100 results", results.getPoints(), is((double)100));
     }
 
     @Test

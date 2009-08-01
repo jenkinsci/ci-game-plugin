@@ -1,10 +1,10 @@
 package hudson.plugins.cigame.rules.plugins.checkstyle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
-import hudson.plugins.checkstyle.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
 
 import org.jmock.Expectations;
@@ -41,7 +41,7 @@ public class DefaultCheckstyleRuleTest {
         DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -59,7 +59,7 @@ public class DefaultCheckstyleRuleTest {
         DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();

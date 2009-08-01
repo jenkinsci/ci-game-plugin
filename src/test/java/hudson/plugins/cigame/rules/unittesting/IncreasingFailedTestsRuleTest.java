@@ -1,5 +1,6 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
@@ -19,7 +20,7 @@ public class IncreasingFailedTestsRuleTest {
     public void testMoreFailingTests() throws Exception {
         IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
         RuleResult result = rule.evaluate(Result.UNSTABLE, Result.UNSTABLE, 2, 0);
-        assertEquals("2 new test should give -20 result", -20, result.getPoints());
+        assertThat("2 new test should give -20 result", result.getPoints(), is((double) -20));
     }
 
     @Test

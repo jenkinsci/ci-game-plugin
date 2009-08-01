@@ -1,13 +1,11 @@
 package hudson.plugins.cigame.rules.plugins.warnings;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.plugins.findbugs.FixedFindBugsWarningsRule;
-import hudson.plugins.findbugs.util.model.Priority;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -45,7 +43,7 @@ public class DefaultWarningsRuleTest {
         DefaultWarningsRule rule = new DefaultWarningsRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -63,7 +61,7 @@ public class DefaultWarningsRuleTest {
         DefaultWarningsRule rule = new DefaultWarningsRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();

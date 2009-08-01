@@ -1,6 +1,7 @@
 package hudson.plugins.cigame.rules.plugins.violation;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import hudson.model.AbstractBuild;
 import hudson.model.Build;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.plugins.warnings.DefaultWarningsRule;
 import hudson.plugins.violations.ViolationsBuildAction;
 import hudson.plugins.violations.ViolationsReport;
 import hudson.plugins.violations.ViolationsReport.TypeReport;
@@ -53,7 +53,7 @@ public class DefaultViolationRuleTest {
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -82,7 +82,7 @@ public class DefaultViolationRuleTest {
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -100,7 +100,7 @@ public class DefaultViolationRuleTest {
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();

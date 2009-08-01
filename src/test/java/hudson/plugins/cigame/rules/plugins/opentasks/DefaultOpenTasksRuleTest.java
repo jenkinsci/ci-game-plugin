@@ -1,10 +1,11 @@
 package hudson.plugins.cigame.rules.plugins.opentasks;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.plugins.pmd.DefaultPmdRule;
 import hudson.plugins.tasks.util.model.Priority;
 
 import org.jmock.Expectations;
@@ -43,7 +44,7 @@ public class DefaultOpenTasksRuleTest {
         DefaultOpenTasksRule rule = new DefaultOpenTasksRule(Priority.HIGH, 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
@@ -61,7 +62,7 @@ public class DefaultOpenTasksRuleTest {
         DefaultOpenTasksRule rule = new DefaultOpenTasksRule(Priority.HIGH, 100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertEquals("Points should be zero", 0, ruleResult.getPoints());
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
