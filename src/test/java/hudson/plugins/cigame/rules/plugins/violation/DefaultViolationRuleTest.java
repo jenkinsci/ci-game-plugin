@@ -1,9 +1,11 @@
 package hudson.plugins.cigame.rules.plugins.violation;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("unchecked")
 public class DefaultViolationRuleTest {
     
     private Mockery context;
@@ -104,6 +107,25 @@ public class DefaultViolationRuleTest {
         
         classContext.assertIsSatisfied();
         context.assertIsSatisfied();
+    }
+    
+    @Test
+    public void assertIfPreviousBuildFailedResultIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.FAILURE);
+
+        ViolationsBuildAction action = mock(ViolationsBuildAction.class);
+        when(build.getActions(ViolationsBuildAction.class)).thenReturn(Arrays.asList(action));
+        ViolationsReport previousReport = createViolationsReportStub("pmd", 10, null);
+        ViolationsReport currentReport = createViolationsReportStub("pmd", 100, previousReport);
+        when(action.getReport()).thenReturn(currentReport);
+
+        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
 
     /**
