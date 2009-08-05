@@ -29,7 +29,7 @@ public class ActionSequenceRetriever<T extends Action>  {
      * @param build latest build
      * @return a list of actions, or null if there was not enough builds or a build does not contain the action
      */
-    public List<List<T>> getActionSequence(AbstractBuild<?,?> build) {
+    public List<List<T>> getSequence(AbstractBuild<?,?> build) {
         List<List<T>> actionSequence = new ArrayList<List<T>>();
         int buildCount = 0;
         while ((build != null)

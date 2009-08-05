@@ -20,7 +20,7 @@ public class ActionSequenceRetrieverTest {
     public void assertNullIsReturnedWithBuildWithoutRequestedAction() {
         Build<?,?> build = mock(Build.class);
         when(build.getActions(Action.class)).thenReturn(null);
-        assertThat(new ActionSequenceRetriever(Action.class, 1).getActionSequence(build), is(nullValue()));
+        assertThat(new ActionSequenceRetriever(Action.class, 1).getSequence(build), is(nullValue()));
     }
     
     @Test 
@@ -28,7 +28,7 @@ public class ActionSequenceRetrieverTest {
         AbstractBuild build = mock(Build.class);
         Action action = mock(Action.class);
         when(build.getActions(Action.class)).thenReturn(Arrays.asList(action));
-        assertThat(new ActionSequenceRetriever(Action.class, 2).getActionSequence(build), is(nullValue()));
+        assertThat(new ActionSequenceRetriever(Action.class, 2).getSequence(build), is(nullValue()));
     }
     
     @Test 
@@ -39,7 +39,7 @@ public class ActionSequenceRetrieverTest {
         when(build.getActions(Action.class)).thenReturn(Arrays.asList(action));
         when(build.getPreviousBuild()).thenReturn(previousBuild);
         when(previousBuild.getActions(Action.class)).thenReturn(null);
-        assertThat(new ActionSequenceRetriever(Action.class, 2).getActionSequence(build), is(nullValue()));
+        assertThat(new ActionSequenceRetriever(Action.class, 2).getSequence(build), is(nullValue()));
     }
     
     @Test 
@@ -51,7 +51,7 @@ public class ActionSequenceRetrieverTest {
         when(build.getPreviousBuild()).thenReturn(previousBuild);
         when(previousBuild.getActions(Action.class)).thenReturn(Arrays.asList(action));
 
-        List<List<Action>> actionList = new ActionSequenceRetriever(Action.class, 2).getActionSequence(build);
+        List<List<Action>> actionList = new ActionSequenceRetriever(Action.class, 2).getSequence(build);
         assertThat(actionList, is(notNullValue()));
         assertThat(actionList.size(), is(2));
     }
