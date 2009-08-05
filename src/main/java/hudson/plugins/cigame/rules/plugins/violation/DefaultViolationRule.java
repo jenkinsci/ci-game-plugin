@@ -6,9 +6,9 @@ import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
+import hudson.plugins.cigame.util.ActionSequenceRetriever;
+import hudson.plugins.cigame.util.ResultSequenceValidator;
 import hudson.plugins.violations.ViolationsBuildAction;
-import hudson.plugins.violations.ViolationsReport;
-import hudson.plugins.violations.ViolationsReport.TypeReport;
 
 public class DefaultViolationRule implements Rule {
 
@@ -26,55 +26,32 @@ public class DefaultViolationRule implements Rule {
     }
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        int diff = 0;
-        if (build.getResult().isBetterOrEqualTo(Result.UNSTABLE)
-                && (build.getPreviousBuild() != null)) {
-            List<ViolationsBuildAction> actions = build.getActions(ViolationsBuildAction.class);
-            for (ViolationsBuildAction action : actions) {
-                ViolationsReport violationReport = action.getReport();
-                if (violationReport.previous() != null) {
-                    TypeReport typeReport = violationReport.getTypeReports().get(typeName);
-                    TypeReport previousTypeReport = violationReport.previous().getTypeReports().get(typeName);
-                    if ((typeReport != null) && (previousTypeReport != null)) {
-                        diff += typeReport.getNumber() - previousTypeReport.getNumber();
-                    }
+        if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
+            List<List<ViolationsBuildAction>> actionList = new ActionSequenceRetriever<ViolationsBuildAction>(ViolationsBuildAction.class, 2).getSequence(build);
+            if (actionList != null) {
+                int diff = getTypeReportCount(actionList.get(0)) - getTypeReportCount(actionList.get(1));
+                if (diff > 0) {
+                    return new RuleResult(diff * pointsForAddingViolation, 
+                            String.format("%d new %ss were found", diff, violationName));
+                }
+                if (diff < 0) {
+                    return new RuleResult((diff * -1) * pointsForRemovingViolation, 
+                            String.format("%d %ss were fixed", diff * -1, violationName));
                 }
             }
-        }
-        if (diff > 0) {
-            return new RuleResult(diff * pointsForAddingViolation, 
-                    String.format("%d new %ss were found", diff, violationName));
-        }
-        if (diff < 0) {
-            return new RuleResult((diff * -1) * pointsForRemovingViolation, 
-                    String.format("%d %ss were fixed", diff * -1, violationName));
         }
         return new RuleResult(0, 
                 String.format("There was no change for %ss", violationName));
     }
 
-    /**
-     * Get the score for the current report
-     * 
-     * @param report can not be null
-     * @param previousReport can not be null
-     * @return
-     */
-    protected double evaluateReport(ViolationsReport report,
-            ViolationsReport previousReport) {
-        TypeReport typeReport = report.getTypeReports().get(typeName);
-        TypeReport previousTypeReport = previousReport.getTypeReports().get(typeName);
-        if ((typeReport != null) && (previousReport != null)) {
-            int diff = typeReport.getNumber() - previousTypeReport.getNumber();
-            if (diff > 0) {
-                return pointsForAddingViolation;
-            } else if (diff < 0) {
-                return pointsForRemovingViolation;
-            }
+    private int getTypeReportCount(List<ViolationsBuildAction> actions) {
+        int numberOfReports = 0;
+        for (ViolationsBuildAction action : actions) {
+            numberOfReports += action.getReport().getTypeReports().get(typeName).getNumber();
         }
-        return 0;
+        return numberOfReports;
     }
-
+    
     public String getName() {
         return violationName;
     }
