@@ -23,7 +23,7 @@ public class ResultSequenceValidator {
      * @param build latest build in sequence
      * @return true, if the build sequence conforms to the requirements set in constructor; false, otherwise.
      */
-    public boolean isValidSequence(AbstractBuild<?,?> build) {
+    public boolean isValid(AbstractBuild<?,?> build) {
         int buildCount = 0;
         while (buildCount < sequenceLength) {
             if ((build == null) || build.getResult().isWorseThan(resultThreshold)) {

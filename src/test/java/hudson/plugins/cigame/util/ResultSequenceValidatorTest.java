@@ -16,7 +16,7 @@ public class ResultSequenceValidatorTest {
     public void assertResultBelowThresholdIsNotValidated() {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
-        assertThat(new ResultSequenceValidator(Result.SUCCESS, 1).isValidSequence(build), is(false));
+        assertThat(new ResultSequenceValidator(Result.SUCCESS, 1).isValid(build), is(false));
     }
     
     @Test
@@ -24,7 +24,7 @@ public class ResultSequenceValidatorTest {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
         when(build.getPreviousBuild()).thenReturn(null);
-        assertThat(new ResultSequenceValidator(Result.SUCCESS, 2).isValidSequence(build), is(false));
+        assertThat(new ResultSequenceValidator(Result.SUCCESS, 2).isValid(build), is(false));
     }
     
     @Test
@@ -34,7 +34,7 @@ public class ResultSequenceValidatorTest {
         when(build.getResult()).thenReturn(Result.SUCCESS);
         when(build.getPreviousBuild()).thenReturn(previousBuild);
         when(previousBuild.getResult()).thenReturn(Result.UNSTABLE);
-        assertThat(new ResultSequenceValidator(Result.SUCCESS, 2).isValidSequence(build), is(false));
+        assertThat(new ResultSequenceValidator(Result.SUCCESS, 2).isValid(build), is(false));
     }
     
     @Test
@@ -44,6 +44,6 @@ public class ResultSequenceValidatorTest {
         when(build.getResult()).thenReturn(Result.SUCCESS);
         when(build.getPreviousBuild()).thenReturn(previousBuild);
         when(previousBuild.getResult()).thenReturn(Result.UNSTABLE);
-        assertThat(new ResultSequenceValidator(Result.UNSTABLE, 2).isValidSequence(build), is(true));
+        assertThat(new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build), is(true));
     }
 }
