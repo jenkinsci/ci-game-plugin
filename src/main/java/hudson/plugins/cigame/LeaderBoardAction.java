@@ -52,7 +52,7 @@ public class LeaderBoardAction implements Action, AccessControlled {
         for (User user : User.getAll()) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
-                list.add(new UserScore(property.getUser(), property.getScore()));
+                list.add(new UserScore(property.getUser(), property.getScore(), user.getDescription()));
             }
         }
 
@@ -86,11 +86,13 @@ public class LeaderBoardAction implements Action, AccessControlled {
     public class UserScore {
         private User user;
         private double score;
+        private String description;
 
-        public UserScore(User user, double score) {
+        public UserScore(User user, double score, String description) {
             super();
             this.user = user;
             this.score = score;
+            this.description = description;
         }
 
         @Exported
@@ -101,6 +103,11 @@ public class LeaderBoardAction implements Action, AccessControlled {
         @Exported
         public double getScore() {
             return score;
+        }
+
+        @Exported
+        public String getDescription() {
+            return description;
         }
     }
 
