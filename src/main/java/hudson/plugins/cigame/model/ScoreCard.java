@@ -44,7 +44,7 @@ public class ScoreCard {
      * Record points for the rules in the rule book
      * 
      * @param build build to evaluate
-     * @param ruleset rule book to use for evaluation
+     * @param ruleBook rule book to use for evaluation
      */
     public void record(AbstractBuild<?, ?> build, RuleBook ruleBook) {
         for (RuleSet set : ruleBook.getRuleSets()) {
@@ -71,7 +71,7 @@ public class ScoreCard {
      * Returns the total points for this score card
      * 
      * @return the total points for this score card
-     * @throws IllegalStateException
+     * @throws IllegalStateException thrown if the method is called before scores has been calculated
      */
     @Exported
     public double getTotalPoints() throws IllegalStateException {

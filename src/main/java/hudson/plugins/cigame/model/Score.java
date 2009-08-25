@@ -23,10 +23,10 @@ public class Score implements Comparable<Score> {
 
     @Exported
     public String getDescription() {
-        if (description == null)
+        if (description == null) {
             return rulesetName + " - " + ruleName;
-        else
-            return description;
+        }
+        return description;
     }
 
     @Exported
@@ -47,8 +47,7 @@ public class Score implements Comparable<Score> {
     public int compareTo(Score o) {
         if (value == o.value) {
             return description.compareToIgnoreCase(o.description);
-        } else {
-            return (int) Math.round(o.value - value);
         }
+        return (int) Math.round(o.value - value);
     }
 }
