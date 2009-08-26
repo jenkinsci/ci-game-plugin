@@ -6,8 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import hudson.model.Action;
+import hudson.Extension;
 import hudson.model.Hudson;
+import hudson.model.RootAction;
 import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
@@ -24,7 +25,8 @@ import org.kohsuke.stapler.export.ExportedBean;
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
-public class LeaderBoardAction implements Action, AccessControlled {
+@Extension
+public class LeaderBoardAction implements RootAction, AccessControlled {
 
     private static final long serialVersionUID = 1L;
 

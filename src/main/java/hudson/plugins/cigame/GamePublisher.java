@@ -10,7 +10,6 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
@@ -21,8 +20,9 @@ import hudson.tasks.Publisher;
 
 public class GamePublisher extends Publisher {
 
-    public Descriptor<Publisher> getDescriptor() {
-        return PluginImpl.GAME_PUBLISHER_DESCRIPTOR;
+    @Override
+    public GameDescriptor getDescriptor() {
+        return (GameDescriptor) super.getDescriptor();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class GamePublisher extends Publisher {
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) throws InterruptedException, IOException {
 
-        RuleBook ruleBook = PluginImpl.GAME_PUBLISHER_DESCRIPTOR.getRuleBook();
+        RuleBook ruleBook = getDescriptor().getRuleBook();
 
         ScoreCard sc = new ScoreCard();
         sc.record(build, ruleBook);

@@ -4,6 +4,7 @@ import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
+import hudson.Extension;
 import hudson.Util;
 import hudson.model.User;
 import hudson.model.UserProperty;
@@ -14,6 +15,7 @@ import hudson.model.UserPropertyDescriptor;
  * 
  * @author Erik Ramfelt
  */
+@Extension
 public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
 
     public UserScorePropertyDescriptor() {
@@ -36,9 +38,8 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
         String scoreStr = Util.fixEmpty(req.getParameter("game.score"));
         if (scoreStr != null) {
             return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null);
-        } else {
-            return new UserScoreProperty();
         }
+        return new UserScoreProperty();
     }
 
     @Override
@@ -48,9 +49,8 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
         }
         if (formData.has("score")) {
             return req.bindJSON(UserScoreProperty.class, formData);
-        } else {
-            return new UserScoreProperty();
         }
+        return new UserScoreProperty();
     }
 
     @Override

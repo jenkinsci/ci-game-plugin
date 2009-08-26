@@ -4,6 +4,7 @@ import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
+import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
@@ -15,16 +16,21 @@ import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
 import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
+import hudson.security.Permission;
+import hudson.security.PermissionGroup;
 import hudson.tasks.Publisher;
 
+@Extension
 public class GameDescriptor extends Descriptor<Publisher> {
 
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png";
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png";
+    
+   
 
     private RuleBook rulebook;
 
-    protected GameDescriptor() {
+    public GameDescriptor() {
         super(GamePublisher.class);
     }
 
