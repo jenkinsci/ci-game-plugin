@@ -39,7 +39,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     public String getUrlName() {
-        return "cigame";
+        return "/cigame";
     }
 
     /**
