@@ -6,7 +6,7 @@ import hudson.plugins.tasks.util.model.Priority;
 public class OpenTasksRuleSet extends PluginRuleSet {
 
     public OpenTasksRuleSet() {
-        super("tasks", "Open tasks");
+        super("tasks", Messages.OpenTasksRuleSet_Title()); //$NON-NLS-1$
     } 
 
     @Override

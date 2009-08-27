@@ -32,16 +32,16 @@ public class DefaultViolationRule implements Rule {
                 int diff = getTypeReportCount(actionList.get(0)) - getTypeReportCount(actionList.get(1));
                 if (diff > 0) {
                     return new RuleResult(diff * pointsForAddingViolation, 
-                            String.format("%d new %ss were found", diff, violationName));
+                            Messages.ViolationRuleSet_DefaultRule_NewViolationsCount(diff, violationName)); //$NON-NLS-1$
                 }
                 if (diff < 0) {
                     return new RuleResult((diff * -1) * pointsForRemovingViolation, 
-                            String.format("%d %ss were fixed", diff * -1, violationName));
+                            Messages.ViolationRuleSet_DefaultRule_FixedViolationsCount(diff * -1, violationName)); //$NON-NLS-1$
                 }
             }
         }
         return new RuleResult(0, 
-                String.format("There was no change for %ss", violationName));
+                Messages.ViolationRuleSet_DefaultRule_NoViolations(violationName)); //$NON-NLS-1$
     }
 
     private int getTypeReportCount(List<ViolationsBuildAction> actions) {

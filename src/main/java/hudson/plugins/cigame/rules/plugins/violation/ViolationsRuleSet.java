@@ -5,17 +5,17 @@ import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
 public class ViolationsRuleSet extends PluginRuleSet {
 
     public ViolationsRuleSet() {
-        super("violations", "Violations");
+        super("violations", Messages.ViolationRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override
     protected void loadRules() {
-        add(new DefaultViolationRule("pmd", "PMD violation", -1, 1));
-        add(new DefaultViolationRule("pylint", "pylint violation", -1, 1));
-        add(new DefaultViolationRule("cpd", "CPD violation", -5, 5));
-        add(new DefaultViolationRule("checkstyle", "Checkstyle violation", -1, 1));
-        add(new DefaultViolationRule("findbugs", "FindBugs violation", -1, 1));
-        add(new DefaultViolationRule("fxcop", "FXCop violation", -1, 1));
-        add(new DefaultViolationRule("simian", "Simian violation", -5, 5));
+        add(new DefaultViolationRule("pmd", Messages.ViolationRuleSet_PmdRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("pylint", Messages.ViolationRuleSet_PylintRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("cpd", Messages.ViolationRuleSet_CpdRule_Name(), -5, 5)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("checkstyle", Messages.ViolationRuleSet_CheckstyleRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("findbugs", Messages.ViolationRuleSet_FindBugsRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("fxcop", Messages.ViolationRuleSet_FxcopRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("simian", Messages.ViolationRuleSet_SimianRule_Name(), -5, 5)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

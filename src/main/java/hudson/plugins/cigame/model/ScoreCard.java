@@ -62,7 +62,7 @@ public class ScoreCard {
     @Exported
     public Collection<Score> getScores() throws IllegalStateException {
         if (scores == null) {
-            throw new IllegalStateException("No scores are available");
+            throw new IllegalStateException("No scores are available"); //$NON-NLS-1$
         }
         return scores;
     }
@@ -76,7 +76,7 @@ public class ScoreCard {
     @Exported
     public double getTotalPoints() throws IllegalStateException {
         if (scores == null) {
-            throw new IllegalStateException("No scores are available");
+            throw new IllegalStateException("No scores are available"); //$NON-NLS-1$
         }
         double value = 0;
         for (Score score : scores) {

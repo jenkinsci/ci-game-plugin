@@ -16,18 +16,14 @@ import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
 import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
-import hudson.security.Permission;
-import hudson.security.PermissionGroup;
 import hudson.tasks.Publisher;
 
 @Extension
 public class GameDescriptor extends Descriptor<Publisher> {
 
-    public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png";
-    public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png";
+    public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
+    public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
     
-   
-
     private RuleBook rulebook;
 
     public GameDescriptor() {
@@ -63,7 +59,7 @@ public class GameDescriptor extends Descriptor<Publisher> {
 
     @Override
     public String getDisplayName() {
-        return "Continuous Integration Game";
+        return Messages.Plugin_Title();
     }
 
     @Override

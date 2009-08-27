@@ -31,9 +31,9 @@ public class NewFindBugsWarningsRule implements Rule {
         }
         if (numberOfAnnotations > 0) {
             return new RuleResult(numberOfAnnotations * pointsForEachNewWarning, 
-                    String.format("%d new %s priority findbugs warnings were found", Math.abs(numberOfAnnotations), priority.name()));
+                    Messages.FindBugsRuleSet_NewWarningsRule_Count( Math.abs(numberOfAnnotations), priority.name())); //$NON-NLS-1$
         }
-        return new RuleResult(0, String.format("No new %s priority findbugs warnings found.", priority.name()));
+        return new RuleResult(0, Messages.FindBugsRuleSet_NewWarningsRule_None( priority.name())); //$NON-NLS-1$
     }
     
     private int getNumberOfAnnotations(List<FindBugsResultAction> list) {
@@ -45,7 +45,7 @@ public class NewFindBugsWarningsRule implements Rule {
     }
 
     public String getName() {
-        return String.format("New %s priority Findbugs warnings", priority.name());
+        return Messages.FindBugsRuleSet_NewWarningsRule_Title(priority.name()); //$NON-NLS-1$
     }
 
 }

@@ -33,7 +33,7 @@ public class RuleResult {
     
     @Override
     public String toString() {
-        return "[RuleSet description='" + description + "', points=" + points + "]"; 
+        return "[RuleSet description='" + description + "', points=" + points + "]";  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     
     @Override

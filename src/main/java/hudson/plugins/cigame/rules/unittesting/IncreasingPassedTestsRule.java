@@ -44,14 +44,14 @@ public class IncreasingPassedTestsRule implements Rule {
             int passedTestDiff = currentPassCount - previousPassCount;
             if (passedTestDiff > 0) {
                 return new RuleResult(passedTestDiff * pointsForEachFixedFailure, 
-                        String.format("%d failing tests were fixed", passedTestDiff));
+                        Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(passedTestDiff)); //$NON-NLS-1$
             }
         }
         return null;
     }
 
     public String getName() {
-        return "Increased number of passed tests";
+        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name(); //$NON-NLS-1$
     }
 
 }

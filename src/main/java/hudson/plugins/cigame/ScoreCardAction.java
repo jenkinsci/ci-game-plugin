@@ -40,7 +40,7 @@ public class ScoreCardAction implements Action {
     }
 
     public String getDisplayName() {
-        return "Score card";
+        return Messages.Scorecard_Title(); //$NON-NLS-1$
     }
 
     public String getIconFileName() {
@@ -48,7 +48,7 @@ public class ScoreCardAction implements Action {
     }
 
     public String getUrlName() {
-        return "cigame";
+        return "cigame"; //$NON-NLS-1$
     }
 
     @Exported

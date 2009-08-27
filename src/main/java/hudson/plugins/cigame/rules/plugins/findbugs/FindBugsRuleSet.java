@@ -6,7 +6,7 @@ import hudson.plugins.findbugs.util.model.Priority;
 public class FindBugsRuleSet extends PluginRuleSet {
 
     public FindBugsRuleSet() {
-        super("findbugs", "Find bugs");
+        super("findbugs", Messages.FindBugsRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override

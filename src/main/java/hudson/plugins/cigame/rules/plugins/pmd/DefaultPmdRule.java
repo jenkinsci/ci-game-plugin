@@ -32,15 +32,15 @@ public class DefaultPmdRule implements Rule {
 
                 if (delta < 0) {
                     return new RuleResult(Math.abs(delta) * pointsForRemovingAnAnnotation, 
-                            String.format("%d %s priority PMD warnings were fixed", Math.abs(delta), tasksPriority.name()));
+                            Messages.PmdRuleSet_DefaultRule_FixedWarningsCount(Math.abs(delta), tasksPriority.name())); //$NON-NLS-1$
                 }
                 if (delta > 0) {
                     return new RuleResult(Math.abs(delta) * pointsForAddingAnAnnotation, 
-                            String.format("%d new %s priority PMD warnings were found", Math.abs(delta), tasksPriority.name()));
+                            Messages.PmdRuleSet_DefaultRule_NewWarningsCount(Math.abs(delta), tasksPriority.name())); //$NON-NLS-1$
                 }
             }
         }
-        return new RuleResult(0, String.format("No new or fixed %s priority PMD warnings found.", tasksPriority.name()));
+        return new RuleResult(0, String.format(Messages.PmdRuleSet_DefaultRule_NoWarnings(), tasksPriority.name())); //$NON-NLS-1$
     }
 
     private int getNumberOfAnnotations(List<PmdResultAction> actions) {
@@ -52,6 +52,6 @@ public class DefaultPmdRule implements Rule {
     }
 
     public String getName() {
-        return String.format("%s priority PMD warnings", tasksPriority.name());
+        return Messages.PmdRuleSet_DefaultRule_Name(tasksPriority.name()); //$NON-NLS-1$
     }
 }

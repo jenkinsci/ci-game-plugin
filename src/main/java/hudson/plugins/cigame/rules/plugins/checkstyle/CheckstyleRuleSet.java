@@ -5,7 +5,7 @@ import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
 public class CheckstyleRuleSet extends PluginRuleSet {
 
     public CheckstyleRuleSet() {
-        super("checkstyle", "Checkstyle warnings");
+        super("checkstyle", Messages.CheckstyleRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
     } 
 
     @Override

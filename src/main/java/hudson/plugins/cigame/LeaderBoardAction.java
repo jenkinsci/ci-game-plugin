@@ -31,7 +31,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     private static final long serialVersionUID = 1L;
 
     public String getDisplayName() {
-        return "Leader board";
+        return Messages.Leaderboard_Title();
     }
 
     public String getIconFileName() {
@@ -39,7 +39,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     public String getUrlName() {
-        return "/cigame";
+        return "/cigame"; //$NON-NLS-1$
     }
 
     /**

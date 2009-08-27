@@ -7,7 +7,7 @@ import hudson.plugins.cigame.model.RuleSet;
  */
 public class BuildRuleSet extends RuleSet {
     public BuildRuleSet() {
-        super("Build result");
+        super(Messages.BuildRuleSet_Title()); //$NON-NLS-1$
         add(new BuildResultRule());
     }
 }

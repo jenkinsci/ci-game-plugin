@@ -24,7 +24,7 @@ public class Score implements Comparable<Score> {
     @Exported
     public String getDescription() {
         if (description == null) {
-            return rulesetName + " - " + ruleName;
+            return rulesetName + " - " + ruleName; //$NON-NLS-1$
         }
         return description;
     }

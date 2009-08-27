@@ -30,15 +30,15 @@ public class DefaultWarningsRule implements Rule {
                 int numberOfAnnotations = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
                 if (numberOfAnnotations > 0) {
                     return new RuleResult(numberOfAnnotations * pointsForAddingAWarning, 
-                            String.format("%d new compiler warnings were found", numberOfAnnotations));
+                            Messages.WarningsRuleSet_DefaultRule_NewWarningsCount(numberOfAnnotations)); //$NON-NLS-1$
                 }
                 if (numberOfAnnotations < 0) {
                     return new RuleResult((numberOfAnnotations * -1) * pointsForRemovingAWarning, 
-                            String.format("%d compiler warnings were fixed", numberOfAnnotations * -1));
+                            Messages.WarningsRuleSet_DefaultRule_FixedWarningsCount(numberOfAnnotations * -1)); //$NON-NLS-1$
                 }
             }
         }
-        return new RuleResult(0, "No new or fixed compiler warnings found.");
+        return new RuleResult(0, Messages.WarningsRuleSet_DefaultRule_NoWarnings()); //$NON-NLS-1$
     }
     
     private int getNumberOfAnnotations(List<WarningsResultAction> actions) {
@@ -50,6 +50,6 @@ public class DefaultWarningsRule implements Rule {
     }
 
     public String getName() {
-        return "Changed number of compiler warnings";
+        return Messages.WarningsRuleSet_DefaultRule_Name(); //$NON-NLS-1$
     }
 }

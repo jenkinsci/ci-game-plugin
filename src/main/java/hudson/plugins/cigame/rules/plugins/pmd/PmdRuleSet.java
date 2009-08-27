@@ -6,7 +6,7 @@ import hudson.plugins.pmd.util.model.Priority;
 public class PmdRuleSet extends PluginRuleSet {
 
     public PmdRuleSet() {
-        super("pmd", "PMD warnings");
+        super("pmd", Messages.PmdRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override

@@ -47,14 +47,14 @@ public class RuleBook {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("RuleBook [");
+        builder.append("RuleBook ["); //$NON-NLS-1$
         for (Iterator<RuleSet> iterator = rulesets.iterator(); iterator.hasNext();) {
             builder.append(iterator.next().getName());
             if (iterator.hasNext()) {
-                builder.append(", ");
+                builder.append(", "); //$NON-NLS-1$
             }
         }
-        builder.append("]");
+        builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
 }

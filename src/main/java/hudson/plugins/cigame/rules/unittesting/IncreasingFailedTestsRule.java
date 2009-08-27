@@ -24,7 +24,7 @@ public class IncreasingFailedTestsRule implements Rule {
     }
 
     public String getName() {
-        return "Increased number of failed tests";
+        return Messages.UnitTestingRuleSet_IncreasingFailedRule_Name(); //$NON-NLS-1$
     }
 
     @SuppressWarnings("unchecked")
@@ -48,7 +48,7 @@ public class IncreasingFailedTestsRule implements Rule {
             int failingTestDiff = currentFailCount - previousFailCount;
             if (failingTestDiff > 0) {
                 return new RuleResult(failingTestDiff * pointsForEachNewFailure, 
-                        String.format("%d new failing tests were added", failingTestDiff));
+                        Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(failingTestDiff)); //$NON-NLS-1$
             }
         }
         return null;

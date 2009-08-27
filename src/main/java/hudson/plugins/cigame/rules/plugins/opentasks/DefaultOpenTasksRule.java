@@ -35,15 +35,15 @@ public class DefaultOpenTasksRule implements Rule {
                 int numberOfAnnotations = getNumberOfAnnotations(actionSequence.get(0)) - getNumberOfAnnotations(actionSequence.get(1));
                 if (numberOfAnnotations > 0) {
                     return new RuleResult(numberOfAnnotations * pointsForAddingAnAnnotation, 
-                            String.format("%d new open %s priority tasks were found", numberOfAnnotations, tasksPriority.name()));
+                            Messages.OpenTasksRule_DefaultRule_NewTasksCount(numberOfAnnotations, tasksPriority.name())); //$NON-NLS-1$
                 }
                 if (numberOfAnnotations < 0) {
                     return new RuleResult((numberOfAnnotations * -1) * pointsForRemovingAnAnnotation, 
-                            String.format("%d open %s priority tasks were fixed", numberOfAnnotations * -1, tasksPriority.name()));
+                            Messages.OpenTasksRule_DefaultRule_FixedTasksCount(numberOfAnnotations * -1, tasksPriority.name())); //$NON-NLS-1$
                 }
             }
         }
-        return new RuleResult(0, String.format("No new or fixed %s priority tasks found.", tasksPriority.name()));
+        return new RuleResult(0, Messages.OpenTasksRule_DefaultRule_NoTasks(tasksPriority.name())); //$NON-NLS-1$
     }
     
     private int getNumberOfAnnotations(List<TasksResultAction> actions) {
@@ -55,6 +55,6 @@ public class DefaultOpenTasksRule implements Rule {
     }
     
     public String getName() {
-        return String.format("Open %s priority tasks", tasksPriority.name());
+        return Messages.OpenTasksRule_DefaultRule_Name(tasksPriority.name()); //$NON-NLS-1$
     }
 }

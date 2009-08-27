@@ -7,7 +7,7 @@ import hudson.plugins.cigame.model.RuleSet;
  */
 public class UnitTestingRuleSet extends RuleSet {
     public UnitTestingRuleSet() {
-        super("Unit testing");
+        super(Messages.UnitTestingRuleSet_Title()); //$NON-NLS-1$
         add(new IncreasingFailedTestsRule());
         add(new IncreasingPassedTestsRule());
     }

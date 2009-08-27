@@ -23,7 +23,7 @@ public class BuildResultRule implements Rule {
     }
 
     public String getName() {
-        return "Build result";
+        return Messages.BuildRuleSet_BuildResult(); //$NON-NLS-1$
     }
 
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
@@ -37,12 +37,12 @@ public class BuildResultRule implements Rule {
 
     RuleResult evaluate(Result result, Result lastResult) {
         if (result == Result.SUCCESS) {
-            return new RuleResult( successPoints, "The build was successful");
+            return new RuleResult( successPoints, Messages.BuildRuleSet_BuildFailed()); //$NON-NLS-1$
         }
         if (result == Result.FAILURE) {
             if ((lastResult == null)
                     || (lastResult.isBetterThan(Result.FAILURE))) {
-                return new RuleResult(failurePoints, "The build failed");
+                return new RuleResult(failurePoints, Messages.BuildRuleSet_BuildFailed()); //$NON-NLS-1$
             }
         }
         return null;

@@ -30,15 +30,15 @@ public class DefaultCheckstyleRule implements Rule {
                 int numberOfWarnings = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
                 if (numberOfWarnings > 0) {
                     return new RuleResult(numberOfWarnings * pointsForAddingAWarning, 
-                            String.format("%d new checkstyle warningss were found", numberOfWarnings));
+                            Messages.CheckstyleRuleSet_DefaultRule_NewWarningsCount(numberOfWarnings)); //$NON-NLS-1$
                 }
                 if (numberOfWarnings < 0) {
                     return new RuleResult((numberOfWarnings * -1) * pointsForRemovingAWarning, 
-                            String.format("%d checkstyle warnings were fixed", numberOfWarnings * -1));
+                            Messages.CheckstyleRuleSet_DefaultRule_FixedWarningsCount(numberOfWarnings * -1)); //$NON-NLS-1$
                 }
             }
         }
-        return  new RuleResult(0, "No new or fixed checkstyle warnings found.");
+        return  new RuleResult(0, Messages.CheckstyleRuleSet_DefaultRule_NoWarnings()); //$NON-NLS-1$
     }
     
     private int getNumberOfAnnotations(List<CheckStyleResultAction> actions) {
@@ -50,6 +50,6 @@ public class DefaultCheckstyleRule implements Rule {
     }
 
     public String getName() {
-        return "Changed number of checkstyle warnings";
+        return Messages.CheckstyleRuleSet_DefaultRule_Name(); //$NON-NLS-1$
     }
 }

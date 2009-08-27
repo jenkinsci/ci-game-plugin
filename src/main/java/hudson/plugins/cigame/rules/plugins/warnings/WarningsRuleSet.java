@@ -5,7 +5,7 @@ import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
 public class WarningsRuleSet extends PluginRuleSet {
 
     public WarningsRuleSet() {
-        super("warnings", "Compiler warnings");
+        super("warnings", Messages.WarningsRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
     } 
 
     @Override

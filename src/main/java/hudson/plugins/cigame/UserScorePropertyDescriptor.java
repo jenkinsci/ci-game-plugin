@@ -24,7 +24,7 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
 
     @Override
     public String getDisplayName() {
-        return "Continuous Integration game";
+        return Messages.User_Property_Title();
     }
     
     /**
@@ -35,9 +35,9 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
      * @return a UserScoreProperty object
      */
     private UserScoreProperty newInstanceIfJSONIsNull(StaplerRequest req) throws FormException {
-        String scoreStr = Util.fixEmpty(req.getParameter("game.score"));
+        String scoreStr = Util.fixEmpty(req.getParameter("game.score")); //$NON-NLS-1$
         if (scoreStr != null) {
-            return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null);
+            return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null); //$NON-NLS-1$
         }
         return new UserScoreProperty();
     }
@@ -47,7 +47,7 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
         if (formData == null) {
             return newInstanceIfJSONIsNull(req);
         }
-        if (formData.has("score")) {
+        if (formData.has("score")) { //$NON-NLS-1$
             return req.bindJSON(UserScoreProperty.class, formData);
         }
         return new UserScoreProperty();
