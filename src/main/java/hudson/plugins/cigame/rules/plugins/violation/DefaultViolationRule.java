@@ -40,8 +40,7 @@ public class DefaultViolationRule implements Rule {
                 }
             }
         }
-        return new RuleResult(0, 
-                Messages.ViolationRuleSet_DefaultRule_NoViolations(violationName)); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
 
     private int getTypeReportCount(List<ViolationsBuildAction> actions) {

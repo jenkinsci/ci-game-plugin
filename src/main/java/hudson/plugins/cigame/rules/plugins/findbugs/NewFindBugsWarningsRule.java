@@ -33,7 +33,7 @@ public class NewFindBugsWarningsRule implements Rule {
             return new RuleResult(numberOfAnnotations * pointsForEachNewWarning, 
                     Messages.FindBugsRuleSet_NewWarningsRule_Count( Math.abs(numberOfAnnotations), priority.name())); //$NON-NLS-1$
         }
-        return new RuleResult(0, Messages.FindBugsRuleSet_NewWarningsRule_None( priority.name())); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
     
     private int getNumberOfAnnotations(List<FindBugsResultAction> list) {

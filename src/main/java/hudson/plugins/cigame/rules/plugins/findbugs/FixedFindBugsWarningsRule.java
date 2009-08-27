@@ -33,7 +33,7 @@ public class FixedFindBugsWarningsRule implements Rule {
             return new RuleResult(numberOfAnnotations * pointsForEachFixedWarning, 
                     Messages.FindBugsRuleSet_FixedWarningsRule_Count(Math.abs(numberOfAnnotations), priority.name())); //$NON-NLS-1$
         }
-        return new RuleResult(0, Messages.FindBugsRuleSet_FixedWarningsRule_None( priority.name())); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
     
     private int getNumberOfAnnotations(List<FindBugsResultAction> list) {

@@ -5,6 +5,8 @@ package hudson.plugins.cigame.model;
  * 
  */
 public class RuleResult {
+    public static final RuleResult EMPTY_RESULT = new EmptyRuleResult();
+    
     private final double points;
     private final String description;
 
@@ -64,5 +66,16 @@ public class RuleResult {
         if (Double.doubleToLongBits(points) != Double.doubleToLongBits(other.points))
             return false;
         return true;
+    }
+    
+    private static class EmptyRuleResult extends RuleResult {
+        private EmptyRuleResult() {
+            super(0, "");
+        }
+
+        @Override
+        public String getDescription() {
+            throw new UnsupportedOperationException("Empty rule result should not be used.");
+        }
     }
 }

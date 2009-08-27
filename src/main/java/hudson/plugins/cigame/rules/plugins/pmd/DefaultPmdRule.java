@@ -40,7 +40,7 @@ public class DefaultPmdRule implements Rule {
                 }
             }
         }
-        return new RuleResult(0, String.format(Messages.PmdRuleSet_DefaultRule_NoWarnings(), tasksPriority.name())); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
 
     private int getNumberOfAnnotations(List<PmdResultAction> actions) {

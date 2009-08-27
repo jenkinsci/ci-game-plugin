@@ -38,7 +38,7 @@ public class DefaultWarningsRule implements Rule {
                 }
             }
         }
-        return new RuleResult(0, Messages.WarningsRuleSet_DefaultRule_NoWarnings()); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
     
     private int getNumberOfAnnotations(List<WarningsResultAction> actions) {

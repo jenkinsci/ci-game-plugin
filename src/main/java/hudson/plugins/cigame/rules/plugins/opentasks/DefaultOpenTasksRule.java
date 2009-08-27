@@ -43,7 +43,7 @@ public class DefaultOpenTasksRule implements Rule {
                 }
             }
         }
-        return new RuleResult(0, Messages.OpenTasksRule_DefaultRule_NoTasks(tasksPriority.name())); //$NON-NLS-1$
+        return RuleResult.EMPTY_RESULT;
     }
     
     private int getNumberOfAnnotations(List<TasksResultAction> actions) {
