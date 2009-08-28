@@ -37,7 +37,7 @@ public class BuildResultRule implements Rule {
 
     RuleResult evaluate(Result result, Result lastResult) {
         if (result == Result.SUCCESS) {
-            return new RuleResult( successPoints, Messages.BuildRuleSet_BuildFailed()); //$NON-NLS-1$
+            return new RuleResult( successPoints, Messages.BuildRuleSet_BuildSuccess()); //$NON-NLS-1$
         }
         if (result == Result.FAILURE) {
             if ((lastResult == null)
