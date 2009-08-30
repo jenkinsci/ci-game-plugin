@@ -21,6 +21,15 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <id>redsolo</id>
+      <name>Erik Ramfelt</name>
+      <email>eramfelt@gmail.com</email>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
