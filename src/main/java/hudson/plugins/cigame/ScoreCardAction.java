@@ -58,20 +58,31 @@ public class ScoreCardAction implements Action {
 
     @Exported
     public Collection<User> getParticipants() {
+        Comparator<User> userIdComparator = new UserIdComparator();
         List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
         for (Entry entry : changeSet) {
             User user = entry.getAuthor();
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-            if ((property != null) && property.isParticipatingInGame()) {
+            if ((property != null) 
+                    && property.isParticipatingInGame() 
+                    && (Collections.binarySearch(players, user, userIdComparator) < 0)) {
                 players.add(user);
             }
         }
-        Collections.sort(players, new Comparator<User>() {
-            public int compare(User arg0, User arg1) {
-                return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
-            }            
-        });
+        Collections.sort(players, new UserDisplayNameComparator());
         return players;
+    }
+    
+    private static class UserDisplayNameComparator implements Comparator<User> {
+        public int compare(User arg0, User arg1) {
+            return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
+        }            
+    }
+    
+    private static class UserIdComparator implements Comparator<User> {
+        public int compare(User arg0, User arg1) {
+            return arg0.getId().compareToIgnoreCase(arg1.getId());
+        }            
     }
 }

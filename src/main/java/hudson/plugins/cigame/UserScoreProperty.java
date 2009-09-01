@@ -54,4 +54,31 @@ public class UserScoreProperty extends UserProperty {
     public String toString() {
         return String.format("UserScoreProperty [isNotParticipatingInGame=%s, score=%s, user=%s]", isNotParticipatingInGame, score, user); //$NON-NLS-1$
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (isNotParticipatingInGame ? 1231 : 1237);
+        long temp;
+        temp = Double.doubleToLongBits(score);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof UserScoreProperty))
+            return false;
+        UserScoreProperty other = (UserScoreProperty) obj;
+        if (isNotParticipatingInGame != other.isNotParticipatingInGame)
+            return false;
+        if (Double.doubleToLongBits(score) != Double.doubleToLongBits(other.score))
+            return false;
+        return true;
+    }
 }

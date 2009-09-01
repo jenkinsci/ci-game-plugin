@@ -47,6 +47,9 @@ public class ScoreCard {
      * @param ruleBook rule book to use for evaluation
      */
     public void record(AbstractBuild<?, ?> build, RuleBook ruleBook) {
+        if (scores == null) {
+            scores = new LinkedList<Score>();
+        }
         for (RuleSet set : ruleBook.getRuleSets()) {
             record(build, set);
         }

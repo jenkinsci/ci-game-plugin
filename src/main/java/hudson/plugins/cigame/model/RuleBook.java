@@ -17,6 +17,11 @@ public class RuleBook {
         rulesets = new LinkedList<RuleSet>();
     }
 
+    public RuleBook(RuleSet ruleset) {
+        this();
+        rulesets.add(ruleset);
+    }
+
     /**
      * Add rule set to the rule book
      * 

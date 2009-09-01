@@ -26,4 +26,11 @@ public class ScoreCardTest {
         card.record(mock(AbstractBuild.class), new RuleSet("test", Arrays.asList(new Rule[]{rule})));
         assertThat(card.getScores().size(), is(0));
     }
+    
+    @Test
+    public void assertEmptyRuleBookDoesNotThrowIllegalException() {
+        ScoreCard scoreCard = new ScoreCard();
+        scoreCard.record(mock(AbstractBuild.class), new RuleBook());
+        assertThat(scoreCard.getTotalPoints(), is(0d));
+    }
 }
