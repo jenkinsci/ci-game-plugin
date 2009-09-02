@@ -49,7 +49,7 @@ public class DefaultOpenTasksRule implements Rule {
     private int getNumberOfAnnotations(List<TasksResultAction> actions) {
         int numberOfAnnotations = 0;
         for (TasksResultAction action : actions) {
-            numberOfAnnotations += action.getResult().getAnnotations(tasksPriority.name()).size();
+            numberOfAnnotations += action.getResult().getNumberOfAnnotations(tasksPriority);
         }
         return numberOfAnnotations;
     }

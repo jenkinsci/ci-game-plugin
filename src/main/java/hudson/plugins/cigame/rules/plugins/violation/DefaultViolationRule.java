@@ -28,7 +28,9 @@ public class DefaultViolationRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<ViolationsBuildAction>> actionList = new ActionSequenceRetriever<ViolationsBuildAction>(ViolationsBuildAction.class, 2).getSequence(build);
-            if (actionList != null) {
+            if ((actionList != null)
+                    && containsTypeReport(actionList.get(0))
+                    && containsTypeReport(actionList.get(1)) ){
                 int diff = getTypeReportCount(actionList.get(0)) - getTypeReportCount(actionList.get(1));
                 if (diff > 0) {
                     return new RuleResult(diff * pointsForAddingViolation, 
@@ -42,11 +44,21 @@ public class DefaultViolationRule implements Rule {
         }
         return RuleResult.EMPTY_RESULT;
     }
+    
+    private boolean containsTypeReport(List<ViolationsBuildAction> actions) {
+        for (ViolationsBuildAction action : actions) {
+            if ((action.getReport().getTypeReports().get(typeName) != null)
+                    && (action.getReport().getTypeSummary(typeName).getErrorMessage() == null)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private int getTypeReportCount(List<ViolationsBuildAction> actions) {
         int numberOfReports = 0;
         for (ViolationsBuildAction action : actions) {
-            numberOfReports += action.getReport().getTypeReports().get(typeName).getNumber();
+            numberOfReports += action.getReport().typeCount(typeName);
         }
         return numberOfReports;
     }
