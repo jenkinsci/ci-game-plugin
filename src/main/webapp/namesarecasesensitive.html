@@ -1,0 +1,9 @@
+<div><p>The checkbox decides if the game should treat the user names in Hudson case sensitive or not.
+    Hudson treats user names as case sensitive, which mean that user "John" is not the same user
+    as "john". Some SCMs make it possible to login with the same user but with different casing,
+    which means that to Hudson there are separate users. This introduces a problem in the game
+    as one real user can have several Hudson users.</p>
+  <p>If this checkbox is enabled, the game will treat all users as separate, just like Hudson does.
+    If this checkbox is disabled, the game will make case insensitive look ups of the user names
+    which mean points awarded to "John" and "john" will be awarded to the same user.</p>
+</div>

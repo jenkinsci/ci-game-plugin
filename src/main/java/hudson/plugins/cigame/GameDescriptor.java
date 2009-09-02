@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.Extension;
-import hudson.model.Descriptor;
+import hudson.model.AbstractProject;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
@@ -16,15 +16,17 @@ import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
 import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
+import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 
 @Extension
-public class GameDescriptor extends Descriptor<Publisher> {
+public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
     
     private RuleBook rulebook;
+    private boolean namesAreCaseSensitive = true;
 
     public GameDescriptor() {
         super(GamePublisher.class);
@@ -63,8 +65,28 @@ public class GameDescriptor extends Descriptor<Publisher> {
     }
 
     @Override
-    public Publisher newInstance(StaplerRequest req, JSONObject formData)
+    public GamePublisher newInstance(StaplerRequest req, JSONObject formData)
             throws hudson.model.Descriptor.FormException {
         return new GamePublisher();
+    }
+
+    @Override
+    public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+        req.bindJSON(this, json);
+        save();
+        return true;
+    }
+
+    public boolean getNamesAreCaseSensitive() {
+        return namesAreCaseSensitive;
+    }
+
+    public void setNamesAreCaseSensitive(boolean namesAreCaseSensitive) {
+        this.namesAreCaseSensitive = namesAreCaseSensitive;
+    }
+
+    @Override
+    public boolean isApplicable(Class<? extends AbstractProject> arg0) {
+        return true;
     }
 }

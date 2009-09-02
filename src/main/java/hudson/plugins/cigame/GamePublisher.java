@@ -15,9 +15,10 @@ import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
-import hudson.tasks.Publisher;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Notifier;
 
-public class GamePublisher extends Publisher {
+public class GamePublisher extends Notifier {
 
     @Override
     public GameDescriptor getDescriptor() {
@@ -97,5 +98,9 @@ public class GamePublisher extends Publisher {
         public int compare(User arg0, User arg1) {
             return arg0.getId().compareToIgnoreCase(arg1.getId());
         }
+    }
+
+    public BuildStepMonitor getRequiredMonitorService() {
+        return BuildStepMonitor.BUILD;
     }
 }
