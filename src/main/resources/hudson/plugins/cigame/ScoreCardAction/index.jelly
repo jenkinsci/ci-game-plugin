@@ -6,7 +6,7 @@
     <l:main-panel>
        	<h1>${%Scorecard.Title}</h1>
 		<div>
-        	<table class="pane sortable" style="width:50%">
+        	<table class="pane sortable" style="width:50%" id="game.scores">
         		<tr><td class="pane-header" align="left">${%Rule}</td><td class="pane-header" initialSortDir="up" align="left">${%Points}</td></tr>
           		<j:forEach var="score" items="${sc.scores}">
         			<tr>
@@ -23,7 +23,7 @@
 	       		${%Scorecard.Participators.None}
 	       	</j:when>
 	       	<j:otherwise>
-	       		<table class="pane sortable" style="width:50%">
+	       		<table class="pane sortable" style="width:50%" id="game.culprits">
 	       		<tr><td class="pane-header" initialSortDir="down" align="left">${%Scorecard.Participators.Players}</td></tr>
           		<j:forEach var="player" items="${it.participants}">
           			<tr><td>

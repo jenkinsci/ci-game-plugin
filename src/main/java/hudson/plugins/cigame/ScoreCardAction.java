@@ -11,6 +11,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
@@ -58,6 +59,10 @@ public class ScoreCardAction implements Action {
 
     @Exported
     public Collection<User> getParticipants() {
+        return getParticipants(Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+    }
+    
+    Collection<User> getParticipants(boolean usernameIsCasesensitive) {
         Comparator<User> userIdComparator = new UserIdComparator();
         List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
@@ -66,7 +71,7 @@ public class ScoreCardAction implements Action {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) 
                     && property.isParticipatingInGame() 
-                    && (Collections.binarySearch(players, user, userIdComparator) < 0)) {
+                    && (usernameIsCasesensitive || Collections.binarySearch(players, user, userIdComparator) < 0)) {
                 players.add(user);
             }
         }

@@ -26,7 +26,18 @@ public class ScoreCardActionTest {
         when(build.getChangeSet()).thenReturn(changeset);
         Iterator<Entry> iterator = Arrays.asList(new Entry[]{mockEntry("Name", "OneName"), mockEntry("name", "TwoName")}).iterator();
         when(changeset.iterator()).thenReturn(iterator);
-        assertThat(new ScoreCardAction(new ScoreCard(), build).getParticipants().size(), is(1));
+        assertThat(new ScoreCardAction(new ScoreCard(), build).getParticipants(false).size(), is(1));
+    }
+
+    @Bug(3990)
+    @Test 
+    public void assertCaseDifferentUserIsNotReportedAsOneUser() {
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);        
+        ChangeLogSet changeset = mock(ChangeLogSet.class);
+        when(build.getChangeSet()).thenReturn(changeset);
+        Iterator<Entry> iterator = Arrays.asList(new Entry[]{mockEntry("Name", "OneName"), mockEntry("name", "TwoName")}).iterator();
+        when(changeset.iterator()).thenReturn(iterator);
+        assertThat(new ScoreCardAction(new ScoreCard(), build).getParticipants(true).size(), is(2));
     }
     
     @Test 
@@ -36,7 +47,7 @@ public class ScoreCardActionTest {
         when(build.getChangeSet()).thenReturn(changeset);
         Iterator<Entry> iterator = Arrays.asList(new Entry[]{mockEntry("one", "David"), mockEntry("two", "Barney"), mockEntry("three", "charlie")}).iterator();
         when(changeset.iterator()).thenReturn(iterator);
-        Iterator<User> participantsIterator = new ScoreCardAction(new ScoreCard(), build).getParticipants().iterator();
+        Iterator<User> participantsIterator = new ScoreCardAction(new ScoreCard(), build).getParticipants(true).iterator();
         assertThat(participantsIterator.next().getDisplayName(), is("Barney"));
         assertThat(participantsIterator.next().getDisplayName(), is("charlie"));
         assertThat(participantsIterator.next().getDisplayName(), is("David"));
