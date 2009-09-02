@@ -15,62 +15,32 @@ import hudson.plugins.checkstyle.CheckStyleResultAction;
 import hudson.plugins.checkstyle.util.model.FileAnnotation;
 import hudson.plugins.cigame.model.RuleResult;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
 import org.junit.Test;
 
 @SuppressWarnings("unchecked")
 public class DefaultCheckstyleRuleTest {
-    private Mockery context;
-    private Mockery classContext;
-    private AbstractBuild<?,?> build;
-    
-    @Before
-    public void setUp() throws Exception {
-        context = new Mockery();
-        classContext = new Mockery() {
-            {
-                setImposteriser(ClassImposteriser.INSTANCE);
-            }
-        };
-        build = classContext.mock(AbstractBuild.class);
-    }
     
     @Test
     public void assertFailedBuildsIsWorthZeroPoints() {
-        classContext.checking(new Expectations() {
-            {
-                ignoring(build).getResult(); will(returnValue(Result.FAILURE));
-            }
-        });
+        AbstractBuild build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
 
         DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
-        
-        classContext.assertIsSatisfied();
-        context.assertIsSatisfied();
     }
     
     @Test
     public void assertNoPreviousBuildIsWorthZeroPoints() {        
-        classContext.checking(new Expectations() {
-            {
-                ignoring(build).getResult(); will(returnValue(Result.SUCCESS));
-                ignoring(build).getPreviousBuild(); will(returnValue(null));
-            }
-        });
+        AbstractBuild build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
+        when(build.getPreviousBuild()).thenReturn(null);
 
         DefaultCheckstyleRule rule = new DefaultCheckstyleRule(100, -100);
         RuleResult ruleResult = rule.evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
-        
-        classContext.assertIsSatisfied();
-        context.assertIsSatisfied();
     }
     
     @Test
