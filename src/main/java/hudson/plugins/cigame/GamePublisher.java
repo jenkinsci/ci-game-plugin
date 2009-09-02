@@ -39,7 +39,7 @@ public class GamePublisher extends Notifier {
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) throws InterruptedException, IOException {
 
-        perform(build, getDescriptor().getRuleBook(), false);
+        perform(build, getDescriptor().getRuleBook(), getDescriptor().getNamesAreCaseSensitive());
         return true;
     }
 
