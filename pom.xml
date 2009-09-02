@@ -31,6 +31,13 @@
   </developers>
 
   <dependencies>
+      <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-harness</artifactId>
+      <version>${parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>checkstyle</artifactId>
