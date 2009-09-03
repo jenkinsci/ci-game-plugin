@@ -20,7 +20,6 @@ public class ScoreCardActionIntegrationTest extends HudsonTestCase {
     @LocalData
     public void testThatUsernameWithDifferentCasingIsNotDisplayedAsOne() throws Exception {
         HtmlTable table = (HtmlTable) new WebClient().goTo("job/multiple-culprits/4/cigame/").getHtmlElementById("game.culprits");
-        assertThat(table.getRowCount(), is(3));
-        
+        assertThat(table.getRowCount(), is(3));        
     }
 }

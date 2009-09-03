@@ -25,11 +25,12 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
     
-    private RuleBook rulebook;
+    private transient RuleBook rulebook;
     private boolean namesAreCaseSensitive = true;
 
     public GameDescriptor() {
         super(GamePublisher.class);
+        load();
     }
 
     /**

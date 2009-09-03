@@ -63,7 +63,7 @@ public class ScoreCardAction implements Action {
     }
     
     Collection<User> getParticipants(boolean usernameIsCasesensitive) {
-        Comparator<User> userIdComparator = new UserIdComparator();
+        Comparator<User> userIdComparator = new CaseInsensitiveUserIdComparator();
         List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
         for (Entry entry : changeSet) {
@@ -82,12 +82,6 @@ public class ScoreCardAction implements Action {
     private static class UserDisplayNameComparator implements Comparator<User> {
         public int compare(User arg0, User arg1) {
             return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
-        }            
-    }
-    
-    private static class UserIdComparator implements Comparator<User> {
-        public int compare(User arg0, User arg1) {
-            return arg0.getId().compareToIgnoreCase(arg1.getId());
         }            
     }
 }

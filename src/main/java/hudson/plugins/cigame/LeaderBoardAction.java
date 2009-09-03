@@ -2,6 +2,7 @@ package hudson.plugins.cigame;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,12 +50,30 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
      */
     @Exported
     public List<UserScore> getUserScores() {
+        return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+    }
+
+    List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCasesensitive) {
         ArrayList<UserScore> list = new ArrayList<UserScore>();
 
-        for (User user : User.getAll()) {
+        Collection<User> players;
+        if (usernameIsCasesensitive) {
+            players = users;
+        } else {
+            List<User> playerList = new ArrayList<User>();
+            CaseInsensitiveUserIdComparator caseInsensitiveUserIdComparator = new CaseInsensitiveUserIdComparator();
+            for (User user : users) {
+                if (Collections.binarySearch(playerList, user, caseInsensitiveUserIdComparator) < 0) {
+                    playerList.add(user);
+                }
+            }
+            players = playerList;
+        }
+        
+        for (User user : players) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
-                list.add(new UserScore(property.getUser(), property.getScore(), user.getDescription()));
+                list.add(new UserScore(user, property.getScore(), user.getDescription()));
             }
         }
 
@@ -73,16 +92,21 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
 
     public void doResetScores( StaplerRequest req, StaplerResponse rsp ) throws IOException {
         if (Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
-            for (User user : User.getAll()) {
-                UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-                if (property != null) {
-                    property.setScore(0);
-                    user.save();
-                }
-            }
+            doResetScores(User.getAll());
         }
         rsp.sendRedirect2(req.getContextPath());
     }
+
+    void doResetScores(Collection<User> users) throws IOException {
+        for (User user : users) {
+            UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+            if (property != null) {
+                property.setScore(0);
+                user.save();
+            }
+        }
+    }
+
     
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
@@ -124,5 +148,4 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     public boolean hasPermission(Permission p) {
         return getACL().hasPermission(p);
     }
-
 }
