@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import hudson.model.AbstractBuild;
@@ -12,7 +11,7 @@ import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.tasks.TasksResult;
 import hudson.plugins.tasks.TasksResultAction;
-import hudson.plugins.tasks.util.model.FileAnnotation;
+import hudson.plugins.tasks.util.HealthDescriptor;
 import hudson.plugins.tasks.util.model.Priority;
 
 import org.junit.Test;
@@ -52,17 +51,38 @@ public class DefaultOpenTasksRuleTest {
         when(previousBuild.getResult()).thenReturn(Result.FAILURE);
         TasksResult result = mock(TasksResult.class);
         TasksResult previosResult = mock(TasksResult.class);
-        TasksResultAction action = new TasksResultAction(build, null, result);
-        TasksResultAction previousAction = new TasksResultAction(previousBuild,null, previosResult);
+        TasksResultAction action = new TasksResultAction(build, mock(HealthDescriptor.class), result);
+        TasksResultAction previousAction = new TasksResultAction(previousBuild,mock(HealthDescriptor.class), previosResult);
         when(build.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(action));
         when(build.getAction(TasksResultAction.class)).thenReturn(action);
         when(previousBuild.getAction(TasksResultAction.class)).thenReturn(previousAction);
-        when(previousBuild.getActions(TasksResultAction.class)).thenReturn(new ArrayList<TasksResultAction>());
+        when(previousBuild.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(previousAction));
         
-        FileAnnotation fileannotationOne = mock(FileAnnotation.class);
-        FileAnnotation fileannotationTwo = mock(FileAnnotation.class);
-        when(result.getAnnotations(Priority.LOW.name())).thenReturn(Arrays.asList(fileannotationOne, fileannotationTwo));
-        when(previosResult.getAnnotations(Priority.LOW.name())).thenReturn(Arrays.asList(fileannotationOne));
+        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(15);
+        when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
+
+        RuleResult ruleResult = new DefaultOpenTasksRule(Priority.LOW, 100, -100).evaluate(build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
+    }
+    
+    @Test
+    public void assertIfPreviousBuildHasErrorsResultIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
+        TasksResult result = mock(TasksResult.class);
+        TasksResult previosResult = mock(TasksResult.class);
+        when(previosResult.hasError()).thenReturn(true);
+        TasksResultAction action = new TasksResultAction(build, mock(HealthDescriptor.class), result);
+        TasksResultAction previousAction = new TasksResultAction(previousBuild,mock(HealthDescriptor.class), previosResult);
+        when(build.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(action));
+        when(previousBuild.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(previousAction));
+        
+        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(15);
+        when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
         RuleResult ruleResult = new DefaultOpenTasksRule(Priority.LOW, 100, -100).evaluate(build);
         assertNotNull("Rule result must not be null", ruleResult);

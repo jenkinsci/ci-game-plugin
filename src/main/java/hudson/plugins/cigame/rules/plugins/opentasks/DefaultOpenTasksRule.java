@@ -31,7 +31,8 @@ public class DefaultOpenTasksRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<TasksResultAction>> actionSequence = new ActionSequenceRetriever<TasksResultAction>(TasksResultAction.class, 2).getSequence(build);
-            if (actionSequence != null) {
+            if ((actionSequence != null)
+                    && hasNoErrors(actionSequence.get(0)) && hasNoErrors(actionSequence.get(1))) {
                 int numberOfAnnotations = getNumberOfAnnotations(actionSequence.get(0)) - getNumberOfAnnotations(actionSequence.get(1));
                 if (numberOfAnnotations > 0) {
                     return new RuleResult(numberOfAnnotations * pointsForAddingAnAnnotation, 
@@ -44,6 +45,15 @@ public class DefaultOpenTasksRule implements Rule {
             }
         }
         return RuleResult.EMPTY_RESULT;
+    }
+    
+    private boolean hasNoErrors(List<TasksResultAction> actions) {
+        for (TasksResultAction action : actions) {
+            if (action.getResult().hasError()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private int getNumberOfAnnotations(List<TasksResultAction> actions) {

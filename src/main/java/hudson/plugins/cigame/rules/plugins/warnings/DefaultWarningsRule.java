@@ -26,7 +26,8 @@ public class DefaultWarningsRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {        
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<WarningsResultAction>> sequence = new ActionSequenceRetriever<WarningsResultAction>(WarningsResultAction.class, 2).getSequence(build);
-            if (sequence != null) {
+            if ((sequence != null)
+                    && hasNoErrors(sequence.get(0)) && hasNoErrors(sequence.get(1))) {
                 int numberOfAnnotations = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
                 if (numberOfAnnotations > 0) {
                     return new RuleResult(numberOfAnnotations * pointsForAddingAWarning, 
@@ -39,6 +40,15 @@ public class DefaultWarningsRule implements Rule {
             }
         }
         return RuleResult.EMPTY_RESULT;
+    }
+    
+    private boolean hasNoErrors(List<WarningsResultAction> actions) {
+        for (WarningsResultAction action : actions) {
+            if (action.getResult().hasError()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private int getNumberOfAnnotations(List<WarningsResultAction> actions) {

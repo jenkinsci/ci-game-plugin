@@ -26,7 +26,8 @@ public class DefaultCheckstyleRule implements Rule {
     public RuleResult evaluate(AbstractBuild<?, ?> build) {
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<CheckStyleResultAction>> sequence = new ActionSequenceRetriever<CheckStyleResultAction>(CheckStyleResultAction.class, 2).getSequence(build);
-            if (sequence != null) {
+            if ((sequence != null)
+                    && hasNoErrors(sequence.get(0)) && hasNoErrors(sequence.get(1))) {
                 int numberOfWarnings = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
                 if (numberOfWarnings > 0) {
                     return new RuleResult(numberOfWarnings * pointsForAddingAWarning, 
@@ -39,6 +40,15 @@ public class DefaultCheckstyleRule implements Rule {
             }
         }
         return RuleResult.EMPTY_RESULT;
+    }
+    
+    private boolean hasNoErrors(List<CheckStyleResultAction> actions) {
+        for (CheckStyleResultAction action : actions) {
+            if (action.getResult().hasError()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private int getNumberOfAnnotations(List<CheckStyleResultAction> actions) {

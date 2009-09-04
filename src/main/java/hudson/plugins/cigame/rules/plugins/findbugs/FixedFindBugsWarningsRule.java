@@ -25,7 +25,8 @@ public class FixedFindBugsWarningsRule implements Rule {
         int numberOfAnnotations = 0;
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<FindBugsResultAction>> actionSequence = new ActionSequenceRetriever<FindBugsResultAction>(FindBugsResultAction.class, 2).getSequence(build);
-            if (actionSequence != null) {
+            if ((actionSequence != null)
+                    && hasNoErrors(actionSequence.get(0)) && hasNoErrors(actionSequence.get(1))) {
                 numberOfAnnotations = getNumberOfAnnotations(actionSequence.get(1)) - getNumberOfAnnotations(actionSequence.get(0)); 
             }
         }
@@ -34,6 +35,15 @@ public class FixedFindBugsWarningsRule implements Rule {
                     Messages.FindBugsRuleSet_FixedWarningsRule_Count(Math.abs(numberOfAnnotations), priority.name())); //$NON-NLS-1$
         }
         return RuleResult.EMPTY_RESULT;
+    }
+    
+    private boolean hasNoErrors(List<FindBugsResultAction> actions) {
+        for (FindBugsResultAction action : actions) {
+            if (action.getResult().hasError()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private int getNumberOfAnnotations(List<FindBugsResultAction> list) {

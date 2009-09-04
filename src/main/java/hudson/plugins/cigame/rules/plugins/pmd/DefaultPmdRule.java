@@ -27,7 +27,8 @@ public class DefaultPmdRule implements Rule {
         
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<PmdResultAction>> sequence = new ActionSequenceRetriever<PmdResultAction>(PmdResultAction.class, 2).getSequence(build);
-            if (sequence != null) {
+            if ((sequence != null)
+                    && hasNoErrors(sequence.get(0)) && hasNoErrors(sequence.get(1))){
                 int delta = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
 
                 if (delta < 0) {
@@ -41,6 +42,15 @@ public class DefaultPmdRule implements Rule {
             }
         }
         return RuleResult.EMPTY_RESULT;
+    }
+    
+    private boolean hasNoErrors(List<PmdResultAction> actions) {
+        for (PmdResultAction action : actions) {
+            if (action.getResult().hasError()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getNumberOfAnnotations(List<PmdResultAction> actions) {

@@ -70,4 +70,23 @@ public class IncreasingPassedTestsRuleTest {
         RuleResult ruleResult = new IncreasingPassedTestsRule(-100).evaluate(build);
         assertNull("Rule result must be null", ruleResult);
     }
+
+    @Test
+    public void assertResultIsCalculated() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
+        AbstractTestResultAction action = mock(AbstractTestResultAction.class);
+        AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
+        when(build.getActions(AbstractTestResultAction.class)).thenReturn(Arrays.asList(action));
+        when(action.getPreviousResult()).thenReturn(previousAction);
+        when(action.getTotalCount()).thenReturn(10);
+        when(previousAction.getTotalCount()).thenReturn(5);
+        
+        RuleResult ruleResult = new IncreasingPassedTestsRule(100).evaluate(build);
+        assertThat(ruleResult, notNullValue());
+        assertThat(ruleResult.getPoints(), is(500d));
+    }
 }
