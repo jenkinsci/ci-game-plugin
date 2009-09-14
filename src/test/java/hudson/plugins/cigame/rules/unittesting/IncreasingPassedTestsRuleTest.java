@@ -14,6 +14,7 @@ import hudson.tasks.test.AbstractTestResultAction;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvnet.hudson.test.Bug;
 
 @SuppressWarnings("unchecked")
 public class IncreasingPassedTestsRuleTest {
@@ -88,5 +89,27 @@ public class IncreasingPassedTestsRuleTest {
         RuleResult ruleResult = new IncreasingPassedTestsRule(100).evaluate(build);
         assertThat(ruleResult, notNullValue());
         assertThat(ruleResult.getPoints(), is(500d));
+    }
+
+    @Bug(4449)
+    @Test
+    public void assertSkippedTestIsntCalculated() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
+        AbstractTestResultAction action = mock(AbstractTestResultAction.class);
+        AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
+        when(build.getActions(AbstractTestResultAction.class)).thenReturn(Arrays.asList(action));
+        when(action.getPreviousResult()).thenReturn(previousAction);
+        when(action.getTotalCount()).thenReturn(10);
+        when(action.getSkipCount()).thenReturn(5);
+        when(previousAction.getTotalCount()).thenReturn(5);
+        when(previousAction.getSkipCount()).thenReturn(1);
+        
+        RuleResult ruleResult = new IncreasingPassedTestsRule(100).evaluate(build);
+        assertThat(ruleResult, notNullValue());
+        assertThat(ruleResult.getPoints(), is(100d));
     }
 }

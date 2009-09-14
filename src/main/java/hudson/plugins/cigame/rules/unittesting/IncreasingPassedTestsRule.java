@@ -30,8 +30,8 @@ public class IncreasingPassedTestsRule implements Rule {
             if ((action != null) && (action.getPreviousResult() != null)) {
                 return evaluate(build.getResult(), 
                         build.getPreviousBuild().getResult(), 
-                        action.getTotalCount()-action.getFailCount(), 
-                        action.getPreviousResult().getTotalCount()-action.getPreviousResult().getFailCount());
+                        action.getTotalCount()-action.getFailCount() - action.getSkipCount(), 
+                        action.getPreviousResult().getTotalCount()-action.getPreviousResult().getFailCount() - action.getPreviousResult().getSkipCount());
             }
         }
         return null;
