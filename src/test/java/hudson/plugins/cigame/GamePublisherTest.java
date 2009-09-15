@@ -19,6 +19,7 @@ import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 
 import org.junit.Test;
+import org.jvnet.hudson.test.Bug;
 
 @SuppressWarnings("unchecked")
 public class GamePublisherTest {
@@ -55,6 +56,18 @@ public class GamePublisherTest {
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true), is(true));
         verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true));
+    }
+
+    @Bug(4470)
+    @Test
+    public void assertThatUserDoesNotReciveDoublePointsIfUserExistInSeveralChangeSetEntries() throws Exception {
+        AbstractBuild build = mock(AbstractBuild.class);
+        UserScoreProperty property = new UserScoreProperty(10d, true);
+        User user = createUser(property);        
+        mockChangeSetInBuild(build, user, user);
+
+        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true), is(true));
+        assertThat(property.getScore(), is(15d));
     }
     
     @Test
@@ -96,7 +109,7 @@ public class GamePublisherTest {
     }
     
     private User createUser(UserScoreProperty property) {
-        return createUser(property, "ignored");
+        return createUser(property, "ignored-" + System.currentTimeMillis());
     }
     
     private User createUser(UserScoreProperty property, String name) {

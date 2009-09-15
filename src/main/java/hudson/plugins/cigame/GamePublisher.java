@@ -1,10 +1,10 @@
 package hudson.plugins.cigame;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
+import java.util.TreeSet;
+
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -72,12 +72,10 @@ public class GamePublisher extends Notifier {
      */
     private boolean updateUserScores(ChangeLogSet<? extends Entry> changeSet,
             double score, boolean usernameIsCasesensitive) throws IOException {
-        List<User> players = new ArrayList<User>();
+        Collection<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new UsernameCaseinsensitiveComparator());
         if (score != 0) {
             for (Entry entry : changeSet) {
-                if (usernameIsCasesensitive || (Collections.binarySearch(players, entry.getAuthor(), new UsernameCaseinsensitiveComparator())< 0)) {
-                    players.add(entry.getAuthor());
-                }
+                players.add(entry.getAuthor());
             }
             for (User user : players) {
                 UserScoreProperty property = user.getProperty(UserScoreProperty.class);
