@@ -1,15 +1,15 @@
 package hudson.plugins.cigame.rules.plugins.opentasks;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.cigame.util.ActionSequenceRetriever;
 import hudson.plugins.cigame.util.ResultSequenceValidator;
 import hudson.plugins.tasks.TasksResultAction;
-import hudson.plugins.tasks.util.model.Priority;
+
+import java.util.List;
 
 /**
  * Default rule for the Open tasks plugin.

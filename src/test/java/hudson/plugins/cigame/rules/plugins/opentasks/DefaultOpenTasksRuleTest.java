@@ -1,18 +1,19 @@
 package hudson.plugins.cigame.rules.plugins.opentasks;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-
-import java.util.Arrays;
-
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.analysis.core.HealthDescriptor;
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.tasks.TasksResult;
 import hudson.plugins.tasks.TasksResultAction;
-import hudson.plugins.tasks.util.HealthDescriptor;
-import hudson.plugins.tasks.util.model.Priority;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 

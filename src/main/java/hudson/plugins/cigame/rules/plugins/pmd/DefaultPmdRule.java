@@ -1,15 +1,15 @@
 package hudson.plugins.cigame.rules.plugins.pmd;
 
-import java.util.List;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.cigame.util.ActionSequenceRetriever;
 import hudson.plugins.cigame.util.ResultSequenceValidator;
 import hudson.plugins.pmd.PmdResultAction;
-import hudson.plugins.pmd.util.model.Priority;
+
+import java.util.List;
 
 public class DefaultPmdRule implements Rule {
     private int pointsForAddingAnAnnotation;

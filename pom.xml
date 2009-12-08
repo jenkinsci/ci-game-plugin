@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.322</version>
+    <version>1.336</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>findbugs</artifactId>
-      <version>3.0</version>
+      <version>4.1-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -59,20 +59,25 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>tasks</artifactId>
-      <version>3.0</version>
+      <version>4.0</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>pmd</artifactId>
-      <version>2.0</version>
+      <version>3.1-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>warnings</artifactId>
-      <version>2.0</version>
+      <version>3.0</version>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.plugins</groupId>
+      <artifactId>analysis-core</artifactId>
+      <version>1.0</version>    
     </dependency>
     <dependency>
       <groupId>junit</groupId>

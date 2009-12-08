@@ -1,7 +1,7 @@
 package hudson.plugins.cigame.rules.plugins.pmd;
 
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
-import hudson.plugins.pmd.util.model.Priority;
 
 public class PmdRuleSet extends PluginRuleSet {
 

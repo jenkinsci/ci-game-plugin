@@ -1,19 +1,19 @@
 package hudson.plugins.cigame.rules.plugins.findbugs;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.*;
-
-import java.util.Arrays;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.analysis.core.HealthDescriptor;
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.findbugs.FindBugsResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
-import hudson.plugins.findbugs.util.HealthDescriptor;
-import hudson.plugins.findbugs.util.model.Priority;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 

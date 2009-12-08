@@ -1,7 +1,7 @@
 package hudson.plugins.cigame.rules.plugins.opentasks;
 
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
-import hudson.plugins.tasks.util.model.Priority;
 
 public class OpenTasksRuleSet extends PluginRuleSet {
 

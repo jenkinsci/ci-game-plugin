@@ -1,17 +1,19 @@
 package hudson.plugins.cigame.rules.plugins.warnings;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-
-import java.util.Arrays;
-
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.analysis.core.HealthDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.warnings.WarningsResult;
 import hudson.plugins.warnings.WarningsResultAction;
-import hudson.plugins.warnings.util.HealthDescriptor;
+
+import java.util.Arrays;
+
 import org.junit.Test;
     
 @SuppressWarnings("unchecked")

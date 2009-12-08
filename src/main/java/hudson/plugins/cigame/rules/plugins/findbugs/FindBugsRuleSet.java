@@ -1,7 +1,7 @@
 package hudson.plugins.cigame.rules.plugins.findbugs;
 
+import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.rules.plugins.PluginRuleSet;
-import hudson.plugins.findbugs.util.model.Priority;
 
 public class FindBugsRuleSet extends PluginRuleSet {
 
