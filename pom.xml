@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>findbugs</artifactId>
-      <version>4.1-SNAPSHOT</version>
+      <version>4.0</version>
       <optional>true</optional>
     </dependency>
     <dependency>
