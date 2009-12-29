@@ -65,7 +65,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>pmd</artifactId>
-      <version>3.1-SNAPSHOT</version>
+      <version>3.1</version>
       <optional>true</optional>
     </dependency>
     <dependency>
