@@ -1,19 +1,19 @@
 package hudson.plugins.cigame.rules.plugins.checkstyle;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.*;
+import hudson.model.AbstractBuild;
+import hudson.model.Result;
+import hudson.plugins.analysis.core.HealthDescriptor;
+import hudson.plugins.checkstyle.CheckStyleResult;
+import hudson.plugins.checkstyle.CheckStyleResultAction;
+import hudson.plugins.cigame.model.RuleResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import hudson.model.AbstractBuild;
-import hudson.model.Result;
-import hudson.plugins.checkstyle.CheckStyleResult;
-import hudson.plugins.checkstyle.CheckStyleResultAction;
-import hudson.plugins.checkstyle.util.HealthDescriptor;
-import hudson.plugins.cigame.model.RuleResult;
 
 import org.junit.Test;
 
