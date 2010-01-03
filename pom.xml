@@ -10,9 +10,15 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.16</version>
+  <version>1.16-SNAPSHOT</version>
   <name>Hudson Continuous Integration game</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/The+Continuous+Integration+Game+plugin</url>
+  
+  <scm>
+    <connection>scm:svn:http://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</connection>
+    <developerConnection>scm:svn:https://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</developerConnection>
+    <url>http://fisheye4.atlassian.com/changelog/hudson/trunk/hudson/plugins/ci-game</url>
+  </scm>  
 
   <licenses>
     <license>
@@ -104,9 +110,4 @@
     </dependency>
   </dependencies>
 
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/ci-game-1.16</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/ci-game-1.16</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/tags/ci-game-1.16</url>
-  </scm>
 </project>
