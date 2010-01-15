@@ -17,5 +17,6 @@ public class ViolationsRuleSet extends PluginRuleSet {
         add(new DefaultViolationRule("findbugs", Messages.ViolationRuleSet_FindBugsRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
         add(new DefaultViolationRule("fxcop", Messages.ViolationRuleSet_FxcopRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
         add(new DefaultViolationRule("simian", Messages.ViolationRuleSet_SimianRule_Name(), -5, 5)); //$NON-NLS-1$ //$NON-NLS-2$
+        add(new DefaultViolationRule("stylecop", Messages.ViolationRuleSet_StylecopRule_Name(), -1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }
