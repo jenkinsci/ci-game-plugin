@@ -10,14 +10,14 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.17</version>
+  <version>1.18-SNAPSHOT</version>
   <name>Hudson Continuous Integration game</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/The+Continuous+Integration+Game+plugin</url>
   
   <scm>
-    <connection>scm:svn:http://hudson.dev.java.net/svn/hudson/tags/ci-game-1.17</connection>
-    <developerConnection>scm:svn:https://hudson.dev.java.net/svn/hudson/tags/ci-game-1.17</developerConnection>
-    <url>http://fisheye4.atlassian.com/changelog/hudson/tags/ci-game-1.17</url>
+    <connection>scm:svn:http://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</connection>
+    <developerConnection>scm:svn:https://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</developerConnection>
+    <url>http://fisheye4.atlassian.com/changelog/hudson/trunk/hudson/plugins/ci-game</url>
   </scm>  
 
   <licenses>
