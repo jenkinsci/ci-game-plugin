@@ -11,14 +11,20 @@
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
   <version>1.18-SNAPSHOT</version>
-  <name>Hudson Continuous Integration game</name>
-  <url>http://wiki.hudson-ci.org/display/HUDSON/The+Continuous+Integration+Game+plugin</url>
+  <name>Jenkins Continuous Integration game</name>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
   <scm>
-    <connection>scm:svn:http://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</connection>
-    <developerConnection>scm:svn:https://hudson.dev.java.net/svn/hudson/trunk/hudson/plugins/ci-game</developerConnection>
-    <url>http://fisheye4.atlassian.com/changelog/hudson/trunk/hudson/plugins/ci-game</url>
+    <connection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</developerConnection>
   </scm>  
+
+  <distributionManagement>
+    <repository>
+      <id>maven.jenkins-ci.org</id>
+      <url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url>
+    </repository>
+  </distributionManagement>
 
   <licenses>
     <license>
@@ -45,6 +51,18 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <goals>deploy</goals>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
 
   <dependencies>
       <dependency>
@@ -113,11 +131,6 @@
       <version>1.2</version>
       <scope>test</scope>
     </dependency>
-    <!-- <dependency>
-      <groupId>org.jvnet.localizer</groupId>
-      <artifactId>localizer</artifactId>
-      <version>1.9</version>
-    </dependency>-->
     <dependency>
 	    <groupId>com.google.collections</groupId>
 	    <artifactId>google-collections</artifactId>
