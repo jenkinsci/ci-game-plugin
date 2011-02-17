@@ -2,7 +2,7 @@ package hudson.plugins.cigame.rules.plugins.violation;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 
 import java.util.ArrayList;
 import java.util.Arrays;

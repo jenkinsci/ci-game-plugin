@@ -6,7 +6,7 @@ import hudson.plugins.cigame.rules.build.BuildResultRule;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 
 public class BuildResultRuleTest {
 

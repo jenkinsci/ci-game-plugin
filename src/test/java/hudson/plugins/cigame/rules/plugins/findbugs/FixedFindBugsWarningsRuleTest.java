@@ -13,7 +13,7 @@ import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.findbugs.FindBugsResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;

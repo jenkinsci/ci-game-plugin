@@ -1,6 +1,6 @@
 package hudson.plugins.cigame.util;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
