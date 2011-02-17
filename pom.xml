@@ -10,13 +10,14 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.18-SNAPSHOT</version>
+  <version>1.18</version>
   <name>Jenkins Continuous Integration game</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
   <scm>
-    <connection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</connection>
-    <developerConnection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</developerConnection>
+    <connection>scm:svn:https://svn.jenkins-ci.org/tags/ci-game-1.18</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/tags/ci-game-1.18</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/tags/ci-game-1.18</url>
   </scm>  
 
   <distributionManagement>
@@ -154,5 +155,6 @@
 	    <scope>test</scope>
     </dependency>
   </dependencies>
+
 
 </project>
