@@ -1,8 +1,10 @@
 package hudson.plugins.cigame;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import hudson.Launcher;
@@ -10,6 +12,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
+import hudson.model.Result;
 import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.ScoreCard;
@@ -39,7 +42,7 @@ public class GamePublisher extends Notifier {
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) throws InterruptedException, IOException {
 
-        perform(build, getDescriptor().getRuleBook(), getDescriptor().getNamesAreCaseSensitive());
+        perform(build, getDescriptor().getRuleBook(), getDescriptor().getNamesAreCaseSensitive(), listener);
         return true;
     }
 
@@ -48,17 +51,38 @@ public class GamePublisher extends Notifier {
      * @param build build to calculate points for
      * @param ruleBook rules used in calculation
      * @param usernameIsCasesensitive user names in Hudson are case insensitive.
+     * @param listener the build listener
      * @return true, if any user scores were updated; false, otherwise
      * @throws IOException thrown if there was a problem setting a user property
      */
-    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive) throws IOException {
+    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive, BuildListener listener) throws IOException {
         ScoreCard sc = new ScoreCard();
-        sc.record(build, ruleBook);
+        sc.record(build, ruleBook, listener);
 
         ScoreCardAction action = new ScoreCardAction(sc, build);
         build.getActions().add(action);
-
-        return updateUserScores(build.getChangeSet(), sc.getTotalPoints(), usernameIsCasesensitive);
+        
+        List<AbstractBuild<?, ?>> accountableBuilds = new ArrayList<AbstractBuild<?,?>>();
+        accountableBuilds.add(build);
+        
+        // also add all previous aborted builds:
+        AbstractBuild<?, ?> previousBuild = build.getPreviousBuild();
+        while (previousBuild != null && previousBuild.getResult() == Result.ABORTED) {
+        	accountableBuilds.add(previousBuild);
+        	previousBuild = previousBuild.getPreviousBuild();
+        }
+        
+        Set<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new UsernameCaseinsensitiveComparator());
+        for (AbstractBuild<?, ?> b : accountableBuilds) {
+        	ChangeLogSet<? extends Entry> changeSet = b.getChangeSet();
+        	if (changeSet != null) {
+	        	for (Entry e : changeSet) {
+	        		players.add(e.getAuthor());
+	        	}
+        	}
+        }
+        
+        return updateUserScores(players, sc.getTotalPoints());
     }
 
     /**
@@ -66,17 +90,11 @@ public class GamePublisher extends Notifier {
      * 
      * @param changeSet the change set, used to get users
      * @param score the score that the build was worth
-     * @param usernameIsCasesensitive user names in Hudson are case insensitive.
      * @throws IOException thrown if the property could not be added to the user object.
      * @return true, if any user scores was updated; false, otherwise
      */
-    private boolean updateUserScores(ChangeLogSet<? extends Entry> changeSet,
-            double score, boolean usernameIsCasesensitive) throws IOException {
-        Collection<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new UsernameCaseinsensitiveComparator());
+    private boolean updateUserScores(Set<User> players, double score) throws IOException {
         if (score != 0) {
-            for (Entry entry : changeSet) {
-                players.add(entry.getAuthor());
-            }
             for (User user : players) {
                 UserScoreProperty property = user.getProperty(UserScoreProperty.class);
                 if (property == null) {
@@ -92,7 +110,7 @@ public class GamePublisher extends Notifier {
         return (!players.isEmpty());
     }
 
-    public class UsernameCaseinsensitiveComparator implements Comparator<User> {
+    public static class UsernameCaseinsensitiveComparator implements Comparator<User> {
         public int compare(User arg0, User arg1) {
             return arg0.getId().compareToIgnoreCase(arg1.getId());
         }

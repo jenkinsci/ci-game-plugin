@@ -10,5 +10,7 @@ public class UnitTestingRuleSet extends RuleSet {
         super(Messages.UnitTestingRuleSet_Title()); //$NON-NLS-1$
         add(new IncreasingFailedTestsRule());
         add(new IncreasingPassedTestsRule());
+        add(new RemovedFailedTestsRule());
+        add(new RemovedPassedTestsRule());
     }
 }

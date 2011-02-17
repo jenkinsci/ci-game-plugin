@@ -23,14 +23,14 @@ public class ScoreCardTest {
         Rule rule = mock(Rule.class);
         when(rule.evaluate(isA(AbstractBuild.class))).thenReturn(RuleResult.EMPTY_RESULT);
         ScoreCard card = new ScoreCard();
-        card.record(mock(AbstractBuild.class), new RuleSet("test", Arrays.asList(new Rule[]{rule})));
+        card.record(mock(AbstractBuild.class), new RuleSet("test", Arrays.asList(new Rule[]{rule})), null);
         assertThat(card.getScores().size(), is(0));
     }
     
     @Test
     public void assertEmptyRuleBookDoesNotThrowIllegalException() {
         ScoreCard scoreCard = new ScoreCard();
-        scoreCard.record(mock(AbstractBuild.class), new RuleBook());
+        scoreCard.record(mock(AbstractBuild.class), new RuleBook(), null);
         assertThat(scoreCard.getTotalPoints(), is(0d));
     }
 }

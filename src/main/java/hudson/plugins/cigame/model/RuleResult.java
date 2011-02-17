@@ -4,17 +4,25 @@ package hudson.plugins.cigame.model;
  * Result from a Rule evaluation.
  * 
  */
-public class RuleResult {
-    public static final RuleResult EMPTY_RESULT = new EmptyRuleResult();
+public class RuleResult<T> {
+    public static final RuleResult<?> EMPTY_RESULT = new EmptyRuleResult();
+    
+    public static final RuleResult<Integer> EMPTY_INT_RESULT = new RuleResult<Integer>(0.0, "", Integer.valueOf(0));
     
     private final double points;
     private final String description;
+    private T additionalData;
 
     public RuleResult(double points, String description) {
+        this(points, description, null);
+    }
+    
+    public RuleResult(double points, String description, T additionalData) {
         this.points = points;
         this.description = description;
-        
+        this.additionalData = additionalData;
     }
+    
     /**
      * Returns the points for the result from a rule
      * @return the points
@@ -31,6 +39,10 @@ public class RuleResult {
      */
     public String getDescription() {
         return description;
+    }
+    
+    public T getAdditionalData() {
+        return additionalData;
     }
     
     @Override
@@ -68,7 +80,7 @@ public class RuleResult {
         return true;
     }
     
-    private static class EmptyRuleResult extends RuleResult {
+    private static class EmptyRuleResult extends RuleResult<Void> {
         private EmptyRuleResult() {
             super(0, "");
         }

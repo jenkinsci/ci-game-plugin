@@ -1,17 +1,12 @@
 package hudson.plugins.cigame.rules.unittesting;
 
-import hudson.model.AbstractBuild;
-import hudson.model.Result;
-import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.tasks.test.AbstractTestResultAction;
-
-import java.util.List;
 
 /**
  * Rule that gives points for increasing the number of passed tests.
  */
-public class IncreasingPassedTestsRule implements Rule {
+public class IncreasingPassedTestsRule extends AbstractUnitTestsRule {
 
     private int pointsForEachFixedFailure;
 
@@ -23,35 +18,49 @@ public class IncreasingPassedTestsRule implements Rule {
         pointsForEachFixedFailure = points;
     }
 
-    @SuppressWarnings("unchecked")
-    public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        List<AbstractTestResultAction> actions = build.getActions(AbstractTestResultAction.class);
-        for (AbstractTestResultAction action : actions) {
-            if ((action != null) && (action.getPreviousResult() != null)) {
-                return evaluate(build.getResult(), 
-                        build.getPreviousBuild().getResult(), 
-                        action.getTotalCount()-action.getFailCount() - action.getSkipCount(), 
-                        action.getPreviousResult().getTotalCount()-action.getPreviousResult().getFailCount() - action.getPreviousResult().getSkipCount());
-            }
+    RuleResult<Integer> evaluate(
+        int currentTotalCount, int currentFailCount, int currentSkipCount,
+        int previousTotalCount, int previousFailCount, int previousSkipCount) {
+        
+        int passedTestDiff = (currentTotalCount - currentFailCount - currentSkipCount)
+        	- (previousTotalCount - previousFailCount - previousSkipCount);
+        
+        // ignore any tests which were just 'unskipped'
+        if (currentSkipCount < previousSkipCount) {
+        	passedTestDiff = passedTestDiff - (previousSkipCount - currentSkipCount);
         }
-        return null;
-    }
-
-    RuleResult evaluate(Result currentResult, Result previousResult,
-            int currentPassCount, int previousPassCount) {
-        if ((previousResult.isBetterThan(Result.FAILURE))
-                && (currentResult.isBetterOrEqualTo(Result.UNSTABLE))) {
-            int passedTestDiff = currentPassCount - previousPassCount;
-            if (passedTestDiff > 0) {
-                return new RuleResult(passedTestDiff * pointsForEachFixedFailure, 
-                        Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(passedTestDiff)); //$NON-NLS-1$
-            }
+        
+        // passedTestDiff may now be 0 or even negative. Count at least all
+        // those tests which were fixed
+        passedTestDiff = Math.max(passedTestDiff, previousFailCount - currentFailCount);
+        
+        if (passedTestDiff > 0) {
+            return new RuleResult<Integer>(passedTestDiff * pointsForEachFixedFailure, 
+                    Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(passedTestDiff),
+                    passedTestDiff); 
         }
         return null;
     }
 
     public String getName() {
-        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name(); //$NON-NLS-1$
+        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name(); 
     }
 
+	@Override
+	protected RuleResult<Integer> evaluate(
+			AbstractTestResultAction<?> testResult,
+			AbstractTestResultAction<?> previousTestResult) {
+		if (testResult == null) {
+			return null;
+		}
+		
+		return evaluate(
+				testResult.getTotalCount(), testResult.getFailCount(), testResult.getSkipCount(),
+				previousTestResult.getTotalCount(), previousTestResult.getFailCount(), previousTestResult.getSkipCount());
+	}
+
+	@Override
+	protected String getResultDescription(Integer testDiff) {
+		return Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(testDiff);
+	}
 }
