@@ -13,7 +13,7 @@
           		<j:forEach var="userscore" items="${it.userScores}">
     	      		<tr>
         				<td><a href="${rootURL}/${userscore.user.url}">${userscore.user}</a></td>
-					    <td>${userscore.description}</td>
+					    <td><j:out value="${userscore.description!=null ? app.markupFormatter.translate(userscore.description) : ''}" /></td>
         				<td>${userscore.score}</td>
         			</tr> 
           		</j:forEach>
