@@ -4,14 +4,16 @@
     <l:main-panel>
        	<h1>${%Leaderboard.title}</h1>
 		<div>
-        	<table class="pane sortable" style="width:50%">	
+        	<table class="pane sortable bigtable" style="width:50%">	
         		<tr>
+                    <j:if test="${it.userAvatarSupported}"><td class="pane-header" align="left"/></j:if>
         			<td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
         			<td class="pane-header" align="left,center">${%Leaderboard.Description}</td>
         			<td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>
         		</tr>
           		<j:forEach var="userscore" items="${it.userScores}">
     	      		<tr>
+                        <j:if test="${it.userAvatarSupported}"><td><img src="${h.getUserAvatar(userscore.user,'48x48')}" alt="" height="48" width="48" /></td></j:if>
         				<td><a href="${rootURL}/${userscore.user.url}">${userscore.user}</a></td>
 					    <td>${userscore.description}</td>
         				<td>${userscore.score}</td>

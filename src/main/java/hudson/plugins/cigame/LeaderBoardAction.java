@@ -14,6 +14,7 @@ import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
+import hudson.util.VersionNumber;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -51,6 +52,11 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     @Exported
     public List<UserScore> getUserScores() {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+    }
+    
+    @Exported
+    public boolean isUserAvatarSupported() {
+        return new VersionNumber(Hudson.VERSION).isNewerThan(new VersionNumber("1.433"));
     }
 
     List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCasesensitive) {
