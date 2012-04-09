@@ -35,10 +35,8 @@ public class ScoreCard {
      * @param listener 
      */
     public void record(AbstractBuild<?, ?> build, RuleSet ruleset, BuildListener listener) {
-        if (scores == null) {
-            scores = new LinkedList<Score>();
-        }
         
+        List<Score> scoresForBuild = new LinkedList<Score>();
         for (Rule rule : ruleset.getRules()) {
         	if (listener != null) {
         		listener.getLogger().append("[ci-game] evaluating rule: " + rule.getName() + "\n");
@@ -46,17 +44,25 @@ public class ScoreCard {
             RuleResult<?> result = evaluate(build, rule);
             if ((result != null) && (result.getPoints() != 0)) {
                 Score score = new Score(ruleset.getName(), rule.getName(), result.getPoints(), result.getDescription());
-                scores.add(score);
+                scoresForBuild.add(score);
                 
                 if (listener != null) {
             		listener.getLogger().append("[ci-game] scored: " + score.getValue() + "\n");
             	}
             }
         }
-        Collections.sort(scores);
+        
+        // prevent ConcurrentModificationExceptions for e.g. matrix builds (see JENKINS-11498):
+        synchronized(this) {
+            if (scores == null) {
+                scores = new LinkedList<Score>();
+            }
+            scores.addAll(scoresForBuild);
+            Collections.sort(scores);
+        }
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     RuleResult<?> evaluate(AbstractBuild<?, ?> build, Rule rule) {
         if (rule instanceof AggregatableRule<?> && build instanceof MavenModuleSetBuild) {
             AggregatableRule aRule = (AggregatableRule<?>)rule;
