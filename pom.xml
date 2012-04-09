@@ -15,9 +15,9 @@
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
   <scm>
-    <connection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</connection>
-    <developerConnection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/ci-game</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/trunk/hudson/plugins/ci-game</url>
+    <connection>scm:git:github.com:jenkinsci/ci-game-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/ci-game-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/ci-game-plugin</url>
   </scm>  
 
   <distributionManagement>
