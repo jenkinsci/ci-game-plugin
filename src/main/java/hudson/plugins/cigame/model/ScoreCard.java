@@ -3,8 +3,8 @@ package hudson.plugins.cigame.model;
 import hudson.maven.MavenBuild;
 import hudson.maven.MavenModule;
 import hudson.maven.MavenModuleSetBuild;
-import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.model.AbstractBuild;
 import hudson.plugins.cigame.util.BuildUtil;
 
 import java.util.ArrayList;
@@ -38,18 +38,23 @@ public class ScoreCard {
         
         List<Score> scoresForBuild = new LinkedList<Score>();
         for (Rule rule : ruleset.getRules()) {
-        	if (listener != null) {
-        		listener.getLogger().append("[ci-game] evaluating rule: " + rule.getName() + "\n");
-        	}
-            RuleResult<?> result = evaluate(build, rule);
-            if ((result != null) && (result.getPoints() != 0)) {
-                Score score = new Score(ruleset.getName(), rule.getName(), result.getPoints(), result.getDescription());
-                scoresForBuild.add(score);
-                
-                if (listener != null) {
-            		listener.getLogger().append("[ci-game] scored: " + score.getValue() + "\n");
-            	}
-            }
+        	if (null != rule){
+	        	if (listener != null) {
+	        		listener.getLogger().append("[ci-game] evaluating rule: " + rule.getName() + "\n");
+	        	}
+	            RuleResult<?> result = evaluate(build, rule);
+	            if ((result != null) && (result.getPoints() != 0)) {
+	                Score score = new Score(ruleset.getName(), rule.getName(), result.getPoints(), result.getDescription());
+	                scoresForBuild.add(score);
+	                if (listener != null) {
+	            		listener.getLogger().append("[ci-game] scored: " + score.getValue() + "\n");
+	            	}
+	            }
+			} else {
+				if (listener != null) {
+					listener.getLogger().append("[ci-game] null rule encountered\n");
+				}
+			}
         }
         
         // prevent ConcurrentModificationExceptions for e.g. matrix builds (see JENKINS-11498):
