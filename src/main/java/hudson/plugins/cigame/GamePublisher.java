@@ -102,7 +102,7 @@ public class GamePublisher extends Notifier {
                     user.addProperty(property);
                 }
                 if (property.isParticipatingInGame()) {
-                    property.setScore(property.getScore() + score);
+                    property.incrementScore(score);
                 }
                 user.save();
             }

@@ -79,7 +79,8 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         for (User user : players) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
-                list.add(new UserScore(user, property.getScore(), user.getDescription()));
+                list.add(new UserScore(user, property.getScore(), property.getMedianScore(),
+                		user.getDescription()));
             }
         }
 
@@ -108,6 +109,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if (property != null) {
                 property.setScore(0);
+                property.resetScoreList();
                 user.save();
             }
         }
@@ -118,12 +120,14 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     public class UserScore {
         private User user;
         private double score;
+        private double medianScore;
         private String description;
 
-        public UserScore(User user, double score, String description) {
+        public UserScore(User user, double score, double medianScore, String description) {
             super();
             this.user = user;
             this.score = score;
+            this.medianScore = medianScore;
             this.description = description;
         }
 
@@ -138,9 +142,15 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         }
 
         @Exported
+        public double getMedianScore() {
+            return medianScore;
+        }
+
+        @Exported
         public String getDescription() {
             return description;
         }
+        
     }
 
     public ACL getACL() {

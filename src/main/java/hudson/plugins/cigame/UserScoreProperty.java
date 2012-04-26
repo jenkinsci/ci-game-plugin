@@ -1,5 +1,8 @@
 package hudson.plugins.cigame;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -15,6 +18,7 @@ import hudson.model.UserProperty;
 public class UserScoreProperty extends UserProperty {
 
     private double score;
+    private ArrayList<Double> listOfScores;
     
     /** Inversed name as default value is false when serializing from data that
      * has doesnt have the value. */
@@ -23,12 +27,15 @@ public class UserScoreProperty extends UserProperty {
     public UserScoreProperty() {
         score = 0;
         isNotParticipatingInGame = false;
+        listOfScores = new ArrayList<Double>();
     }
     
     @DataBoundConstructor
     public UserScoreProperty(double score, boolean participatingInGame) {
         this.score = score;
         this.isNotParticipatingInGame = !participatingInGame;
+        listOfScores = new ArrayList<Double>();
+        listOfScores.add(score);
     }
 
     @Exported
@@ -40,9 +47,40 @@ public class UserScoreProperty extends UserProperty {
     public double getScore() {
         return score;
     }
+    
+    @Exported
+    public ArrayList<Double> getListOfScores() {
+    	return listOfScores;
+    }
+    
+    public double getMedianScore() {
+    	if (listOfScores.size() == 0) {
+    		return 0.0;
+    	}
+    	
+		Collections.sort(listOfScores);
+
+		if (listOfScores.size() % 2 == 1)
+			return listOfScores.get((listOfScores.size() + 1) / 2 - 1);
+		else {
+			double lower = listOfScores.get(listOfScores.size() / 2 - 1);
+			double upper = listOfScores.get(listOfScores.size() / 2);
+
+			return (lower + upper) / 2.0;
+		}
+    }
 
     public void setScore(double score) {
         this.score = score;
+    }
+    
+    public void incrementScore(double score) {
+    	setScore(getScore() + score);
+    	listOfScores.add(score);
+    }
+    
+    public void resetScoreList() {
+    	listOfScores.clear();
     }
 
     @Exported

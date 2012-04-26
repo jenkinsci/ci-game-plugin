@@ -1,5 +1,7 @@
 package hudson.plugins.cigame.model;
 
+import java.util.Collection;
+
 import hudson.model.AbstractBuild;
 
 /**
@@ -22,4 +24,5 @@ public interface Rule {
      * @return the result of the rule; null if the rule should be ignored.
      */
     RuleResult evaluate(AbstractBuild<?, ?> build);
+
 }
