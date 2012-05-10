@@ -10,7 +10,7 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.19-SNAPSHOT</version>
+  <version>1.19</version>
   <name>Jenkins Continuous Integration game (with median)</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
