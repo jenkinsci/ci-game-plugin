@@ -53,7 +53,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     public List<UserScore> getUserScores() {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
-    
+
     @Exported
     public boolean isUserAvatarSupported() {
         return new VersionNumber(Hudson.VERSION).isNewerThan(new VersionNumber("1.433"));
@@ -75,12 +75,12 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             }
             players = playerList;
         }
-        
+
         for (User user : players) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
                 list.add(new UserScore(user, property.getScore(), property.getMedianScore(),
-                		user.getDescription()));
+                        user.getDescription()));
             }
         }
 
@@ -115,7 +115,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         }
     }
 
-    
+
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
         private User user;
@@ -150,7 +150,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         public String getDescription() {
             return description;
         }
-        
+
     }
 
     public ACL getACL() {
