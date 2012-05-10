@@ -53,7 +53,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     public List<UserScore> getUserScores() {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
-    
+
     @Exported
     public boolean isUserAvatarSupported() {
         return new VersionNumber(Hudson.VERSION).isNewerThan(new VersionNumber("1.433"));
@@ -75,11 +75,12 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             }
             players = playerList;
         }
-        
+
         for (User user : players) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
-                list.add(new UserScore(user, property.getScore(), user.getDescription()));
+                list.add(new UserScore(user, property.getScore(), property.getMedianScore(),
+                        user.getDescription()));
             }
         }
 
@@ -108,22 +109,25 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if (property != null) {
                 property.setScore(0);
+                property.resetScoreList();
                 user.save();
             }
         }
     }
 
-    
+
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
         private User user;
         private double score;
+        private double medianScore;
         private String description;
 
-        public UserScore(User user, double score, String description) {
+        public UserScore(User user, double score, double medianScore, String description) {
             super();
             this.user = user;
             this.score = score;
+            this.medianScore = medianScore;
             this.description = description;
         }
 
@@ -138,9 +142,15 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         }
 
         @Exported
+        public double getMedianScore() {
+            return medianScore;
+        }
+
+        @Exported
         public String getDescription() {
             return description;
         }
+
     }
 
     public ACL getACL() {

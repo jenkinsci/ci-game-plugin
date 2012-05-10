@@ -17,7 +17,7 @@ public interface AggregatableRule<T> extends Rule {
 	 * This is currently (only) used to aggregate build results for maven multi module
 	 * builds (especially with the 'incremental build' option).
 	 */
-    RuleResult<?> aggregate(Collection<RuleResult<T>> results);
+	RuleResult<?> aggregate(Collection<RuleResult<T>> results);
     
     /**
      * Evaluates the rule for the current build compared to a previous build.

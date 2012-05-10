@@ -10,6 +10,7 @@
         			<td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
         			<td class="pane-header" align="left,center">${%Leaderboard.Description}</td>
         			<td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>
+        			<td class="pane-header" align="left" width="10%">${%Leaderboard.MedianScore}</td>
         		</tr>
           		<j:forEach var="userscore" items="${it.userScores}">
     	      		<tr>
@@ -17,6 +18,7 @@
         				<td><a href="${rootURL}/${userscore.user.url}">${userscore.user}</a></td>
 					    <td><j:out value="${userscore.description!=null ? app.markupFormatter.translate(userscore.description) : ''}" /></td>
         				<td>${userscore.score}</td>
+        				<td>${userscore.medianScore}</td>
         			</tr> 
           		</j:forEach>
         	</table>

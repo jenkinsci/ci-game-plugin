@@ -23,7 +23,7 @@ public class DefaultCheckstyleRule implements AggregatableRule<Integer> {
         this.pointsForAddingAWarning = pointsForAddingAWarning;
         this.pointsForRemovingAWarning = pointsForRemovingAWarning;
     }
-    
+
 	@Override
 	public RuleResult<?> aggregate(Collection<RuleResult<Integer>> results) {
 		double score = 0.0;
