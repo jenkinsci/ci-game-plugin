@@ -13,6 +13,7 @@
   <version>1.19-SNAPSHOT</version>
   <name>Jenkins Continuous Integration game</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
+  <description>This plugin introduces a game where users gets point on improving the builds.</description>
   
   <scm>
     <connection>scm:git:github.com:jenkinsci/ci-game-plugin.git</connection>
