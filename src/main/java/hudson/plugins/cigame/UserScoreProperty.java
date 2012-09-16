@@ -1,11 +1,19 @@
 package hudson.plugins.cigame;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import hudson.model.AbstractBuild;
+import hudson.plugins.cigame.model.ScoreHistoryEntry;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
 import hudson.model.User;
 import hudson.model.UserProperty;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 
@@ -14,11 +22,15 @@ import hudson.model.UserProperty;
 @ExportedBean(defaultVisibility = 999)
 public class UserScoreProperty extends UserProperty {
 
+    private static final int MAX_HISTORY_LENGTH = 10;
+
     private double score;
     
     /** Inversed name as default value is false when serializing from data that
      * has doesnt have the value. */
     private boolean isNotParticipatingInGame;
+
+    private List<ScoreHistoryEntry> scoreHistoryEntries;
 
     public UserScoreProperty() {
         score = 0;
@@ -26,9 +38,10 @@ public class UserScoreProperty extends UserProperty {
     }
     
     @DataBoundConstructor
-    public UserScoreProperty(double score, boolean participatingInGame) {
+    public UserScoreProperty(double score, boolean participatingInGame, List<ScoreHistoryEntry> scoreHistoryEntries) {
         this.score = score;
         this.isNotParticipatingInGame = !participatingInGame;
+        this.scoreHistoryEntries = scoreHistoryEntries != null ? Lists.newLinkedList(scoreHistoryEntries) : null;
     }
 
     @Exported
@@ -49,7 +62,43 @@ public class UserScoreProperty extends UserProperty {
     public boolean isParticipatingInGame() {
         return !isNotParticipatingInGame;
     }
-    
+
+    public void rememberAccountableBuilds(List<AbstractBuild<?, ?>> accountableBuilds, double score) {
+        this.addScoreHistoryEntry(ScoreHistoryEntry.fromScoreAward(accountableBuilds, score));
+    }
+
+    private void addScoreHistoryEntry(ScoreHistoryEntry scoreHistoryEntry) {
+        if(this.scoreHistoryEntries == null) {
+            this.scoreHistoryEntries = Lists.newLinkedList();
+        }
+        makeSpaceForNewEntryInHistory();
+        this.scoreHistoryEntries.add(0, scoreHistoryEntry);
+    }
+
+    private void makeSpaceForNewEntryInHistory() {
+        while(historyReachesOrIsAboveCapacityLimit()) {
+            removeOldestHistoryEntry();
+        }
+    }
+
+    private void removeOldestHistoryEntry() {
+        this.scoreHistoryEntries.remove(this.scoreHistoryEntries.size()-1);
+    }
+
+    private boolean historyReachesOrIsAboveCapacityLimit() {
+        return this.scoreHistoryEntries.size() >= MAX_HISTORY_LENGTH;
+    }
+
+    @Exported
+    public List<ScoreHistoryEntry> getMostRecentScores() {
+        if(this.scoreHistoryEntries == null) {
+            return Collections.emptyList();
+        }
+        return Lists.newLinkedList(this.scoreHistoryEntries);
+    }
+
+
+
     @Override
     public String toString() {
         return String.format("UserScoreProperty [isNotParticipatingInGame=%s, score=%s, user=%s]", isNotParticipatingInGame, score, user); //$NON-NLS-1$
@@ -63,6 +112,7 @@ public class UserScoreProperty extends UserProperty {
         long temp;
         temp = Double.doubleToLongBits(score);
         result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + scoreHistoryEntries.hashCode();
         return result;
     }
 
@@ -78,6 +128,8 @@ public class UserScoreProperty extends UserProperty {
         if (isNotParticipatingInGame != other.isNotParticipatingInGame)
             return false;
         if (Double.doubleToLongBits(score) != Double.doubleToLongBits(other.score))
+            return false;
+        if (!Objects.equal(this.scoreHistoryEntries, other.scoreHistoryEntries))
             return false;
         return true;
     }

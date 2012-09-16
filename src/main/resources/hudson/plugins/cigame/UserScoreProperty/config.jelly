@@ -6,4 +6,22 @@
 	<f:entry title="${%User.CurrentScore}">
 		<f:textbox name="game.score" value="${instance.score}" disabled="disabled" readonly="readonly"/>
 	</f:entry>
+    <f:entry title="${%User.MostRecentScores}">
+        <table class="pane sortable" style="width:50%" id="game.scores">
+            <tr>
+                <td class="pane-header" align="left">${%User.Score}</td>
+                <td class="pane-header" align="left">${%User.ScoreSource}</td>
+            </tr>
+            <j:forEach var="scoreEntry" items="${instance.mostRecentScores}">
+                <tr>
+                    <td><j:out value="${scoreEntry.awardedScoreString}"/></td>
+                    <td>
+                        <j:forEach var="scoredJob" items="${scoreEntry.awardingRuns}">
+                            <a href="${rootURL}/${scoredJob.url}cigame/">${scoredJob.fullDisplayName}</a>
+                        </j:forEach>
+                    </td>
+                </tr>
+            </j:forEach>
+        </table>
+    </f:entry>
 </j:jelly>
