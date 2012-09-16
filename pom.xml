@@ -83,12 +83,16 @@
 
   <dependencies>
       <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>13.0.1</version>
+      </dependency>
+      <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-test-harness</artifactId>
       <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>checkstyle</artifactId>
@@ -148,12 +152,8 @@
       <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-	    <groupId>com.google.collections</groupId>
-	    <artifactId>google-collections</artifactId>
-	    <version>1.0</version>
-	    <scope>test</scope>
-    </dependency>
+
+
   </dependencies>
 
 
