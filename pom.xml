@@ -4,8 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.339</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>1.395</version>
   </parent>
 
   <artifactId>ci-game</artifactId>
@@ -100,6 +99,12 @@
       <artifactId>findbugs</artifactId>
       <version>4.0</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion><!-- collides with our own dom4j -->
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
@@ -147,12 +152,6 @@
       <artifactId>hamcrest-core</artifactId>
       <version>1.2.1</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-	    <groupId>com.google.collections</groupId>
-	    <artifactId>google-collections</artifactId>
-	    <version>1.0</version>
-	    <scope>test</scope>
     </dependency>
   </dependencies>
 
