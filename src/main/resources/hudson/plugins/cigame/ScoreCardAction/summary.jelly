@@ -1,7 +1,0 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
-	xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
-	xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-	<t:summary icon="/plugin/ci-game/icons/game-48x48.png">
-	   ${%Scorecard.Summary(it.urlName, it.scorecard.totalPoints)}
-	</t:summary>
-</j:jelly>
