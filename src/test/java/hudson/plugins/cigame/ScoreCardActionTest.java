@@ -55,7 +55,7 @@ public class ScoreCardActionTest {
     
     private Entry mockEntry(String id, String displayName) {
         User user = mock(User.class);
-        when(user.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(3d, true));
+        when(user.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(3d, true, null));
         when(user.getDisplayName()).thenReturn(displayName);
         when(user.getId()).thenReturn(id);
         Entry entry = mock(Entry.class);

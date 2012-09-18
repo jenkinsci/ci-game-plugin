@@ -1,5 +1,6 @@
 package hudson.plugins.cigame;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -22,7 +23,8 @@ import java.util.List;
 @ExportedBean(defaultVisibility = 999)
 public class UserScoreProperty extends UserProperty {
 
-    private static final int MAX_HISTORY_LENGTH = 10;
+    @VisibleForTesting
+    protected static final int MAX_HISTORY_LENGTH = 10;
 
     private double score;
     
@@ -67,7 +69,8 @@ public class UserScoreProperty extends UserProperty {
         this.addScoreHistoryEntry(ScoreHistoryEntry.fromScoreAward(accountableBuilds, score));
     }
 
-    private void addScoreHistoryEntry(ScoreHistoryEntry scoreHistoryEntry) {
+    @VisibleForTesting
+    protected void addScoreHistoryEntry(ScoreHistoryEntry scoreHistoryEntry) {
         if(this.scoreHistoryEntries == null) {
             this.scoreHistoryEntries = Lists.newLinkedList();
         }

@@ -42,7 +42,7 @@ public class GamePublisherTest {
     @Test
     public void assertPointsAreToExistingUserScoreProperty() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
-        UserScoreProperty userScoreProperty = new UserScoreProperty(10, true);
+        UserScoreProperty userScoreProperty = new UserScoreProperty(10, true, null);
         mockChangeSetInBuild(build, createUser(userScoreProperty));
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
@@ -56,14 +56,14 @@ public class GamePublisherTest {
         mockChangeSetInBuild(build, userWithoutProperty);
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
-        verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true));
+        verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true, null));
     }
 
     @Bug(4470)
     @Test
     public void assertThatUserDoesNotReciveDoublePointsIfUserExistInSeveralChangeSetEntries() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
-        UserScoreProperty property = new UserScoreProperty(10d, true);
+        UserScoreProperty property = new UserScoreProperty(10d, true, null);
         User user = createUser(property);        
         mockChangeSetInBuild(build, user, user);
 
@@ -74,8 +74,8 @@ public class GamePublisherTest {
     @Test
     public void assertUsersNamesWithDifferentCasingIsReportedAsPointsForOneUser() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
-        UserScoreProperty propertyOne = new UserScoreProperty(10, true);
-        UserScoreProperty propertyTwo = new UserScoreProperty(20, true);
+        UserScoreProperty propertyOne = new UserScoreProperty(10, true, null);
+        UserScoreProperty propertyTwo = new UserScoreProperty(20, true, null);
         mockChangeSetInBuild(build, createUser(propertyOne, "name"), createUser(propertyTwo, "NAME"));
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), false, null), is(true));
