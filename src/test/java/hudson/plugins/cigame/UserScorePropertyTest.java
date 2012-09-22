@@ -56,7 +56,7 @@ public class UserScorePropertyTest {
     }
 
     @Test
-    public void itShouldOrderElementsInReverseAddOrder() throws Exception {
+    public void itShouldSortElementsInMostRecentlyAddedOrder() throws Exception {
         addHistoryEntriesToProperty(2);
         assertEquals(entries.get(1), property.getMostRecentScores().get(0));
     }

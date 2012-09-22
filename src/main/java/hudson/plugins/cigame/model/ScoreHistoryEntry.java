@@ -1,5 +1,7 @@
 package hudson.plugins.cigame.model;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.converters.Converter;
@@ -7,7 +9,6 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import hudson.model.AbstractBuild;
 import hudson.model.Run;
 import org.kohsuke.stapler.export.Exported;
 
@@ -22,7 +23,7 @@ public class ScoreHistoryEntry {
     /*
      * The runs that are the cause for us giving you the award.
      */
-    private SortedSet<Run> awardingRuns;
+    private SortedSet<Run<?,?>> awardingRuns;
 
     /*
      * The score that has been awarded.
@@ -33,18 +34,17 @@ public class ScoreHistoryEntry {
     public ScoreHistoryEntry() {
     }
 
-    public ScoreHistoryEntry(Collection<? extends Run> awardingRuns, double awardedScore) {
-        this.awardingRuns = createEmptyRunSet();
-        this.awardingRuns.addAll(awardingRuns);
+    public ScoreHistoryEntry(Collection<? extends Run<?,?>> awardingRuns, double awardedScore) {
+        this.awardingRuns = Sets.newTreeSet(awardingRuns);
         this.awardedScore = awardedScore;
     }
 
-    private static SortedSet<Run> createEmptyRunSet() {
-        return Sets.newTreeSet();
+    public Set<Run<?,?>> getAwardingRuns() {
+        return awardingRuns;
     }
 
-    public Set<Run> getAwardingRuns() {
-        return awardingRuns;
+    public void setAwardingRuns(Collection<? extends Run<?,?>> awardingRuns) {
+        this.awardingRuns = Sets.newTreeSet(awardingRuns);
     }
 
     public double getAwardedScore() {
@@ -64,12 +64,44 @@ public class ScoreHistoryEntry {
         this.awardedScore = awardedScore;
     }
 
-    public static ScoreHistoryEntry fromScoreAward(@Nonnull List<? extends Run> accountableBuilds, double accountedScore) {
+    public static ScoreHistoryEntry fromScoreAward(@Nonnull List<? extends Run<?,?>> accountableBuilds, double accountedScore) {
         return new ScoreHistoryEntry(accountableBuilds, accountedScore);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ScoreHistoryEntry that = (ScoreHistoryEntry) o;
+
+        if (Double.compare(that.awardedScore, awardedScore) != 0) return false;
+        return Objects.equal(this.awardingRuns, that.awardingRuns);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.awardedScore, this.awardingRuns);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("awardedScore", getAwardedScoreString())
+                .add("awardingRuns", awardingRuns)
+                .toString();
+    }
+
+    @SuppressWarnings("unused")
     public static final class ConverterImpl implements Converter {
+        private RunCreationStrategy runCreationStrategy;
+
         public ConverterImpl() {
+            this(new DefaultRunCreationStrategy());
+        }
+
+        public ConverterImpl(RunCreationStrategy runCreationStrategy) {
+            this.runCreationStrategy = runCreationStrategy;
         }
 
         public boolean canConvert(Class type) {
@@ -97,16 +129,34 @@ public class ScoreHistoryEntry {
             score = Double.valueOf(reader.getValue());
             reader.moveUp();
             reader.moveDown();
-            List<Run> awardingRuns = Lists.newArrayList();
+            List<Run<?,?>> awardingRuns = Lists.newArrayList();
 
             while(reader.hasMoreChildren()) {
                 reader.moveDown();
                 String externalId = reader.getValue();
-                awardingRuns.add(Run.fromExternalizableId(externalId));
+                awardingRuns.add(this.runCreationStrategy.createRunFromExternalId(externalId));
                 reader.moveUp();
             }
             reader.moveUp();
             return ScoreHistoryEntry.fromScoreAward(awardingRuns, score);
+        }
+
+
+    }
+
+    @VisibleForTesting
+    protected Run<?, ?> runFromExternalId(String externalId) {
+        return Run.fromExternalizableId(externalId);
+    }
+
+    public static interface RunCreationStrategy {
+        Run<?,?> createRunFromExternalId(String externalId);
+    }
+
+    public static class DefaultRunCreationStrategy implements RunCreationStrategy {
+
+        public Run<?, ?> createRunFromExternalId(String externalId) {
+            return Run.fromExternalizableId(externalId);
         }
     }
 }

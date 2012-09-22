@@ -104,7 +104,7 @@ public class UserScoreProperty extends UserProperty {
 
     @Override
     public String toString() {
-        return String.format("UserScoreProperty [isNotParticipatingInGame=%s, score=%s, user=%s]", isNotParticipatingInGame, score, user); //$NON-NLS-1$
+        return String.format("UserScoreProperty [isNotParticipatingInGame=%s, score=%s, user=%s, scoreHistory=%s]", isNotParticipatingInGame, score, user, scoreHistoryEntries); //$NON-NLS-1$
     }
 
     @Override
