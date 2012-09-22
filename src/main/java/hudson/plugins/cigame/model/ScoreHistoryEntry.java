@@ -149,7 +149,7 @@ public class ScoreHistoryEntry {
         return Run.fromExternalizableId(externalId);
     }
 
-    public static interface RunCreationStrategy {
+    public interface RunCreationStrategy {
         Run<?,?> createRunFromExternalId(String externalId);
     }
 
