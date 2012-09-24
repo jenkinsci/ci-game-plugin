@@ -4,13 +4,12 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.339</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>1.395</version>
   </parent>
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.19-SNAPSHOT</version>
+  <version>1.20-SNAPSHOT</version>
   <name>Jenkins Continuous Integration game</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
@@ -82,11 +81,7 @@
   
 
   <dependencies>
-      <dependency>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-          <version>13.0.1</version>
-      </dependency>
+
       <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-test-harness</artifactId>
@@ -104,6 +99,12 @@
       <artifactId>findbugs</artifactId>
       <version>4.0</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion><!-- collides with our own dom4j -->
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
@@ -152,8 +153,6 @@
       <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
-
-
   </dependencies>
 
 
