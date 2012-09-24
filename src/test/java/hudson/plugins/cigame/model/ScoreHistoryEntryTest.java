@@ -1,12 +1,9 @@
 package hudson.plugins.cigame.model;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Closeables;
+import com.google.common.collect.ImmutableSet;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import hudson.model.ItemGroup;
 import hudson.model.Job;
 import hudson.model.Run;
 import org.junit.Before;
@@ -16,12 +13,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -65,10 +61,28 @@ public class ScoreHistoryEntryTest {
         assertEquals('-', entry.getAwardedScoreString().charAt(0));
     }
 
+    @Test
+    public void theAwardedRunsContains() throws Exception {
+        Set<TestRun> expected = ImmutableSet.of(mockRun2, mockRun1);
+        assertEquals(expected, entry.getAwardingRuns());
+    }
+
+    @Test
+    public void theAwardedRunsShouldBeSortedFromNewestToOldest() throws Exception {
+        Set<TestRun> expected = ImmutableSet.of(mockRun2, mockRun1);
+        Iterator<TestRun> expectedIter = expected.iterator();
+        Iterator<Run<?, ?>> actualIter = entry.getAwardingRuns().iterator();
+        while(expectedIter.hasNext() && actualIter.hasNext()) {
+            assertEquals(expectedIter.next(), actualIter.next());
+        }
+        assertFalse(expectedIter.hasNext());
+        assertFalse(actualIter.hasNext());
+    }
+
     /*
-     * Strictly speaking, this is not really a unit-test because it does involve XStream directly.
-     * Since it runs very fast, we use it here anyway.
-     */
+    * Strictly speaking, this is not really a unit-test because it does involve XStream directly.
+    * Since it runs very fast, we use it here anyway.
+    */
     @Test
     public void itCanMarshal() throws Exception {
         final String marshaled = marshal();
