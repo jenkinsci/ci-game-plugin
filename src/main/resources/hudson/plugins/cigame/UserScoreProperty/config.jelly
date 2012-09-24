@@ -18,6 +18,7 @@
                     <td>
                         <j:forEach var="scoredJob" items="${scoreEntry.awardingRuns}">
                             <a href="${rootURL}/${scoredJob.url}cigame/">${scoredJob.fullDisplayName}</a>
+                            <j:out value=" "/>
                         </j:forEach>
                     </td>
                 </tr>
