@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import hudson.model.AbstractBuild;
@@ -56,7 +57,7 @@ public class GamePublisherTest {
         mockChangeSetInBuild(build, userWithoutProperty);
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
-        verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true, null));
+        verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true, anyList()));
     }
 
     @Bug(4470)

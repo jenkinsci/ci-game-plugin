@@ -73,7 +73,7 @@ public class ScoreHistoryEntryTest {
     public void itCanMarshal() throws Exception {
         final String marshaled = marshal();
         assertNotNull(marshaled);
-        assertThat(marshaled.length(), not(eq(0)));
+        assertTrue(marshaled.length() > 0);
     }
 
     /*
