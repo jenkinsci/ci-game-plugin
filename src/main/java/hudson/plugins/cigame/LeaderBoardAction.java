@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import hudson.Extension;
+import hudson.model.Api;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
 import hudson.model.User;
@@ -153,5 +154,9 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
 
     public boolean hasPermission(Permission p) {
         return getACL().hasPermission(p);
+    }
+
+    public Api getApi() {
+        return  new Api(this);
     }
 }
