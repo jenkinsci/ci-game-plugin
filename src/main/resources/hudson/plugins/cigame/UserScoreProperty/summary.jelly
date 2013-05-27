@@ -1,0 +1,49 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns="http://www.w3.org/1999/xhtml" xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <j:if test="${it.isParticipatingInGame()}">
+        <style type="text/css">
+            .green-bg {
+                background-color: #DFF0D8;
+            }
+
+            .red-bg {
+                background-color: #F2DEDE;
+            }
+
+            .grey-bg {
+                background-color: #F9F9F9;
+            }
+
+            .current-score {
+                font-size: 200%;
+                font-weight: lighter;
+                padding: 7px 14px;
+            }
+        </style>
+        <h2><img src="${rootURL}/plugin/ci-game/icons/game-32x32.png"/><span style="padding-left: 1ex;"><st:out value="${%cigame.title}"/></span></h2>
+        <j:set var="scoreColor" value="${it.score &gt;= 0 ? 'green-bg' : (it.score &lt; 0 ? 'red-bg' : 'grey-bg')}" />
+        <div style="vertical-align: baseline;">
+            <span style="padding-right: 1em;"><st:out value="${%User.Score}"/></span>
+            <span class="current-score ${scoreColor}"><st:out value="${it.score}"/></span>
+        </div>
+        <h3><st:out value="${%User.MostRecentScores}"/></h3>
+        <table class="pane sortable" style="width: 60%;" id="game.scores">
+            <tr>
+                <td class="pane-header" style="text-align: right;">${%User.Score}</td>
+                <td class="pane-header" style="text-align: left;">${%User.ScoreSource}</td>
+            </tr>
+            <j:forEach var="scoreEntry" items="${it.mostRecentScores}">
+                <j:set var="scoreEntryColor" value="${scoreEntry.awardedScoreString.startsWith('+') ? 'green-bg' : (scoreEntry.awardedScoreString.startsWith('-') ? 'red-bg' : 'grey-bg')}" />
+                <tr class="${scoreEntryColor}" >
+                    <td style="text-align: right; padding: 4px;"><st:out value="${scoreEntry.awardedScoreString}"/></td>
+                    <td>
+                        <j:forEach var="scoredJob" items="${scoreEntry.awardingRuns}">
+                            <a href="${rootURL}/${scoredJob.url}cigame/">${scoredJob.fullDisplayName}</a>
+                            <st:nbsp/>
+                        </j:forEach>
+                    </td>
+                </tr>
+            </j:forEach>
+        </table>
+    </j:if>
+</j:jelly>

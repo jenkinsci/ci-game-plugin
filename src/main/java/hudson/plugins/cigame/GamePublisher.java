@@ -82,18 +82,19 @@ public class GamePublisher extends Notifier {
         	}
         }
         
-        return updateUserScores(players, sc.getTotalPoints());
+        return updateUserScores(players, sc.getTotalPoints(), accountableBuilds);
     }
 
     /**
      * Add the score to the users that have committed code in the change set
      * 
-     * @param changeSet the change set, used to get users
+     *
      * @param score the score that the build was worth
+     * @param accountableBuilds
      * @throws IOException thrown if the property could not be added to the user object.
      * @return true, if any user scores was updated; false, otherwise
      */
-    private boolean updateUserScores(Set<User> players, double score) throws IOException {
+    private boolean updateUserScores(Set<User> players, double score, List<AbstractBuild<?, ?>> accountableBuilds) throws IOException {
         if (score != 0) {
             for (User user : players) {
                 UserScoreProperty property = user.getProperty(UserScoreProperty.class);
@@ -103,6 +104,7 @@ public class GamePublisher extends Notifier {
                 }
                 if (property.isParticipatingInGame()) {
                     property.setScore(property.getScore() + score);
+                    property.rememberAccountableBuilds(accountableBuilds, score);
                 }
                 user.save();
             }

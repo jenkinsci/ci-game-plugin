@@ -37,7 +37,7 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
     private UserScoreProperty newInstanceIfJSONIsNull(StaplerRequest req) throws FormException {
         String scoreStr = Util.fixEmpty(req.getParameter("game.score")); //$NON-NLS-1$
         if (scoreStr != null) {
-            return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null); //$NON-NLS-1$
+            return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null, null); //$NON-NLS-1$
         }
         return new UserScoreProperty();
     }

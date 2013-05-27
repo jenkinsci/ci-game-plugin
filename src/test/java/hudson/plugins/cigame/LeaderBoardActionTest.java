@@ -18,7 +18,7 @@ public class LeaderBoardActionTest {
     public void assertUserScoreAreRestWhenResettingScore() throws Exception {
         User userWithProperty = mock(User.class);
         User userWithoutProperty = mock(User.class);
-        UserScoreProperty property = new UserScoreProperty(2.0, true);
+        UserScoreProperty property = new UserScoreProperty(2.0, true, null);
         when(userWithProperty.getProperty(UserScoreProperty.class)).thenReturn(property);
         when(userWithoutProperty.getProperty(UserScoreProperty.class)).thenReturn(null);
         
@@ -38,8 +38,8 @@ public class LeaderBoardActionTest {
         User userTwo = mock(User.class);
         when(userOne.getId()).thenReturn("ID");
         when(userTwo.getId()).thenReturn("id");
-        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true));
-        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true));
+        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
+        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true, null));
         
         List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), false);
         assertThat(scores.size(), is(1));
@@ -52,8 +52,8 @@ public class LeaderBoardActionTest {
         User userTwo = mock(User.class);
         when(userOne.getId()).thenReturn("ID");
         when(userTwo.getId()).thenReturn("id");
-        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true));
-        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true));
+        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true, null));
+        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
         
         List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), true);
         assertThat(scores.size(), is(2));
@@ -67,8 +67,8 @@ public class LeaderBoardActionTest {
         User userTwo = mock(User.class);
         when(userOne.getId()).thenReturn("Andy");
         when(userTwo.getId()).thenReturn("John");
-        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(1.0, true));
-        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true));
+        when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(1.0, true, null));
+        when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
         
         List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), true);
         assertThat(scores.size(), is(2));
