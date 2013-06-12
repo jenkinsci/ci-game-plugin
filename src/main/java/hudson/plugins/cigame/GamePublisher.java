@@ -90,7 +90,7 @@ public class GamePublisher extends Notifier {
      * 
      *
      * @param score the score that the build was worth
-     * @param accountableBuilds
+     * @param accountableBuilds the builds for which the {@code score} is awarded for.
      * @throws IOException thrown if the property could not be added to the user object.
      * @return true, if any user scores was updated; false, otherwise
      */
