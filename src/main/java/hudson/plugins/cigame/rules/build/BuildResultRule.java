@@ -13,7 +13,6 @@ public class BuildResultRule implements Rule {
     private int failurePoints;
     private int successPoints;
 
-    // TODO you can expose this 1 and -10 values as a configuration
     public BuildResultRule() {
         this(1, -10);
     }
