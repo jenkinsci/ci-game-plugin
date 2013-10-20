@@ -72,12 +72,12 @@ public class MavenMultiModuleUnitTestsTest {
 		MavenBuild currentBuild = null;
 		MavenBuild previousBuild = mockBuild(Result.SUCCESS, 6, 2, 1);
 		
-		RuleResult<Integer> ruleResult = new RemovedPassedTestsRule().evaluate(
+		RuleResult<Integer> ruleResult = new DecreasingPassedTestsRule().evaluate(
 				previousBuild, currentBuild);
 		Assert.assertEquals(-6, ruleResult.getPoints(), 0.1);
 		
 		
-		ruleResult = new RemovedFailedTestsRule().evaluate(
+		ruleResult = new DecreasingFailedTestsRule().evaluate(
 				previousBuild, currentBuild);
 		Assert.assertEquals(2, ruleResult.getPoints(), 0.1);
 	}
@@ -97,9 +97,14 @@ public class MavenMultiModuleUnitTestsTest {
 	    MavenBuild prevPrevBuild = mockBuild(Result.SUCCESS, 6, 0, 0);
 	    when(previousBuild.getPreviousBuild()).thenReturn(prevPrevBuild);
 	    
-	    RuleResult<Integer> ruleResult = new RemovedPassedTestsRule().evaluate(
+	    RuleResult<Integer> ruleResult = new DecreasingPassedTestsRule().evaluate(
                 previousBuild, currentBuild);
-        Assert.assertNull(ruleResult);
+	    
+	    // After the first build with 6 passing tests, next build has not got the Test Results. 
+	    // So current build must be given the negative marks.
+//      Assert.assertNull(ruleResult);
+        Assert.assertEquals(-6, ruleResult.getPoints(), 0.1);
+	    
 	}
 	
 	/**

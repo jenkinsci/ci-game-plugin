@@ -17,21 +17,21 @@ public class IncreasingFailedTestsRuleTest {
     @Test
     public void testNoTests() throws Exception {
         IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(0, 0);
+        RuleResult result = rule.evaluate(0);
         assertNull("No new test should return null", result);
     }
 
     @Test
     public void testMoreFailingTests() throws Exception {
         IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(2, 0);
+        RuleResult result = rule.evaluate(2);
         assertThat("2 new test should give -20 result", result.getPoints(), is((double) -20));
     }
 
     @Test
     public void testLessFailingTests() throws Exception {
         IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(2, 4);
+        RuleResult result = rule.evaluate(2 - 4);
         assertNull("2 lost tests should return null", result);
     }
 

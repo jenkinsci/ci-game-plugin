@@ -21,21 +21,21 @@ public class IncreasingPassedTestsRuleTest {
     @Test
     public void testNoTests() throws Exception {
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(0, 0, 0, 0, 0, 0);
+        RuleResult result = rule.evaluate((0 - 0 - 0) - (0 - 0 - 0));
         Assert.assertNull("No new test should return null", result);
     }
 
     @Test
     public void testMorePassingTests() throws Exception {
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(2, 0, 0, 0, 0, 0);
+        RuleResult result = rule.evaluate((2 - 0 - 0) - (0 - 0 - 0));
         Assert.assertThat("2 new test should give 20 result", result.getPoints(), is((double) 20));
     }
 
     @Test
     public void testLessPassingTests() throws Exception {
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(2, 0, 0, 4, 0, 0);
+        RuleResult result = rule.evaluate((2 - 0  - 0) - (4 - 0 - 0));
         Assert.assertNull("2 lost tests should return null", result);
     }
     
@@ -43,6 +43,14 @@ public class IncreasingPassedTestsRuleTest {
     public void testNoMorePointsThanPassingTests() throws Exception {
     	IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(1);
     	
+    	// JENKINS-6446 
+    	// Previous build: Total number of tests = 71 + 67 + 2963
+    	// Current build: Total number of tests = 610
+    	// So 
+    	// no. of new passing tests = 610 - 71
+    	// no. of new failing tests = 0 - 67
+    	// no. of new skipped tested = 0 - 2963
+        
     	AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.UNSTABLE,
         			71, 67, 2963);
@@ -52,7 +60,7 @@ public class IncreasingPassedTestsRuleTest {
         
         RuleResult result = rule.evaluate(previousBuild, build);
         Assert.assertNotNull(result);
-        Assert.assertEquals(67, result.getPoints(), 0.1);
+        Assert.assertEquals((610 - 71), result.getPoints(), 0.1);
     }
 
     @Test
