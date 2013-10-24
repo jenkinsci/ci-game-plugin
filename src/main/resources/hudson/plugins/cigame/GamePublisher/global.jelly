@@ -5,4 +5,26 @@
       <f:checkbox field="namesAreCaseSensitive"/>
     </f:entry>
   </f:section>
+  <f:section title="${%cigame.title} - ${%cigame.unittests.subtitle}">
+	<f:advanced>  
+	    <f:entry title="${%cigame.unittests.marksForIncreasingPassedTestsByOne}" field="passedTestIncreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	    <f:entry title="${%cigame.unittests.marksForDecreasingPassedTestsByOne}" field="passedTestDecreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	    <f:entry title="${%cigame.unittests.marksForIncreasingFailedTestsByOne}" field="failedTestIncreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	    <f:entry title="${%cigame.unittests.marksForDecreasingFailedTestsByOne}" field="failedTestDecreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	    <f:entry title="${%cigame.unittests.marksForIncreasingSkippedTestsByOne}" field="skippedTestIncreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	    <f:entry title="${%cigame.unittests.marksForDecreasingSkippedTestsByOne}" field="skippedTestDecreasingPoints">
+	      <f:textbox/>
+	    </f:entry>
+	</f:advanced>
+  </f:section>
 </j:jelly>

@@ -1,5 +1,7 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import jenkins.model.Jenkins;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
 
 /**
@@ -10,16 +12,13 @@ import hudson.plugins.cigame.model.RuleResult;
  */
 public class IncreasingSkippedTestsRule extends AbstractSkippedTestsRule {
 
-    private int pointsForIncreasingOneSkippedTest;
+    private static final int DEFAULT_POINTS = 0;
 
-    public IncreasingSkippedTestsRule() {
-        this(0);
+    private int getPoints() {
+        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
+        return gameDescriptor!=null?gameDescriptor.getSkippedTestIncreasingPoints():DEFAULT_POINTS;
     }
-
-    public IncreasingSkippedTestsRule(int points) {
-        pointsForIncreasingOneSkippedTest = points;
-    }
-
+    
     public String getName() {
         return Messages.UnitTestingRuleSet_IncreasingSkippedRule_Name();
     }
@@ -32,7 +31,7 @@ public class IncreasingSkippedTestsRule extends AbstractSkippedTestsRule {
     @Override
     protected RuleResult<Integer> evaluate(int passedTestDiff) {
         if (passedTestDiff > 0) {
-            return new RuleResult<Integer>(passedTestDiff * pointsForIncreasingOneSkippedTest,
+            return new RuleResult<Integer>(passedTestDiff * getPoints(),
                                            Messages.UnitTestingRuleSet_IncreasingSkippedRule_Count(passedTestDiff),
                                            passedTestDiff);
         }

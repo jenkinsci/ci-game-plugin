@@ -1,5 +1,7 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import jenkins.model.Jenkins;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
 
 /**
@@ -11,16 +13,13 @@ import hudson.plugins.cigame.model.RuleResult;
  */
 public class IncreasingFailedTestsRule extends AbstractFailedTestsRule {
 
-    private int pointsForIncreasingOneFailedTest;
+    private static final int DEFAULT_POINTS = -1;
 
-    public IncreasingFailedTestsRule() {
-        this(-1);
+    private int getPoints() {
+        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
+        return gameDescriptor!=null?gameDescriptor.getFailedTestIncreasingPoints():DEFAULT_POINTS;
     }
-
-    public IncreasingFailedTestsRule(int points) {
-        pointsForIncreasingOneFailedTest = points;
-    }
-
+    
     public String getName() {
         return Messages.UnitTestingRuleSet_IncreasingFailedRule_Name(); 
     }
@@ -33,7 +32,7 @@ public class IncreasingFailedTestsRule extends AbstractFailedTestsRule {
     @Override
     protected RuleResult<Integer> evaluate(int failingTestDiff) {
         if (failingTestDiff > 0) {
-            return new RuleResult<Integer>(failingTestDiff * pointsForIncreasingOneFailedTest, 
+            return new RuleResult<Integer>(failingTestDiff * getPoints(), 
                     Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(failingTestDiff),
                     failingTestDiff); 
         }

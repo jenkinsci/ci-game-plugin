@@ -1,5 +1,7 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import jenkins.model.Jenkins;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
 
 /**
@@ -10,16 +12,13 @@ import hudson.plugins.cigame.model.RuleResult;
  */
 public class DecreasingPassedTestsRule extends AbstractPassedTestsRule {
 
-    private int pointsForDecreasingOnePassingTest;
+    private static final int DEFAULT_POINTS = 1;
 
-    public DecreasingPassedTestsRule() {
-        this(-1);
+    private int getPoints() {
+        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
+        return gameDescriptor!=null?gameDescriptor.getPassedTestDecreasingPoints():DEFAULT_POINTS;
     }
-
-    public DecreasingPassedTestsRule(int points) {
-        pointsForDecreasingOnePassingTest = points;
-    }
-
+    
     public String getName() {
         return Messages.UnitTestingRuleSet_DecreasingPassedRule_Name();
     }
@@ -33,7 +32,7 @@ public class DecreasingPassedTestsRule extends AbstractPassedTestsRule {
     protected RuleResult<Integer> evaluate(int passedTestDiff) {
         if (passedTestDiff < 0) {
             passedTestDiff = -passedTestDiff;
-            return new RuleResult<Integer>(passedTestDiff * pointsForDecreasingOnePassingTest,
+            return new RuleResult<Integer>(passedTestDiff * getPoints(),
                                            Messages.UnitTestingRuleSet_DecreasingPassedRule_Count(passedTestDiff),
                                            passedTestDiff);
         }
