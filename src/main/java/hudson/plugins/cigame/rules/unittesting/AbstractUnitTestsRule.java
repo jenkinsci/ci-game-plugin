@@ -100,6 +100,9 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         prevResult = prevResult != null ? prevResult : Result.ABORTED;
         result = result != null ? result : Result.ABORTED;
         
+        // if the current action is null, let's assume as a ZERO result
+        action = action != null ? action : ZERO_RESULT;
+        
         if ((prevResult.isBetterThan(Result.FAILURE))
                 && (result.isBetterThan(Result.FAILURE))) {
 	        return evaluate(action, prevAction);

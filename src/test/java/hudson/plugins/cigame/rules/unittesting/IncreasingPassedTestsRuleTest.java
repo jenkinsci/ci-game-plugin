@@ -2,47 +2,79 @@ package hudson.plugins.cigame.rules.unittesting;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import hudson.model.AbstractBuild;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.unittesting.IncreasingPassedTestsRule;
 import hudson.tasks.test.AbstractTestResultAction;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.Bug;
+import org.jvnet.hudson.test.HudsonTestCase;
+import org.jvnet.hudson.test.JenkinsRule;
+import org.mockito.Mockito;
 
 @SuppressWarnings("unchecked")
 public class IncreasingPassedTestsRuleTest {
 
+    private GameDescriptor gameDescriptor;
+    
+    @Rule 
+    public JenkinsRule jenkinsRule = new JenkinsRule();
+    
+    @Before 
+    public void setup() {
+        gameDescriptor = jenkinsRule.jenkins.getDescriptorByType(GameDescriptor.class);
+    }
+    
     @Test
     public void testNoTests() throws Exception {
-        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(0, 0, 0, 0, 0, 0);
+        gameDescriptor.setPassedTestIncreasingPoints(10);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
+        RuleResult result = rule.evaluate((0 - 0 - 0) - (0 - 0 - 0));
         Assert.assertNull("No new test should return null", result);
     }
 
     @Test
     public void testMorePassingTests() throws Exception {
-        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(2, 0, 0, 0, 0, 0);
+        gameDescriptor.setPassedTestIncreasingPoints(10);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
+        RuleResult result = rule.evaluate((2 - 0 - 0) - (0 - 0 - 0));
         Assert.assertThat("2 new test should give 20 result", result.getPoints(), is((double) 20));
     }
 
     @Test
     public void testLessPassingTests() throws Exception {
-        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
-        RuleResult result = rule.evaluate(2, 0, 0, 4, 0, 0);
+        gameDescriptor.setPassedTestIncreasingPoints(10);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
+        RuleResult result = rule.evaluate((2 - 0  - 0) - (4 - 0 - 0));
         Assert.assertNull("2 lost tests should return null", result);
     }
     
     @Test
     public void testNoMorePointsThanPassingTests() throws Exception {
-    	IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(1);
-    	
+        gameDescriptor.setPassedTestIncreasingPoints(1);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
+        
+    	// JENKINS-6446 
+    	// Previous build: Total number of tests = 71 + 67 + 2963
+    	// Current build: Total number of tests = 610
+    	// So 
+    	// no. of new passing tests = 610 - 71
+    	// no. of new failing tests = 0 - 67
+    	// no. of new skipped tested = 0 - 2963
+        
     	AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.UNSTABLE,
         			71, 67, 2963);
@@ -52,12 +84,14 @@ public class IncreasingPassedTestsRuleTest {
         
         RuleResult result = rule.evaluate(previousBuild, build);
         Assert.assertNotNull(result);
-        Assert.assertEquals(67, result.getPoints(), 0.1);
+        Assert.assertEquals((610 - 71), result.getPoints(), 0.1);
     }
 
     @Test
     public void testPreviousBuildFailed() throws Exception {
-        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
+        gameDescriptor.setPassedTestIncreasingPoints(10);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.FAILURE,
         			1, 1, 0);
@@ -71,7 +105,9 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testCurrentBuildFailed() throws Exception {
-        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule(10);
+        gameDescriptor.setPassedTestIncreasingPoints(10);
+        
+        IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.UNSTABLE,
         			1, 1, 0);
@@ -97,7 +133,9 @@ public class IncreasingPassedTestsRuleTest {
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
         
-        RuleResult ruleResult = new IncreasingPassedTestsRule(-100).evaluate(previousBuild, build);
+        gameDescriptor.setPassedTestIncreasingPoints(-100);
+        
+        RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertNull("Rule result must be null", ruleResult);
     }
 
@@ -116,7 +154,9 @@ public class IncreasingPassedTestsRuleTest {
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
         
-        RuleResult ruleResult = new IncreasingPassedTestsRule(100).evaluate(previousBuild, build);
+        gameDescriptor.setPassedTestIncreasingPoints(100);
+        
+        RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertThat(ruleResult, notNullValue());
         assertThat(ruleResult.getPoints(), is(500d));
     }
@@ -139,7 +179,9 @@ public class IncreasingPassedTestsRuleTest {
         when(previousAction.getTotalCount()).thenReturn(5);
         when(previousAction.getSkipCount()).thenReturn(1);
         
-        RuleResult ruleResult = new IncreasingPassedTestsRule(100).evaluate(previousBuild, build);
+        gameDescriptor.setPassedTestIncreasingPoints(100);
+        
+        RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertThat(ruleResult, notNullValue());
         assertThat(ruleResult.getPoints(), is(100d));
     }

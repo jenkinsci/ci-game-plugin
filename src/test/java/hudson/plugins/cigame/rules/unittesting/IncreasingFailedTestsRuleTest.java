@@ -1,43 +1,67 @@
 package hudson.plugins.cigame.rules.unittesting;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import hudson.model.AbstractBuild;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.plugins.cigame.rules.unittesting.IncreasingFailedTestsRule;
 import hudson.tasks.test.AbstractTestResultAction;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
 
 @SuppressWarnings("unchecked")
 public class IncreasingFailedTestsRuleTest {
+
+    private GameDescriptor gameDescriptor;
+    
+    @Rule 
+    public JenkinsRule jenkinsRule = new JenkinsRule();
+    
+    @Before 
+    public void setup() {
+        gameDescriptor = jenkinsRule.jenkins.getDescriptorByType(GameDescriptor.class);
+    }
+    
     @Test
     public void testNoTests() throws Exception {
-        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(0, 0);
+        gameDescriptor.setFailedTestIncreasingPoints(-10);
+        
+        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule();
+        RuleResult result = rule.evaluate(0);
         assertNull("No new test should return null", result);
     }
 
     @Test
     public void testMoreFailingTests() throws Exception {
-        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(2, 0);
+        gameDescriptor.setFailedTestIncreasingPoints(-10);
+        
+        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule();
+        RuleResult result = rule.evaluate(2);
         assertThat("2 new test should give -20 result", result.getPoints(), is((double) -20));
     }
 
     @Test
     public void testLessFailingTests() throws Exception {
-        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
-        RuleResult result = rule.evaluate(2, 4);
+        gameDescriptor.setFailedTestIncreasingPoints(-10);
+        
+        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule();
+        RuleResult result = rule.evaluate(2 - 4);
         assertNull("2 lost tests should return null", result);
     }
 
     @Test
     public void testPreviousBuildFailed() throws Exception {
-        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule(-10);
+        gameDescriptor.setFailedTestIncreasingPoints(-1);
+        
+        IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule();
+        
         AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.FAILURE,
         			1, 1, 0);
@@ -51,7 +75,10 @@ public class IncreasingFailedTestsRuleTest {
 
     @Test
     public void testCurrentBuildFailed() throws Exception {
+        gameDescriptor.setFailedTestIncreasingPoints(-1);
+        
         IncreasingFailedTestsRule rule = new IncreasingFailedTestsRule();
+        
         AbstractBuild<?, ?> previousBuild =
         	MavenMultiModuleUnitTestsTest.mockBuild(Result.UNSTABLE,
         			1, 1, 0);
@@ -77,7 +104,9 @@ public class IncreasingFailedTestsRuleTest {
         when(action.getFailCount()).thenReturn(10);
         when(previousAction.getFailCount()).thenReturn(5);
         
-        RuleResult ruleResult = new IncreasingFailedTestsRule(-100).evaluate(previousBuild, build);
+        gameDescriptor.setFailedTestIncreasingPoints(-100);
+        
+        RuleResult ruleResult = new IncreasingFailedTestsRule().evaluate(previousBuild, build);
         assertNull("Rule result must be null", ruleResult);
     }
 }
