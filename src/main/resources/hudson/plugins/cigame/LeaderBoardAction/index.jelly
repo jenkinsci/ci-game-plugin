@@ -7,13 +7,15 @@
 		<div>
         	<table class="pane sortable bigtable" style="width:50%">	
         		<tr>
+              <td class="pane-header" align="left,center">#</td>
                     <j:if test="${it.userAvatarSupported}"><td class="pane-header" align="left"/></j:if>
         			<td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
         			<td class="pane-header" align="left,center">${%Leaderboard.Description}</td>
         			<td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>
         		</tr>
-          		<j:forEach var="userscore" items="${it.userScores}">
+          		<j:forEach indexVar="index" var="userscore" items="${it.userScores}">
     	      		<tr>
+                  <td>${index + 1}</td>
                         <j:if test="${it.userAvatarSupported}"><td><img src="${h.getUserAvatar(userscore.user,'48x48')}" alt="" height="48" width="48" /></td></j:if>
         				<td><a href="${rootURL}/${userscore.user.url}">${userscore.user}</a></td>
 					    <td><j:out value="${userscore.description!=null ? app.markupFormatter.translate(userscore.description) : ''}" /></td>
