@@ -46,7 +46,7 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         	if (previousBuild.getResult() != null) {
 	            if (previousBuild.getResult().isBetterThan(Result.FAILURE)) {
 	                @SuppressWarnings("unchecked")
-	                AbstractTestResultAction action = previousBuild.getTestResultAction();
+	                AbstractTestResultAction action = previousBuild.getAction(AbstractTestResultAction.class);
 	                if (action != null) {
 	                    return previousBuild;
 	                }
@@ -82,7 +82,7 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         	action = null;
         	result = Result.SUCCESS;
         } else {
-        	action = build.getTestResultAction();
+        	action = build.getAction(AbstractTestResultAction.class);
         	result = build.getResult();
         }
         
@@ -90,7 +90,7 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         	prevAction = ZERO_RESULT;
         	prevResult = Result.SUCCESS;
         } else {
-        	prevAction = previousBuild.getTestResultAction();
+        	prevAction = previousBuild.getAction(AbstractTestResultAction.class);
         	prevResult = previousBuild.getResult();
         }
         
