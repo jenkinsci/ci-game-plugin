@@ -99,7 +99,7 @@ public class IncreasingFailedTestsRuleTest {
         when(previousBuild.getResult()).thenReturn(Result.FAILURE);
         AbstractTestResultAction action = mock(AbstractTestResultAction.class);
         AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
-        when(build.getTestResultAction()).thenReturn(action);
+        when(build.getAction(AbstractTestResultAction.class)).thenReturn(action);
         when(action.getPreviousResult()).thenReturn(previousAction);
         when(action.getFailCount()).thenReturn(10);
         when(previousAction.getFailCount()).thenReturn(5);
