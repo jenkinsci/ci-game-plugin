@@ -128,7 +128,7 @@ public class IncreasingPassedTestsRuleTest {
         when(previousBuild.getResult()).thenReturn(Result.FAILURE);
         AbstractTestResultAction action = mock(AbstractTestResultAction.class);
         AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
-        when(build.getTestResultAction()).thenReturn(action);
+        when(build.getAction(AbstractTestResultAction.class)).thenReturn(action);
         when(action.getPreviousResult()).thenReturn(previousAction);
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
@@ -148,9 +148,9 @@ public class IncreasingPassedTestsRuleTest {
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         AbstractTestResultAction action = mock(AbstractTestResultAction.class);
         AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
-        when(build.getTestResultAction()).thenReturn(action);
+        when(build.getAction(AbstractTestResultAction.class)).thenReturn(action);
         when(action.getPreviousResult()).thenReturn(previousAction);
-        when(previousBuild.getTestResultAction()).thenReturn(previousAction);
+        when(previousBuild.getAction(AbstractTestResultAction.class)).thenReturn(previousAction);
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
         
@@ -171,9 +171,9 @@ public class IncreasingPassedTestsRuleTest {
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         AbstractTestResultAction action = mock(AbstractTestResultAction.class);
         AbstractTestResultAction previousAction = mock(AbstractTestResultAction.class);
-        when(build.getTestResultAction()).thenReturn(action);
+        when(build.getAction(AbstractTestResultAction.class)).thenReturn(action);
         when(action.getPreviousResult()).thenReturn(previousAction);
-        when(previousBuild.getTestResultAction()).thenReturn(previousAction);
+        when(previousBuild.getAction(AbstractTestResultAction.class)).thenReturn(previousAction);
         when(action.getTotalCount()).thenReturn(10);
         when(action.getSkipCount()).thenReturn(5);
         when(previousAction.getTotalCount()).thenReturn(5);

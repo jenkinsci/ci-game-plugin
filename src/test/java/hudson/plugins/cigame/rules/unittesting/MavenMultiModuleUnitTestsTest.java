@@ -37,13 +37,13 @@ public class MavenMultiModuleUnitTestsTest  {
 //		MavenBuild module1Build1 = mock(MavenBuild.class);
 //		AbstractTestResultAction testResult11 = mock(AbstractTestResultAction.class);
 //		when(testResult11.getTotalCount()).thenReturn(3);
-//		when(module1Build1.getTestResultAction()).thenReturn(testResult11);
+//		when(module1Build1.getAction(AbstractTestResultAction.class)).thenReturn(testResult11);
 //		
 //		MavenModule module2 = mock(MavenModule.class);
 //		MavenBuild module2Build1 = mock(MavenBuild.class);
 //		AbstractTestResultAction testResult21 = mock(AbstractTestResultAction.class);
 //		when(testResult21.getTotalCount()).thenReturn(5);
-//		when(module2Build1.getTestResultAction()).thenReturn(testResult21);
+//		when(module2Build1.getAction(AbstractTestResultAction.class)).thenReturn(testResult21);
 //		
 //		when(build.getModuleLastBuilds()).thenReturn(
 //				new ImmutableMap.Builder<MavenModule, MavenBuild>()
@@ -182,7 +182,7 @@ public class MavenMultiModuleUnitTestsTest  {
 		when(testResult.getTotalCount()).thenReturn(passedTestCount + failedTestCount + skippedTestCount);
 		when(testResult.getFailCount()).thenReturn(failedTestCount);
 		when(testResult.getSkipCount()).thenReturn(skippedTestCount);
-		when(build.getTestResultAction()).thenReturn(testResult);
+		when(build.getAction(AbstractTestResultAction.class)).thenReturn(testResult);
 		when(build.getResult()).thenReturn(buildResult);
 		
 		return build;
