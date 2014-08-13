@@ -2,6 +2,7 @@ package hudson.plugins.cigame.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import hudson.model.Job;
@@ -15,8 +16,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
@@ -53,6 +56,23 @@ public class ScoreHistoryEntryTest {
     public void theAwardedScoreStringShouldBePrefixedByPlusSignForPositiveScores() throws Exception {
         entry.setAwardedScore(3.0);
         assertEquals('+', entry.getAwardedScoreString().charAt(0));
+    }
+
+    @Test
+    public void nullRunsAreNotRemembered() throws Exception {
+        final Set<Run<?, ?>> originalRuns = this.entry.getAwardingRuns();
+        final List<Run<?, ?>> newRuns = Lists.newArrayList(originalRuns);
+        newRuns.add(0, null);
+        newRuns.add(null);
+        newRuns.add(2, null);
+
+        entry.setAwardingRuns(newRuns);
+
+        assertThat(entry.getAwardingRuns().size(), equalTo(originalRuns.size()));
+
+        for (Run<?, ?> run : entry.getAwardingRuns()) {
+            assertThat(run, is(notNullValue()));
+        }
     }
 
     @Test

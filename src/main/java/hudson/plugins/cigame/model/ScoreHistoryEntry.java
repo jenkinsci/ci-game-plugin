@@ -2,6 +2,8 @@ package hudson.plugins.cigame.model;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -36,10 +38,9 @@ public class ScoreHistoryEntry {
     }
 
     public ScoreHistoryEntry(Collection<? extends Run<?,?>> awardingRuns, double awardedScore) {
-        this.awardingRuns = Sets.newTreeSet(Ordering.natural().reverse());
-        this.awardingRuns.addAll(awardingRuns);
-        this.awardedScore = awardedScore;
-    }
+		this.setAwardingRuns(awardingRuns);
+		this.awardedScore = awardedScore;
+	}
 
     public Set<Run<?,?>> getAwardingRuns() {
         return awardingRuns;
@@ -47,8 +48,8 @@ public class ScoreHistoryEntry {
 
     public void setAwardingRuns(Collection<? extends Run<?,?>> awardingRuns) {
         this.awardingRuns = Sets.newTreeSet(Ordering.natural().reverse());
-        this.awardingRuns.addAll(awardingRuns);
-    }
+		this.awardingRuns.addAll(Collections2.filter(awardingRuns, Predicates.notNull()));
+	}
 
     public double getAwardedScore() {
         return awardedScore;
