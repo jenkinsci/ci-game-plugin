@@ -1,53 +1,41 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import jenkins.model.Jenkins;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
-import hudson.tasks.test.AbstractTestResultAction;
 
 /**
- * Rule for giving points if a new test is added and fails.
+ * Rule for giving points if a test fails (new or existing). By default -1 mark given.
+ * 
+ * @author Unknown
+ * @author <a href="www.digizol.com">Kamal Mettananda</a>
+ * @since 1.20
  */
-public class IncreasingFailedTestsRule extends AbstractUnitTestsRule {
+public class IncreasingFailedTestsRule extends AbstractFailedTestsRule {
 
-    private double pointsForEachNewFailure;
+    private static final int DEFAULT_POINTS = -1;
 
-    public IncreasingFailedTestsRule() {
-        this(-1);
+    private int getPoints() {
+        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
+        return gameDescriptor!=null?gameDescriptor.getFailedTestIncreasingPoints():DEFAULT_POINTS;
     }
-
-    public IncreasingFailedTestsRule(int points) {
-        pointsForEachNewFailure = points;
-    }
-
+    
     public String getName() {
         return Messages.UnitTestingRuleSet_IncreasingFailedRule_Name(); 
     }
-
-    RuleResult<Integer> evaluate(
-        int currentFailCount, int previousFailCount) {
-        int failingTestDiff = currentFailCount - previousFailCount;
-        if (failingTestDiff > 0) {
-            return new RuleResult<Integer>(failingTestDiff * pointsForEachNewFailure, 
-                    Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(failingTestDiff),
-                    failingTestDiff); 
-        }
-        return null;
-    }
-    
-	@Override
-	@SuppressWarnings("unchecked")
-	protected RuleResult evaluate(
-			AbstractTestResultAction testResult,
-			AbstractTestResultAction previousTestResult) {
-		if (testResult == null) {
-			return null;
-		}
-		
-		return evaluate(
-				testResult.getFailCount(), previousTestResult.getFailCount());
-	}
 
 	@Override
 	protected String getResultDescription(Integer testDiff) {
 		return Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(testDiff);
 	}
+
+    @Override
+    protected RuleResult<Integer> evaluate(int failingTestDiff) {
+        if (failingTestDiff > 0) {
+            return new RuleResult<Integer>(failingTestDiff * getPoints(), 
+                    Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(failingTestDiff),
+                    failingTestDiff); 
+        }
+        return null;
+    }
 }

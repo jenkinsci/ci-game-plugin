@@ -1,18 +1,33 @@
 package hudson.plugins.cigame.rules.unittesting;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.maven.MavenBuild;
 import hudson.model.Result;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.tasks.test.AbstractTestResultAction;
 
-@SuppressWarnings("unchecked")
-public class MavenMultiModuleUnitTestsTest {
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
 
+
+@SuppressWarnings("unchecked")
+public class MavenMultiModuleUnitTestsTest  {
+
+    private GameDescriptor gameDescriptor;
+    
+    @Rule 
+    public JenkinsRule jenkinsRule = new JenkinsRule();
+    
+    @Before 
+    public void setup() {
+        gameDescriptor = jenkinsRule.jenkins.getDescriptorByType(GameDescriptor.class);
+    }
+    
 // Doesn't work, because MavenModule is final ...	
 //	
 //	private MavenModuleSetBuild getMultiModuleBuild() {
@@ -22,13 +37,13 @@ public class MavenMultiModuleUnitTestsTest {
 //		MavenBuild module1Build1 = mock(MavenBuild.class);
 //		AbstractTestResultAction testResult11 = mock(AbstractTestResultAction.class);
 //		when(testResult11.getTotalCount()).thenReturn(3);
-//		when(module1Build1.getTestResultAction()).thenReturn(testResult11);
+//		when(module1Build1.getAction(AbstractTestResultAction.class)).thenReturn(testResult11);
 //		
 //		MavenModule module2 = mock(MavenModule.class);
 //		MavenBuild module2Build1 = mock(MavenBuild.class);
 //		AbstractTestResultAction testResult21 = mock(AbstractTestResultAction.class);
 //		when(testResult21.getTotalCount()).thenReturn(5);
-//		when(module2Build1.getTestResultAction()).thenReturn(testResult21);
+//		when(module2Build1.getAction(AbstractTestResultAction.class)).thenReturn(testResult21);
 //		
 //		when(build.getModuleLastBuilds()).thenReturn(
 //				new ImmutableMap.Builder<MavenModule, MavenBuild>()
@@ -71,13 +86,16 @@ public class MavenMultiModuleUnitTestsTest {
 	public void testCountNegativeIfModuleRemoved() {
 		MavenBuild currentBuild = null;
 		MavenBuild previousBuild = mockBuild(Result.SUCCESS, 6, 2, 1);
-		
-		RuleResult<Integer> ruleResult = new RemovedPassedTestsRule().evaluate(
+
+        gameDescriptor.setPassedTestDecreasingPoints(-1);
+        
+		RuleResult<Integer> ruleResult = new DecreasingPassedTestsRule().evaluate(
 				previousBuild, currentBuild);
 		Assert.assertEquals(-6, ruleResult.getPoints(), 0.1);
 		
-		
-		ruleResult = new RemovedFailedTestsRule().evaluate(
+		gameDescriptor.setFailedTestDecreasingPoints(1);
+        
+        ruleResult = new DecreasingFailedTestsRule().evaluate(
 				previousBuild, currentBuild);
 		Assert.assertEquals(2, ruleResult.getPoints(), 0.1);
 	}
@@ -97,9 +115,16 @@ public class MavenMultiModuleUnitTestsTest {
 	    MavenBuild prevPrevBuild = mockBuild(Result.SUCCESS, 6, 0, 0);
 	    when(previousBuild.getPreviousBuild()).thenReturn(prevPrevBuild);
 	    
-	    RuleResult<Integer> ruleResult = new RemovedPassedTestsRule().evaluate(
+        gameDescriptor.setPassedTestDecreasingPoints(-1);
+	    
+	    RuleResult<Integer> ruleResult = new DecreasingPassedTestsRule().evaluate(
                 previousBuild, currentBuild);
-        Assert.assertNull(ruleResult);
+	    
+	    // After the first build with 6 passing tests, next build has not got the Test Results. 
+	    // So current build must be given the negative marks.
+//      Assert.assertNull(ruleResult);
+        Assert.assertEquals(-6, ruleResult.getPoints(), 0.1);
+	    
 	}
 	
 	/**
@@ -141,11 +166,13 @@ public class MavenMultiModuleUnitTestsTest {
 	
 	
 	private IncreasingFailedTestsRule getIncreasingFailedTestsRule() {
+        gameDescriptor.setFailedTestIncreasingPoints(-1);
 		return new IncreasingFailedTestsRule();
 	}
 	
 	private IncreasingPassedTestsRule getIncreasingPassedTestsRule() {
-		return new IncreasingPassedTestsRule();
+	    gameDescriptor.setPassedTestIncreasingPoints(1);
+        return new IncreasingPassedTestsRule();
 	}
 	
 	static MavenBuild mockBuild(Result buildResult, int passedTestCount,
@@ -155,7 +182,7 @@ public class MavenMultiModuleUnitTestsTest {
 		when(testResult.getTotalCount()).thenReturn(passedTestCount + failedTestCount + skippedTestCount);
 		when(testResult.getFailCount()).thenReturn(failedTestCount);
 		when(testResult.getSkipCount()).thenReturn(skippedTestCount);
-		when(build.getTestResultAction()).thenReturn(testResult);
+		when(build.getAction(AbstractTestResultAction.class)).thenReturn(testResult);
 		when(build.getResult()).thenReturn(buildResult);
 		
 		return build;

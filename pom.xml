@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.jvnet.hudson.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.395</version>
-  </parent>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.499</version>
+    </parent>
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.20-SNAPSHOT</version>
+  <version>1.21-SNAPSHOT</version>
   <name>Jenkins Continuous Integration game</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
   
@@ -17,6 +17,7 @@
     <connection>scm:git:github.com:jenkinsci/ci-game-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/ci-game-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/ci-game-plugin</url>
+    <tag>HEAD</tag>
   </scm>  
 
   <distributionManagement>
@@ -72,6 +73,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
+        <version>2.5</version>
         <configuration>
           <goals>deploy</goals>
         </configuration>
@@ -81,13 +83,13 @@
   
 
   <dependencies>
+
       <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-test-harness</artifactId>
+      <groupId>org.jenkins-ci.main</groupId>
+      <artifactId>jenkins-test-harness</artifactId>
       <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>checkstyle</artifactId>
