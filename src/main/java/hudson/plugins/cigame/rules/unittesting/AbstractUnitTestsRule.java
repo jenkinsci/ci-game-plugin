@@ -97,11 +97,11 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         prevAction = prevAction != null ? prevAction : ZERO_RESULT;
         
         // sometimes (when a build is aborted?) result can be null
-        prevResult = prevResult != null ? prevResult : Result.ABORTED;
-        result = result != null ? result : Result.ABORTED;
+        prevResult = (prevResult == null) ? Result.ABORTED : prevResult;
+        result = (result == null) ? Result.ABORTED : result;
         
         // if the current action is null, let's assume as a ZERO result
-        action = action != null ? action : ZERO_RESULT;
+        action = (action == null) ? ZERO_RESULT : action;
         
         if ((prevResult.isBetterThan(Result.FAILURE))
                 && (result.isBetterThan(Result.FAILURE))) {
