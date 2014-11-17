@@ -69,14 +69,14 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
 
         previousBuild = getPreviousBuildWithResults(previousBuild);
 
-        AbstractTestResultAction action; 
+        if (previousBuild == null && build == null) {
+            return null;
+        }
+
+        AbstractTestResultAction action;
         AbstractTestResultAction prevAction;
         Result result;
         Result prevResult;
-        
-        if (previousBuild == null && build == null) {
-        	return null;
-        }
 
         if (build == null) {
         	action = null;
