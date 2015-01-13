@@ -46,6 +46,28 @@ public class GamePublisher extends Notifier {
         return true;
     }
 
+    private static AbstractBuild getBuildByUpstreamCause(List<Cause> causes,BuildListener listener ){
+        for(Cause cause: (List<Cause>) causes){
+            if(cause instanceof Cause.UpstreamCause) {
+                TopLevelItem upstreamProject = Hudson.getInstance().getItemByFullName(((Cause.UpstreamCause)cause).getUpstreamProject(), TopLevelItem.class);
+                if(upstreamProject instanceof AbstractProject){
+                    int buildId = ((Cause.UpstreamCause)cause).getUpstreamBuild();
+                    Run run = ((AbstractProject) upstreamProject).getBuildByNumber(buildId);
+                    AbstractBuild upstreamRun = getBuildByUpstreamCause(run.getCauses(),listener);
+                    if(upstreamRun == null) {
+                        return (AbstractBuild) run;
+                    }else{
+                        return upstreamRun;
+                    }
+                }
+            }
+        }
+        return null;
+
+    }
+    private static AbstractBuild getUpstreamByCause(AbstractBuild build, BuildListener listener) {
+        return getBuildByUpstreamCause(build.getCauses(),listener);
+    }
     /**
      * Calculates score from the build and rule book and adds a Game action to the build.
      * @param build build to calculate points for
@@ -64,6 +86,15 @@ public class GamePublisher extends Notifier {
         
         List<AbstractBuild<?, ?>> accountableBuilds = new ArrayList<AbstractBuild<?,?>>();
         accountableBuilds.add(build);
+        AbstractBuild  upstreamBuild = getUpstreamByCause(build, listener);
+        if(upstreamBuild!= null) {
+            accountableBuilds.add(upstreamBuild);
+            ChangeLogSet<? extends Entry> changeSet = upstreamBuild.getChangeSet();
+            if(listener != null ) listener.getLogger().append("[ci-game] UpStream Build ID: " + upstreamBuild.getId()+ "\n");
+            if(listener != null ) listener.getLogger().append("[ci-game] UpStream Display Name: " + upstreamBuild.getFullDisplayName()+ "\n");
+            if(listener != null ) listener.getLogger().append("[ci-game] Is UpStream Change Set Empty: " + changeSet.isEmptySet() + "\n");
+
+        }
         
         // also add all previous aborted builds:
         AbstractBuild<?, ?> previousBuild = build.getPreviousBuild();
