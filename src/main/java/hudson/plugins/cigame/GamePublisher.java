@@ -14,6 +14,10 @@ import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.User;
+import hudson.model.Cause;
+import hudson.model.TopLevelItem;
+import hudson.model.Run;
+import hudson.model.Hudson;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
@@ -46,28 +50,6 @@ public class GamePublisher extends Notifier {
         return true;
     }
 
-    private static AbstractBuild getBuildByUpstreamCause(List<Cause> causes,BuildListener listener ){
-        for(Cause cause: (List<Cause>) causes){
-            if(cause instanceof Cause.UpstreamCause) {
-                TopLevelItem upstreamProject = Hudson.getInstance().getItemByFullName(((Cause.UpstreamCause)cause).getUpstreamProject(), TopLevelItem.class);
-                if(upstreamProject instanceof AbstractProject){
-                    int buildId = ((Cause.UpstreamCause)cause).getUpstreamBuild();
-                    Run run = ((AbstractProject) upstreamProject).getBuildByNumber(buildId);
-                    AbstractBuild upstreamRun = getBuildByUpstreamCause(run.getCauses(),listener);
-                    if(upstreamRun == null) {
-                        return (AbstractBuild) run;
-                    }else{
-                        return upstreamRun;
-                    }
-                }
-            }
-        }
-        return null;
-
-    }
-    private static AbstractBuild getUpstreamByCause(AbstractBuild build, BuildListener listener) {
-        return getBuildByUpstreamCause(build.getCauses(),listener);
-    }
     /**
      * Calculates score from the build and rule book and adds a Game action to the build.
      * @param build build to calculate points for
@@ -86,7 +68,8 @@ public class GamePublisher extends Notifier {
         
         List<AbstractBuild<?, ?>> accountableBuilds = new ArrayList<AbstractBuild<?,?>>();
         accountableBuilds.add(build);
-        AbstractBuild  upstreamBuild = getUpstreamByCause(build, listener);
+
+        AbstractBuild upstreamBuild = getBuildByUpstreamCause(build.getCauses(), listener);
         if(upstreamBuild!= null) {
             accountableBuilds.add(upstreamBuild);
             ChangeLogSet<? extends Entry> changeSet = upstreamBuild.getChangeSet();
@@ -114,6 +97,26 @@ public class GamePublisher extends Notifier {
         }
         
         return updateUserScores(players, sc.getTotalPoints(), accountableBuilds);
+    }
+    private AbstractBuild getBuildByUpstreamCause(List<Cause> causes,BuildListener listener ){
+        for(Cause cause: (List<Cause>) causes){
+            if(cause instanceof Cause.UpstreamCause) {
+                TopLevelItem upstreamProject = Hudson.getInstance().getItemByFullName(((Cause.UpstreamCause)cause).getUpstreamProject(), TopLevelItem.class);
+                if(upstreamProject instanceof AbstractProject){
+                    int buildId = ((Cause.UpstreamCause)cause).getUpstreamBuild();
+                    Run run = ((AbstractProject) upstreamProject).getBuildByNumber(buildId);
+                    System.out.println();
+                    AbstractBuild upstreamRun = getBuildByUpstreamCause(run.getCauses(),listener);
+                    if(upstreamRun == null) {
+                        return (AbstractBuild) run;
+                    }else{
+                        return upstreamRun;
+                    }
+                }
+            }
+        }
+        return null;
+
     }
 
     /**
