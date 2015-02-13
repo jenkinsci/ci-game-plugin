@@ -21,6 +21,7 @@ import hudson.scm.ChangeLogSet.Entry;
 
 import org.junit.Test;
 import org.jvnet.hudson.test.Bug;
+import org.mockito.Mockito;
 
 @SuppressWarnings("unchecked")
 public class GamePublisherTest {
@@ -34,7 +35,7 @@ public class GamePublisherTest {
         assertThat(new GamePublisher().perform(build, new RuleBook(), true, null), is(false));
         
         verify(build).getActions();
-        verify(actions).add(isA(ScoreCardAction.class));
+        verify(actions).add(Mockito.isA(ScoreCardAction.class));
         verify(build).getChangeSet();
         verify(build).getPreviousBuild();
         verify(build).getCauses();
