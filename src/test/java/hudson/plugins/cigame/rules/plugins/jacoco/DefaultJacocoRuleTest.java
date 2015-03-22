@@ -60,6 +60,21 @@ public class DefaultJacocoRuleTest {
     }
 
     @Test
+    public void reducedCoveragePointsRoundedDown() {
+        addCoverage(previous, 100, 990);
+        addCoverage(build, 151, 949);
+
+        final RuleResult<?> ruleResult = rule.evaluate(previous, build);
+
+        assertPoints(-10f, ruleResult);
+
+        assertThat(ruleResult.getDescription(),
+            allOf(
+                containsString("reduced"),
+                containsString("4.55%")));
+    }
+
+    @Test
     public void reducedCoverageCostsAtLeastOnePoint() {
         addCoverage(previous, 10, 990);
         addCoverage(build, 11, 989);
@@ -90,6 +105,21 @@ public class DefaultJacocoRuleTest {
     }
 
     @Test
+    public void increasedCoveragePointsRoundedUp() {
+        addCoverage(previous, 151, 949);
+        addCoverage(build, 100, 990);
+
+        final RuleResult<?> ruleResult = rule.evaluate(previous, build);
+
+        assertPoints(14f, ruleResult);
+
+        assertThat(ruleResult.getDescription(),
+            allOf(
+                containsString("increased"),
+                containsString("4.55%")));
+    }
+
+    @Test
     public void increasedCoverageWinsAtLeastOnePoint() {
         addCoverage(previous, 10, 990);
         addCoverage(build, 9, 991);
@@ -110,13 +140,13 @@ public class DefaultJacocoRuleTest {
     }
 
     @Test
-    public void sameCoverageGivesOnePoint() {
+    public void sameCoverageGivesNoPoints() {
         addCoverage(previous, 5, 10);
         addCoverage(build, 4, 8);
 
         final RuleResult<?> ruleResult = rule.evaluate(previous, build);
 
-        assertPoints(1f, ruleResult);
+        assertPoints(0f, ruleResult);
     }
 
     @Test

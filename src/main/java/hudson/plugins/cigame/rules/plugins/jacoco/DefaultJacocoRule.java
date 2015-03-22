@@ -1,7 +1,7 @@
 package hudson.plugins.cigame.rules.plugins.jacoco;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 import hudson.plugins.cigame.model.AggregatableRule;
@@ -96,13 +96,13 @@ public class DefaultJacocoRule implements AggregatableRule<Double> {
 
         if (percentage >= 0) {
             return new RuleResult<Double>(
-                max(1, percentage * pointsForIncreasingCoverage),
+                ceil(percentage * pointsForIncreasingCoverage),
                 Messages.JacocoRuleSet_DefaultRule_IncreasedCoverage(percentage * 0.01),
                 percentage);
         }
         else {
             return new RuleResult<Double>(
-                min(-1, percentage * -1 * pointsForReducingCoverage),
+                floor(percentage * -1 * pointsForReducingCoverage),
                 Messages.JacocoRuleSet_DefaultRule_ReducedCoverage(percentage * -0.01),
                 percentage);
         }
