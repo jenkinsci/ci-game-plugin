@@ -70,6 +70,9 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
     }
 
     private double getCurrentUserScore() {
+        if (User.current() == null) {
+            return 0;
+        }
         UserScoreProperty property = User.current().getProperty(UserScoreProperty.class);
         return property != null ? property.getScore() : 0.0;
     }
