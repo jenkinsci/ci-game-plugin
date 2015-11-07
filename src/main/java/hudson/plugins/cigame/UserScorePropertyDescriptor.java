@@ -36,29 +36,19 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
      */
     private UserScoreProperty newInstanceIfJSONIsNull(StaplerRequest req) throws FormException {
         String scoreStr = Util.fixEmpty(req.getParameter("game.score")); //$NON-NLS-1$
-        if (scoreStr != null) {
-            if (getCurrentUserScore() != getRequestScore(scoreStr)) {
-                if (!Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
-                    throw new hudson.model.Descriptor.FormException(Messages.UserScore_Cheating_Message(), "game.score");
-                }
-            }
+        if (scoreStr != null && checkUserScoreChange(scoreStr)) {
             return new UserScoreProperty(Double.parseDouble(scoreStr), req.getParameter("game.participatingInGame") != null, null); //$NON-NLS-1$
         }
         return new UserScoreProperty();
     }
 
     @Override
-    public UserScoreProperty newInstance(StaplerRequest req, JSONObject formData) throws hudson.model.Descriptor.FormException {
+    public UserScoreProperty newInstance(StaplerRequest req, JSONObject formData) throws FormException {
 
         if (formData == null) {
             return newInstanceIfJSONIsNull(req);
         }
-        if (formData.has("score")) { //$NON-NLS-1$
-            if (getCurrentUserScore() != getRequestScore(formData.get("score").toString())) {
-                if (!Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
-                    throw new hudson.model.Descriptor.FormException(Messages.UserScore_Cheating_Message(), "score");
-                }
-            }
+        if (formData.has("score") && checkUserScoreChange(formData.get("score").toString())) { //$NON-NLS-1$
             return req.bindJSON(UserScoreProperty.class, formData);
         }
         return new UserScoreProperty();
@@ -86,5 +76,14 @@ public class UserScorePropertyDescriptor extends UserPropertyDescriptor {
            }
        }
        return 0;
+    }
+    
+    private boolean checkUserScoreChange(String score) throws FormException {
+        if (getCurrentUserScore() != getRequestScore(score)) {
+            if (!Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
+                throw new FormException(Messages.UserScore_Cheating_Message(), "score");
+            }
+        }
+        return true;
     }
 }
