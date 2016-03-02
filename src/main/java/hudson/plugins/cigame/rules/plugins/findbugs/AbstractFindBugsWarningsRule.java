@@ -85,9 +85,6 @@ public abstract class AbstractFindBugsWarningsRule implements AggregatableRule<I
 	private RuleResult<Integer> evaluateMaven(AbstractBuild<?, ?> previousBuild, AbstractBuild<?, ?> build) {
 		List<FindBugsMavenResultAction> currentActions = ActionRetriever.getResult(build, Result.UNSTABLE,
 				FindBugsMavenResultAction.class);
-		if (currentActions.isEmpty()) {
-			return null;
-		}
 		int currentAnnotations = getNumberOfMavenAnnotations(currentActions);
 		
 		List<FindBugsMavenResultAction> previousActions = ActionRetriever.getResult(previousBuild, Result.UNSTABLE, FindBugsMavenResultAction.class);
