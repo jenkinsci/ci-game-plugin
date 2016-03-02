@@ -12,6 +12,7 @@ import hudson.model.Result;
 import hudson.plugins.analysis.core.HealthDescriptor;
 import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
+import hudson.plugins.findbugs.FindBugsMavenResultAction;
 import hudson.plugins.findbugs.FindBugsResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
 
@@ -39,11 +40,40 @@ public class NewFindBugsWarningsRuleTest {
     }
     
     @Test
+    public void assertFailedMavenBuildsIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
+        addMavenFindBugsWarnings(build, 10);
+        
+        AbstractBuild prevBuild = mock(AbstractBuild.class); 
+        when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
+        addMavenFindBugsWarnings(prevBuild, 5);
+
+        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        RuleResult ruleResult = rule.evaluate(prevBuild, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+    }
+    
+    @Test
     public void assertNoPreviousBuildIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
         addFindBugsWarnings(build, 42);
+
+        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        RuleResult ruleResult = rule.evaluate(null, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+    }
+    
+    @Test
+    public void assertNoPreviousMavenBuildIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
+        when(build.getPreviousBuild()).thenReturn(null);
+        addMavenFindBugsWarnings(build, 42);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(null, build);
@@ -64,6 +94,28 @@ public class NewFindBugsWarningsRuleTest {
         FindBugsResultAction previousAction = new FindBugsResultAction(previousBuild,mock(HealthDescriptor.class), previosResult);
         when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
         when(previousBuild.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(previousAction));
+        
+        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
+        when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
+
+        RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
+    }
+    
+    @Test
+    public void assertIfPreviousMavenBuildFailedResultIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.FAILURE);
+        FindBugsResult result = mock(FindBugsResult.class);
+        FindBugsResult previosResult = mock(FindBugsResult.class);
+        FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
+        FindBugsMavenResultAction previousAction = new FindBugsMavenResultAction(previousBuild,mock(HealthDescriptor.class), "UTF-8", previosResult);
+        when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
+        when(previousBuild.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(previousAction));
         
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
@@ -100,7 +152,7 @@ public class NewFindBugsWarningsRuleTest {
     public void assertNewMavenModuleCountsAsNewWarnings() {
     	AbstractBuild build = mock(MavenBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
-        addFindBugsWarnings(build, 7);
+        addMavenFindBugsWarnings(build, 7);
         
         RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -1).evaluate(null, build);
         assertNotNull(ruleResult);
@@ -111,6 +163,14 @@ public class NewFindBugsWarningsRuleTest {
     	FindBugsResult result = mock(FindBugsResult.class);
         FindBugsResultAction action = new FindBugsResultAction(build, mock(HealthDescriptor.class), result);
         when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
+        
+        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
+    }
+    
+    private static void addMavenFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
+    	FindBugsResult result = mock(FindBugsResult.class);
+    	FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
+        when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
         
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
     }
