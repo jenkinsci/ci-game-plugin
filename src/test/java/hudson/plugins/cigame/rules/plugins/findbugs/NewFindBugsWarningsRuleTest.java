@@ -27,11 +27,11 @@ public class NewFindBugsWarningsRuleTest {
     public void assertFailedBuildsIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
-        addFindBugsWarnings(build, 10);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 10);
         
         AbstractBuild prevBuild = mock(AbstractBuild.class); 
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
-        addFindBugsWarnings(prevBuild, 5);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(prevBuild, 5);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(prevBuild, build);
@@ -43,11 +43,11 @@ public class NewFindBugsWarningsRuleTest {
     public void assertFailedMavenBuildsIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
-        addMavenFindBugsWarnings(build, 10);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 10);
         
         AbstractBuild prevBuild = mock(AbstractBuild.class); 
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
-        addMavenFindBugsWarnings(prevBuild, 5);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(prevBuild, 5);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(prevBuild, build);
@@ -60,7 +60,7 @@ public class NewFindBugsWarningsRuleTest {
         AbstractBuild build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
-        addFindBugsWarnings(build, 42);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 42);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(null, build);
@@ -73,7 +73,7 @@ public class NewFindBugsWarningsRuleTest {
         AbstractBuild build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
-        addMavenFindBugsWarnings(build, 42);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 42);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(null, build);
@@ -152,26 +152,10 @@ public class NewFindBugsWarningsRuleTest {
     public void assertNewMavenModuleCountsAsNewWarnings() {
     	AbstractBuild build = mock(MavenBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
-        addMavenFindBugsWarnings(build, 7);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 7);
         
         RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -1).evaluate(null, build);
         assertNotNull(ruleResult);
         assertThat("Points should be -7", ruleResult.getPoints(), is(-7d));
-    }
-    
-    private static void addFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-    	FindBugsResult result = mock(FindBugsResult.class);
-        FindBugsResultAction action = new FindBugsResultAction(build, mock(HealthDescriptor.class), result);
-        when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
-        
-        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
-    }
-    
-    private static void addMavenFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-    	FindBugsResult result = mock(FindBugsResult.class);
-    	FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
-        when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
-        
-        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
     }
 }

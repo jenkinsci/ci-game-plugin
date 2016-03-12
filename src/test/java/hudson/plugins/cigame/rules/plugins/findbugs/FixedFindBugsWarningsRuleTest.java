@@ -27,11 +27,11 @@ public class FixedFindBugsWarningsRuleTest {
     public void assertFailedBuildsIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
-        addFindBugsWarnings(build, 0);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 0);
         
         AbstractBuild prevBuild = mock(AbstractBuild.class);
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
-        addFindBugsWarnings(prevBuild, 7);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(prevBuild, 7);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(prevBuild, build);
@@ -43,11 +43,11 @@ public class FixedFindBugsWarningsRuleTest {
     public void assertFailedMavenBuildsIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
-        addMavenFindBugsWarnings(build, 0);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 0);
         
         AbstractBuild prevBuild = mock(AbstractBuild.class);
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
-        addMavenFindBugsWarnings(prevBuild, 7);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(prevBuild, 7);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(prevBuild, build);
@@ -60,7 +60,7 @@ public class FixedFindBugsWarningsRuleTest {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
-        addFindBugsWarnings(build, 0);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 0);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(null, build);
@@ -73,7 +73,7 @@ public class FixedFindBugsWarningsRuleTest {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
-        addMavenFindBugsWarnings(build, 0);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 0);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
         RuleResult ruleResult = rule.evaluate(null, build);
@@ -158,26 +158,10 @@ public class FixedFindBugsWarningsRuleTest {
     public void assertRemovedMavenModuleCountsAsFixed() {
         AbstractBuild previousBuild = mock(MavenBuild.class);
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
-        addMavenFindBugsWarnings(previousBuild, 6);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(previousBuild, 6);
         
         RuleResult ruleResult= new FixedFindBugsWarningsRule(Priority.LOW, 1).evaluate(previousBuild, null);
         assertNotNull(ruleResult);
         assertThat("Points should be 6", ruleResult.getPoints(), is(6d));
-    }
-    
-    private static void addFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-        FindBugsResult result = mock(FindBugsResult.class);
-        FindBugsResultAction action = new FindBugsResultAction(build, mock(HealthDescriptor.class), result);
-        when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
-        
-        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
-    }
-    
-    private static void addMavenFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-        FindBugsResult result = mock(FindBugsResult.class);
-        FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
-        when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
-        
-        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
     }
 }
