@@ -20,67 +20,67 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("unchecked")
 public class FixedFindBugsWarningsRuleTest {
     
     @Test
     public void assertFailedBuildsIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 0);
         
-        AbstractBuild prevBuild = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> prevBuild = mock(AbstractBuild.class);
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
         FindBugsWarningsRuleTestUtils.addFindBugsWarnings(prevBuild, 7);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(prevBuild, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(prevBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
     }
     
     @Test
     public void assertFailedMavenBuildsIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 0);
         
-        AbstractBuild prevBuild = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> prevBuild = mock(AbstractBuild.class);
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
         FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(prevBuild, 7);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(prevBuild, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(prevBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
     }
     
     @Test
     public void assertNoPreviousBuildIsWorthZeroPoints() { 
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
         FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 0);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(null, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
     }
     
     @Test
     public void assertNoPreviousMavenBuildIsWorthZeroPoints() { 
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
         FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 0);
 
         FixedFindBugsWarningsRule rule = new FixedFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(null, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
-        assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
     }
     
+    @SuppressWarnings("rawtypes")
     @Test
     public void assertIfPreviousBuildFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -100,11 +100,12 @@ public class FixedFindBugsWarningsRuleTest {
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
-        RuleResult ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        RuleResult<Integer> ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
     
+    @SuppressWarnings("rawtypes")
     @Test
     public void assertIfPreviousMavenBuildFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -124,11 +125,12 @@ public class FixedFindBugsWarningsRuleTest {
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
         when(previousResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
-        RuleResult ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        RuleResult<Integer> ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
     
+    @SuppressWarnings("rawtypes")
     @Test
     public void assertIfPreviousHasErrorsFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -149,18 +151,18 @@ public class FixedFindBugsWarningsRuleTest {
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
-        RuleResult ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        RuleResult<Integer> ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
     
     @Test
     public void assertRemovedMavenModuleCountsAsFixed() {
-        AbstractBuild previousBuild = mock(MavenBuild.class);
+        AbstractBuild<?, ?> previousBuild = mock(MavenBuild.class);
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(previousBuild, 6);
         
-        RuleResult ruleResult= new FixedFindBugsWarningsRule(Priority.LOW, 1).evaluate(previousBuild, null);
+        RuleResult<Integer> ruleResult= new FixedFindBugsWarningsRule(Priority.LOW, 1).evaluate(previousBuild, null);
         assertNotNull(ruleResult);
         assertThat("Points should be 6", ruleResult.getPoints(), is(6d));
     }
