@@ -12,6 +12,7 @@ import hudson.model.Result;
 import hudson.plugins.analysis.core.HealthDescriptor;
 import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
+import hudson.plugins.findbugs.FindBugsMavenResultAction;
 import hudson.plugins.findbugs.FindBugsResult;
 import hudson.plugins.findbugs.FindBugsResultAction;
 
@@ -19,38 +20,67 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-@SuppressWarnings("unchecked")
 public class NewFindBugsWarningsRuleTest {
     
     @Test
     public void assertFailedBuildsIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class); 
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
-        addFindBugsWarnings(build, 10);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 10);
         
-        AbstractBuild prevBuild = mock(AbstractBuild.class); 
+        AbstractBuild<?, ?> prevBuild = mock(AbstractBuild.class); 
         when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
-        addFindBugsWarnings(prevBuild, 5);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(prevBuild, 5);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(prevBuild, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(prevBuild, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
+    }
+    
+    @Test
+    public void assertFailedMavenBuildsIsWorthZeroPoints() {
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 10);
+        
+        AbstractBuild<?, ?> prevBuild = mock(AbstractBuild.class); 
+        when(prevBuild.getResult()).thenReturn(Result.SUCCESS);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(prevBuild, 5);
+
+        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        RuleResult<Integer> ruleResult = rule.evaluate(prevBuild, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be zero", ruleResult.getPoints(), is(0.0));
+    }
+    
+    @Test
+    public void assertNoPreviousBuildIsWorthZeroPoints() {
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class); 
+        when(build.getResult()).thenReturn(Result.FAILURE);
+        when(build.getPreviousBuild()).thenReturn(null);
+        FindBugsWarningsRuleTestUtils.addFindBugsWarnings(build, 42);
+
+        NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
+        RuleResult<Integer> ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
     
     @Test
-    public void assertNoPreviousBuildIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class); 
+    public void assertNoPreviousMavenBuildIsWorthZeroPoints() {
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class); 
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
-        addFindBugsWarnings(build, 42);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 42);
 
         NewFindBugsWarningsRule rule = new NewFindBugsWarningsRule(Priority.LOW, 100);
-        RuleResult ruleResult = rule.evaluate(null, build);
+        RuleResult<Integer> ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
     
+    @SuppressWarnings("rawtypes")
     @Test
     public void assertIfPreviousBuildFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -68,11 +98,35 @@ public class NewFindBugsWarningsRuleTest {
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
 
-        RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        RuleResult<Integer> ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
     
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void assertIfPreviousMavenBuildFailedResultIsWorthZeroPoints() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
+        when(build.getPreviousBuild()).thenReturn(previousBuild);
+        when(build.getResult()).thenReturn(Result.SUCCESS);
+        when(previousBuild.getResult()).thenReturn(Result.FAILURE);
+        FindBugsResult result = mock(FindBugsResult.class);
+        FindBugsResult previosResult = mock(FindBugsResult.class);
+        FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
+        FindBugsMavenResultAction previousAction = new FindBugsMavenResultAction(previousBuild,mock(HealthDescriptor.class), "UTF-8", previosResult);
+        when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
+        when(previousBuild.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(previousAction));
+        
+        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
+        when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
+
+        RuleResult<Integer> ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        assertNotNull("Rule result must not be null", ruleResult);
+        assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
+    }
+    
+    @SuppressWarnings("rawtypes")
     @Test
     public void assertIfPreviousHasErrorsResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -91,27 +145,19 @@ public class NewFindBugsWarningsRuleTest {
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
 
-        RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
+        RuleResult<Integer> ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
     
     @Test
     public void assertNewMavenModuleCountsAsNewWarnings() {
-    	AbstractBuild build = mock(MavenBuild.class);
+    	AbstractBuild<?, ?> build = mock(MavenBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
-        addFindBugsWarnings(build, 7);
+        FindBugsWarningsRuleTestUtils.addMavenFindBugsWarnings(build, 7);
         
-        RuleResult ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -1).evaluate(null, build);
+        RuleResult<Integer> ruleResult = new NewFindBugsWarningsRule(Priority.LOW, -1).evaluate(null, build);
         assertNotNull(ruleResult);
         assertThat("Points should be -7", ruleResult.getPoints(), is(-7d));
-    }
-    
-    private static void addFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-    	FindBugsResult result = mock(FindBugsResult.class);
-        FindBugsResultAction action = new FindBugsResultAction(build, mock(HealthDescriptor.class), result);
-        when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
-        
-        when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfWarnings);
     }
 }
