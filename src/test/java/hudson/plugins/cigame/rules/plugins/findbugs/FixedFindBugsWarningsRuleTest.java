@@ -113,16 +113,16 @@ public class FixedFindBugsWarningsRuleTest {
         when(build.getResult()).thenReturn(Result.SUCCESS);
         when(previousBuild.getResult()).thenReturn(Result.FAILURE);
         FindBugsResult result = mock(FindBugsResult.class);
-        FindBugsResult previosResult = mock(FindBugsResult.class);
+        FindBugsResult previousResult = mock(FindBugsResult.class);
         FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
-        FindBugsMavenResultAction previousAction = new FindBugsMavenResultAction(previousBuild, mock(HealthDescriptor.class), "UTF-8", previosResult);
+        FindBugsMavenResultAction previousAction = new FindBugsMavenResultAction(previousBuild, mock(HealthDescriptor.class), "UTF-8", previousResult);
         when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
         when(build.getAction(FindBugsMavenResultAction.class)).thenReturn(action);
         when(previousBuild.getAction(FindBugsMavenResultAction.class)).thenReturn(previousAction);
         when(previousBuild.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(previousAction));
         
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(5);
-        when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
+        when(previousResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
         RuleResult ruleResult = new FixedFindBugsWarningsRule(Priority.LOW, -4).evaluate(previousBuild, build);
         assertNotNull("Rule result must not be null", ruleResult);
@@ -156,7 +156,7 @@ public class FixedFindBugsWarningsRuleTest {
     
     @Test
     public void assertRemovedMavenModuleCountsAsFixed() {
-    	AbstractBuild previousBuild = mock(MavenBuild.class);
+        AbstractBuild previousBuild = mock(MavenBuild.class);
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         addMavenFindBugsWarnings(previousBuild, 6);
         
@@ -166,7 +166,7 @@ public class FixedFindBugsWarningsRuleTest {
     }
     
     private static void addFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-    	FindBugsResult result = mock(FindBugsResult.class);
+        FindBugsResult result = mock(FindBugsResult.class);
         FindBugsResultAction action = new FindBugsResultAction(build, mock(HealthDescriptor.class), result);
         when(build.getActions(FindBugsResultAction.class)).thenReturn(Arrays.asList(action));
         
@@ -174,7 +174,7 @@ public class FixedFindBugsWarningsRuleTest {
     }
     
     private static void addMavenFindBugsWarnings(AbstractBuild<?, ?> build, int numberOfWarnings) {
-    	FindBugsResult result = mock(FindBugsResult.class);
+        FindBugsResult result = mock(FindBugsResult.class);
         FindBugsMavenResultAction action = new FindBugsMavenResultAction(build, mock(HealthDescriptor.class), "UTF-8", result);
         when(build.getActions(FindBugsMavenResultAction.class)).thenReturn(Arrays.asList(action));
         
