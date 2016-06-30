@@ -16,6 +16,7 @@ Note that the plugin version 1.13+ requires Hudson 1.320 to work and the followi
  - Warnings 3.0
  - Violations 0.5.4
  - analysis-core 1.0
+ - Jacoco 1.0.18
 
 The plugin is not activated for all jobs at start, each separate job has to activate the game. The game can also be de-activated in one job if some large merge activity is going to take place. To activate the game for a job, go to the job configuration page, click "Add post-build action" and select "Continuous integration game" from the list of available post-build actions.
 
@@ -69,6 +70,8 @@ Rules that depend on other plugins:
 #####Checkstyle Plugin. [link](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)
  - Adding/removing a checkstyle warning = -1/+1.
 
+#####Jacoco Plugin. [link](https://wiki.jenkins-ci.org/display/JENKINS/Jacoco+Plugin)
+ - Reducing/increasing coverage = -10/+10 for each percentage of line coverage, with a minimum of -1/+1.
 
 ###Adding rules to the game
 
