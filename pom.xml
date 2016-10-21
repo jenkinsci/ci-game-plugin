@@ -9,16 +9,16 @@
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
-  <version>1.25</version>
+  <version>1.26-SNAPSHOT</version>
   <name>Jenkins Continuous Integration game</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/The+Continuous+Integration+Game+plugin</url>
-  
+
   <scm>
     <connection>scm:git:github.com:jenkinsci/ci-game-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/ci-game-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/ci-game-plugin</url>
-    <tag>ci-game-1.25</tag>
-  </scm>  
+    <tag>HEAD</tag>
+  </scm>
 
   <distributionManagement>
     <repository>
@@ -48,11 +48,11 @@
         <timezone>1</timezone>
     </developer>
   </developers>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+
   <build>
     <pluginManagement>
         <plugins>
@@ -80,7 +80,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
 
   <dependencies>
 
@@ -193,6 +193,4 @@
             <url>http://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
-</project>  
-  
-
+</project>
