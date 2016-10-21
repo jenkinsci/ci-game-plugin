@@ -2,6 +2,7 @@ package hudson.plugins.cigame;
 
 import net.sf.json.JSONObject;
 
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.Extension;
@@ -22,6 +23,7 @@ import hudson.tasks.Publisher;
 
 // Config page for the application (descriptor of the game plugin)
 @Extension
+@Symbol("ciGame")
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$

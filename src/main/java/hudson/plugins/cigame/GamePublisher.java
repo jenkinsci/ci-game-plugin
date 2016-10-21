@@ -24,8 +24,13 @@ import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class GamePublisher extends Notifier {
+
+    @DataBoundConstructor
+    public GamePublisher() {
+    }
 
     @Override
     public GameDescriptor getDescriptor() {
