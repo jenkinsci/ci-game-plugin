@@ -18,7 +18,8 @@ public class DecreasingSkippedTestsRule extends AbstractSkippedTestsRule {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
         return gameDescriptor!=null?gameDescriptor.getSkippedTestDecreasingPoints():DEFAULT_POINTS;
     }
-    
+
+    @Override
     public String getName() {
         return Messages.UnitTestingRuleSet_DecreasingSkippedRule_Name();
     }

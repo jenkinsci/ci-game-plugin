@@ -18,7 +18,8 @@ public class DecreasingPassedTestsRule extends AbstractPassedTestsRule {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
         return gameDescriptor!=null?gameDescriptor.getPassedTestDecreasingPoints():DEFAULT_POINTS;
     }
-    
+
+    @Override
     public String getName() {
         return Messages.UnitTestingRuleSet_DecreasingPassedRule_Name();
     }

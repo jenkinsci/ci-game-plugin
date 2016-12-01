@@ -19,6 +19,7 @@ public class DecreasingFailedTestsRule extends AbstractFailedTestsRule {
         return gameDescriptor!=null?gameDescriptor.getFailedTestDecreasingPoints():DEFAULT_POINTS;
     }
 
+    @Override
     public String getName() {
         return Messages.UnitTestingRuleSet_DecreasingFailedRule_Name();
     }

@@ -19,7 +19,8 @@ public class IncreasingPassedTestsRule extends AbstractPassedTestsRule {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
         return gameDescriptor!=null?gameDescriptor.getPassedTestIncreasingPoints():DEFAULT_POINTS;
     }
-    
+
+    @Override
     public String getName() {
         return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name();
     }
