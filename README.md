@@ -21,7 +21,7 @@ Note that the plugin version 1.13+ requires Hudson 1.320 to work and the followi
 The plugin is not activated for all jobs at start, each separate job has to activate the game. The game can also be de-activated in one job if some large merge activity is going to take place. To activate the game for a job, go to the job configuration page, click "Add post-build action" and select "Continuous integration game" from the list of available post-build actions.
 
 ####Build score card
-For each build the game calculates, according to the rules, the number of points that it is worth. Each user that is responsible for the build (ie comitters) receives the points.
+For each build the game calculates, according to the rules, the number of points that it is worth. Each user that is responsible for the build (ie committers) receives the points.
 
 ![build score total](https://wiki.jenkins-ci.org/download/attachments/19070977/summary.png?version=1&modificationDate=1207714737000)
 
