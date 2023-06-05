@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.*;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.recipes.LocalData;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import org.htmlunit.html.HtmlTable;
 
 public class ScoreCardActionIntegrationTest extends HudsonTestCase {
 

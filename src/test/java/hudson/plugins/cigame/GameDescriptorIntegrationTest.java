@@ -6,8 +6,8 @@ import static org.hamcrest.CoreMatchers.*;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.recipes.LocalData;
 
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import org.htmlunit.html.HtmlButton;
+import org.htmlunit.html.HtmlForm;
 
 public class GameDescriptorIntegrationTest extends HudsonTestCase {
 
